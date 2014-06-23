@@ -1,0 +1,47 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+        <item name="android:background">@android:color/background_light</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
+
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:activatedBackgroundIndicator">@drawable/listitem_background</item>
+    </style>
+
+    <style name="username" parent="@android:style/Widget.TextView">
+        <item name="android:hint">@string/user</item>
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">textPersonName</item>
+        <item name="android:maxLength">12</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
+    </style>
+
+    <style name="smallbutton" parent="@android:drawable/btn_default_small">
+        <item name="android:background">@color/blue_sf</item>
+    </style>
+
+    <style name="celltext" parent="@android:attr/textAppearanceSmall">
+        <item name="android:gravity">center|left</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="listview_selected_item">
+        <item name="android:activatedBackgroundIndicator">@drawable/listitem_background</item>
+    </style>
+
+</resources>

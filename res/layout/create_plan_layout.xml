@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/background_light" >
+
+    <Spinner
+        android:id="@+id/weekNumberSpinner"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
+
+    <Spinner
+        android:id="@+id/yearSpinner"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/weekNumberSpinner" />
+
+    <TextView
+        android:id="@+id/mycheduleJobText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/yearSpinner"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="1dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="1dp"
+        android:text="@string/my_schedule" />
+
+    <LinearLayout
+        android:id="@+id/directionLinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical" >
+
+        <ImageButton
+            android:id="@+id/toPlanButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/move_to_plan"
+            android:src="@android:drawable/ic_media_next" />
+
+        <ImageButton
+            android:id="@+id/toOrdersButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/move"
+            android:src="@android:drawable/ic_media_previous" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/orderList"
+        style="@style/listview_selected_item"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/mycheduleJobText"
+        android:layout_toLeftOf="@+id/directionLinearLayout"
+        android:choiceMode="singleChoice" >
+    </ListView>
+
+    <ListView
+        android:id="@+id/planList"
+        style="@style/listview_selected_item"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/weekNumberSpinner"
+        android:layout_toRightOf="@+id/directionLinearLayout"
+        android:choiceMode="singleChoice" >
+    </ListView>
+
+</RelativeLayout>

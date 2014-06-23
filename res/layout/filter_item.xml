@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:rowCount="1" >
+
+    <ImageView
+        android:id="@+id/filterimage"
+        android:layout_gravity="center"
+        android:src="@android:drawable/ic_menu_add" />
+
+    <TextView
+        android:id="@+id/filteroption"
+        android:layout_gravity="left|center_vertical"
+        android:text="Option Filter" />
+
+</GridLayout>

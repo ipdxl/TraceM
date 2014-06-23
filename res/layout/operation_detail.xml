@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText" >
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/eqktx"
+        android:layout_alignBottom="@+id/eqktx"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="14dp"
+        android:text="Time" />
+
+    <TextView
+        android:id="@+id/eqktx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/activity"
+        android:layout_marginLeft="15dp"
+        android:hint="Description"
+        android:text="Description"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/eqktx"
+        android:layout_alignParentTop="true"
+        android:layout_margin="3dp"
+        android:hint="Activity"
+        android:text="Activity" />
+
+</RelativeLayout>

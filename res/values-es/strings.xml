@@ -1,0 +1,86 @@
+<resources>
+
+    <string name="app_name">"TraceM"</string>
+    <string name="title_item_detail">"Detalles del artículo"</string>
+    <string name="todo">"TODO"</string>
+    <string name="login">"Acceder"</string>
+    <string name="user">"Usuario"</string>
+    <string name="password">"Contraseña"</string>
+    <string name="my_job">"Mi trabajo"</string>
+    <string name="drawer_close">"Cerrar"</string>
+    <string name="drawer_open">"Abrir"</string>
+    <string name="my_schedule">"Mi Programa"</string>
+    <string name="my_plans">"Mis planes"</string>
+    <string name="my_path">"Mi ruta"</string>
+    <string name="my_visit">"Mi visita"</string>
+    <string name="aufnr">"Número de orden"</string>
+    <string name="aufart">"Tipo de orden"</string>
+    <string name="auftext">"Descripción"</string>
+    <string name="co_gstrp">"Fecha de inicio"</string>
+    <string name="name">"Nombre"</string>
+    <string name="address">"Dirección"</string>
+
+    <color name="blue_sf">#850024B0</color>
+    <color name="Obscure_bg">#8D8C8B</color>
+
+    <string-array name="my_job_items">
+        <item>"Proyecto"</item>
+        <item>"Programa"</item>
+        <item>"Ruta"</item>
+        <item>"Visita"</item>
+    </string-array>
+    <string-array name="my_job_filter_options">
+        <item>"Abierto"</item>
+        <item>"Cerrado"</item>
+        <item>"En proceso"</item>
+        <item>"Cancelado"</item>
+    </string-array>
+
+    <drawable name="table_divider">#606060</drawable>
+
+    <string name="create_program">"Crear programa"</string>
+    <string name="filter">"Filtro"</string>
+
+    <string-array name="filters">
+        <item>"En proceso"</item>
+    </string-array>
+
+    <string name="search">"Buscar"</string>
+    <string name="update">"Actualizar"</string>
+    <string name="equipment">"Equipo"</string>
+    <string name="visit">"Visita"</string>
+    <string name="pick_date">"Fecha de entrega"</string>
+    <string name="date_low">"Fecha inferior"</string>
+    <string name="date_high">"Fecha superior"</string>
+    <string name="move_to_plan">"Mover a plan"</string>
+    <string name="move">"Mover a órdenes"</string>
+    <string name="save">"Guardar"</string>
+    <string name="activate_plan">"Activar el plan"</string>
+    <string name="order_description">"Descripción de orden"</string>
+    <string name="creation_program_error">"No se puede crear el plan"</string>
+    <string name="planCreated">"Plan de creado"</string>
+    <string name="welcome">"Bienvenido"</string>
+    <string name="incorrect_login">"El usuario no existe"</string>
+    <string name="path_locations">"Ubicaciones de ruta"</string>
+    <string name="location">"Ubicación"</string>
+    <string name="add_location">"Añadir locación"</string>
+    <string name="normal_map">"Normal"</string>
+    <string name="satelite_map">"Satelite"</string>
+    <string name="terrain_map">"Suelo"</string>
+    <string name="hybrid_map">"Híbrido"</string>
+
+    <string-array name="main_menu_titles">
+        <item>"Mi trabajo"</item>
+        <item>"Mi inventario"</item>
+        <item>"Mis compras"</item>
+        <item>"Mi esfuerzo"</item>
+        <item>"Mis notificaciones"</item>
+    </string-array>
+
+    <string name="logout">"Salir"</string>
+    <string name="logout_error">"Error de conexión al salir"</string>
+
+    <color name="light_gray">#8F8F8F</color>
+    <string name="loading">Cargando</string>
+
+</resources>
