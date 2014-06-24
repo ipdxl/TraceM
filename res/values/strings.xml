@@ -90,5 +90,6 @@
     <string name="update_program_error">Error updating schedule</string>
     <string name="delete_schedule_success">Schedule deleted</string>
     <string name="delete_schedule_error">Schedule can not be deleted</string>
+    <string name="create_visit">Create visit</string>
 
 </resources>

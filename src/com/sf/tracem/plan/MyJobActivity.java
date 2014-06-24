@@ -30,7 +30,7 @@ import com.sf.tracem.visit.VisitFragment;
  * @author José Guadalupe Mandujano Serrano
  * 
  */
-public class MyPlanActivity extends FragmentActivity implements MyJobNavigation {
+public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -284,6 +284,12 @@ public class MyPlanActivity extends FragmentActivity implements MyJobNavigation 
 
 		ft.replace(R.id.content_frame, visitFragment, VisitFragment.TAG);
 		ft.commit();
+
+	}
+
+	@Override
+	public void onCreateVisit() {
+		// TODO Auto-generated method stub
 
 	}
 }

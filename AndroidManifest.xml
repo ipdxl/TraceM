@@ -54,7 +54,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.sf.tracem.plan.MyPlanActivity"
+            android:name="com.sf.tracem.plan.MyJobActivity"
             android:configChanges="orientation|screenSize"
             android:uiOptions="splitActionBarWhenNarrow" >
             <meta-data

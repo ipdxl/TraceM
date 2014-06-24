@@ -950,17 +950,16 @@ public class Connection extends Activity {
 		return visits;
 	}
 
-	public String createVisit(String userName, int year, int week, String fini,
-			String hini, boolean tini) throws HttpResponseException,
+	public String createVisit(Visit visit) throws HttpResponseException,
 			IOException, XmlPullParserException {
-		String id = getIDProgram(year, week);
+
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_VISIT_LIST);
 
-		request.addProperty(FINI, fini);
-		request.addProperty(HINI, hini);
-		request.addProperty(TINI, tini ? "X" : "");
-		request.addProperty("P_PROGRAM", id);
-		request.addProperty(P_USER, userName);
+		request.addProperty(FINI, visit.getFINI());
+		request.addProperty(HINI, visit.getHINI());
+		request.addProperty(TINI, visit.getTINI() == 1 ? "X" : "");
+		request.addProperty("P_PROGRAM", visit.getID_PROGRAM());
+		request.addProperty(P_USER, visit.getZUSER());
 
 		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
 				SAP_USER, SAP_PASSWORD);

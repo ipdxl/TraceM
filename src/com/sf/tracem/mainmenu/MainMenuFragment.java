@@ -30,7 +30,7 @@ import com.sf.tracem.connection.Message;
 import com.sf.tracem.db.MenuTable;
 import com.sf.tracem.db.TraceMOpenHelper;
 import com.sf.tracem.login.CurrentConfig;
-import com.sf.tracem.plan.MyPlanActivity;
+import com.sf.tracem.plan.MyJobActivity;
 
 public class MainMenuFragment extends Fragment {
 
@@ -183,7 +183,7 @@ public class MainMenuFragment extends Fragment {
 	protected void goToMenu(int i) {
 		switch (i) {
 		case 0:
-			Intent intent = new Intent(getActivity(), MyPlanActivity.class);
+			Intent intent = new Intent(getActivity(), MyJobActivity.class);
 			getActivity().startActivity(intent);
 			break;
 		default:

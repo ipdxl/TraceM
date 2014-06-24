@@ -9,6 +9,7 @@ import java.util.List;
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -23,10 +24,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.login.CurrentConfig;
+import com.sf.tracem.plan.MyJobNavigation;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -42,7 +45,15 @@ public class VisitFragment extends Fragment {
 	protected String activeID;
 	protected int year;
 	protected int week;
+	private MyJobNavigation navigation;
 
+	
+	@Override
+	public void onAttach(Activity activity) {
+		navigation = (MyJobNavigation)activity;
+		super.onAttach(activity);
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -151,13 +162,20 @@ public class VisitFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Auto-generated method stub
+		inflater.inflate(R.menu.visit_list_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+		case R.id.create_visist:
+		navigation.onCreateVisit();
+			break;
+
+		default:
+			break;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
