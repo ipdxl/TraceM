@@ -16,7 +16,7 @@ public class ZEORDER implements Serializable {
 	private String EXP_STATUS;
 	private String ZHOURS;
 	private int ASSIGNED_STATUS;
-	private String ID_PROGRAM;
+//	private String ID_PROGRAM;
 
 	/**
 	 * @return the pARTNER
@@ -148,18 +148,18 @@ public class ZEORDER implements Serializable {
 		AUFTEXT = aUFTEXT;
 	}
 
-	/**
-	 * @return the iD_PROGRAM
-	 */
-	public String getID_PROGRAM() {
-		return ID_PROGRAM;
-	}
-
-	/**
-	 * @param iD_PROGRAM the iD_PROGRAM to set
-	 */
-	public void setID_PROGRAM(String iD_PROGRAM) {
-		ID_PROGRAM = iD_PROGRAM;
-	}
+	// /**
+	// * @return the iD_PROGRAM
+	// */
+	// public String getID_PROGRAM() {
+	// return ID_PROGRAM;
+	// }
+	//
+	// /**
+	// * @param iD_PROGRAM the iD_PROGRAM to set
+	// */
+	// public void setID_PROGRAM(String iD_PROGRAM) {
+	// ID_PROGRAM = iD_PROGRAM;
+	// }
 
 }

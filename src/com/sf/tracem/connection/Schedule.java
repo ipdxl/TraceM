@@ -65,4 +65,12 @@ public class Schedule implements Serializable {
 	public String toString() {
 		return ID_PROGRAM;
 	}
+
+	public int getYear() {
+		return Integer.parseInt(ID_PROGRAM.substring(0, 4));
+	}
+
+	public int getWeek() {
+		return Integer.parseInt(ID_PROGRAM.substring(4));
+	}
 }

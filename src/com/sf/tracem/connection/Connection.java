@@ -426,13 +426,7 @@ public class Connection extends Activity {
 		Schedule schedule = getSingleSchedule(response.get(0));
 
 		if (schedule != null) {
-			List<Schedule> schedules = new ArrayList<Schedule>();
-			schedules.add(schedule);
-			dbManager.insertSchedules(schedules);
-			for (ZEORDER order : orders) {
-				order.setID_PROGRAM(schedule.getID_PROGRAM());
-			}
-			dbManager.updateOrders(orders);
+			dbManager.insertScheduleDetail(schedule.getID_PROGRAM(), orders);
 		}
 
 		return schedule;
@@ -458,8 +452,8 @@ public class Connection extends Activity {
 	 * @see #createSchedule(String, int, int, List)
 	 */
 	public List<Message> updateSchedule(String userName, int year, int week,
-			List<ZEORDER> schedule, List<ZEORDER> oldSchedule)
-			throws HttpResponseException, IOException, XmlPullParserException {
+			List<ZEORDER> schedule) throws HttpResponseException, IOException,
+			XmlPullParserException {
 
 		// Create request
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_UPDATE_SCHEDULE);
@@ -470,7 +464,7 @@ public class Connection extends Activity {
 		List<Message> messagelist = null;
 		messagelist = getMessageList(response);
 
-		dbManager.updateSchedule(oldSchedule, schedule, year, week);
+		dbManager.updateSchedule(schedule, year, week);
 
 		return messagelist;
 	}
@@ -571,25 +565,15 @@ public class Connection extends Activity {
 		Vector<SoapObject> response = (Vector<SoapObject>) envelope
 				.getResponse();
 
-		// SoapObject errorSoap = response.get(1);
-		// List<Message> errors = getMessageList(errorSoap);
-		//
-		// zProgram.setErrors(errors);
-		//
-		// if (errors.size() > 0) {
-		// return zProgram;
-		// }
-
-		// Este es el código anterior con la función Z_PM_CALENDAR
 		SoapObject ordersSoap = response.get(0);
 		zProgram.setORDERS(getListOrders(ordersSoap));
 
 		for (ZEORDER order : zProgram.getORDERS()) {
 			order.setASSIGNED_STATUS(1);
-			order.setID_PROGRAM(idProgram);
+			// order.setID_PROGRAM(idProgram);
 		}
 
-		dbManager.updateOrders(zProgram.getORDERS());
+		dbManager.insertScheduleDetail(idProgram, zProgram.getORDERS());
 
 		return zProgram;
 
@@ -647,10 +631,10 @@ public class Connection extends Activity {
 
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) scheduleSoap.getProperty(i);
-			scheduleList.add(getSingleSchedule(item));
+			Schedule schedule = getSingleSchedule(item);
+			dbManager.insertSchedule(schedule);
+			scheduleList.add(schedule);
 		}
-
-		dbManager.insertSchedules(scheduleList);
 
 		return scheduleList;
 

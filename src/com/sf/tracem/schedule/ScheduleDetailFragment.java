@@ -420,7 +420,7 @@ public class ScheduleDetailFragment extends Fragment {
 					case UPDATE:
 						messages = connection.updateSchedule(loginPreferences
 								.getString(CurrentConfig.USERNAME, null), year,
-								week, schedule, oldSchedule);
+								week, schedule);
 						break;
 					default:
 					}
@@ -531,7 +531,7 @@ public class ScheduleDetailFragment extends Fragment {
 		scheduleList.setAdapter(scheduleAdapter);
 
 		ordersAdapter.addAll(orders);
-//		scheduleAdapter.addAll(schedule);
+		// scheduleAdapter.addAll(schedule);
 
 		ordersAdapter.notifyDataSetChanged();
 		scheduleAdapter.notifyDataSetChanged();

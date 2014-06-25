@@ -9,7 +9,7 @@ import java.util.Locale;
  * @author José Guadalupe Mandujano Serrano
  * 
  */
-public class DateFormater {
+public class TraceMFormater {
 
 	public final static String DATE_FORMATE = "d\\d\\d\\d-\\d\\d-\\d\\d";
 
@@ -43,6 +43,14 @@ public class DateFormater {
 
 	public static int getSecond(String time) {
 		return Integer.parseInt(time.substring(6));
+	}
+
+	public static int getScheduleYear(String iDProgram) {
+		return Integer.parseInt(iDProgram.substring(0, 4));
+	}
+
+	public static int getScheduleWeek(String iDProgram) {
+		return Integer.parseInt(iDProgram.substring(4));
 	}
 
 }

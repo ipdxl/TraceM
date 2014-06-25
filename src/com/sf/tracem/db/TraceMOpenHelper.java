@@ -38,6 +38,7 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 		db.execSQL(PartnerTable.CREATE_TABLE);
 		db.execSQL(ScheduleTable.CREATE_TABLE);
 		db.execSQL(OrdersTable.CREATE_TABLE);
+		db.execSQL(OrderScheduleTable.CREATE_TABLE);
 		db.execSQL(HeaderOrderTable.CREATE_TABLE);
 		db.execSQL(OperationTable.CREATE_TABLE);
 		db.execSQL(ComponentTable.CREATE_TABLE);
