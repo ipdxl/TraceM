@@ -15,8 +15,6 @@ public class ZEORDER implements Serializable {
 	private String EXP_DAYS;
 	private String EXP_STATUS;
 	private String ZHOURS;
-	private int ASSIGNED_STATUS;
-//	private String ID_PROGRAM;
 
 	/**
 	 * @return the pARTNER
@@ -91,21 +89,6 @@ public class ZEORDER implements Serializable {
 	 */
 	public void setZHOURS(String zHOURS) {
 		ZHOURS = zHOURS;
-	}
-
-	/**
-	 * @return the aSSIGNED_STATUS
-	 */
-	public int getASSIGNED_STATUS() {
-		return ASSIGNED_STATUS;
-	}
-
-	/**
-	 * @param i
-	 *            the aSSIGNED_STATUS to set
-	 */
-	public void setASSIGNED_STATUS(int ASSIGNED_STATUS) {
-		this.ASSIGNED_STATUS = ASSIGNED_STATUS;
 	}
 
 	public String getADDRESS() {

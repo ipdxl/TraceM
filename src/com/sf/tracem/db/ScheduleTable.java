@@ -20,7 +20,7 @@ public class ScheduleTable {
 	/**
 	 * Schedule status
 	 */
-	public static final String CREATE_DATE = "STATUS";
+	public static final String CREATE_DATE = "CREATE_DATE";
 	/**
 	 * Schedule table name
 	 */

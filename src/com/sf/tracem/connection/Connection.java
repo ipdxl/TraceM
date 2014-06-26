@@ -15,9 +15,15 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
+import com.sf.tracem.db.ComponentTable;
 import com.sf.tracem.db.DBManager;
+import com.sf.tracem.db.HeaderOrderTable;
+import com.sf.tracem.db.MenuTable;
+import com.sf.tracem.db.OperationTable;
+import com.sf.tracem.db.OrdersTable;
+import com.sf.tracem.db.PartnerTable;
+import com.sf.tracem.db.ScheduleTable;
 
 public class Connection extends Activity {
 
@@ -51,6 +57,8 @@ public class Connection extends Activity {
 	private static final String FINI = "FINI";
 	private static final String HINI = "HINI";
 	private static final String TINI = "TINI";
+	private static final String P_PROGRAM = "P_PROGRAM";
+	private static final String P_PASSWORD = "P_PASSWORD";
 	@SuppressWarnings("unused")
 	private Context context;
 	private DBManager dbManager;
@@ -77,7 +85,7 @@ public class Connection extends Activity {
 
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_LOGIN);
 
-		request.addProperty("P_PASSWORD", password);
+		request.addProperty(P_PASSWORD, password);
 		request.addProperty(P_USER, userName);
 
 		// Create envelope
@@ -223,9 +231,9 @@ public class Connection extends Activity {
 			SoapObject item = (SoapObject) object.getProperty(i);
 
 			menu.setIdMenu((byte) parseNumericResult(item
-					.getPropertyAsString("ID_MENU")));
+					.getPropertyAsString(MenuTable.ID_MENU)));
 			menu.setIdFather((byte) parseNumericResult(item
-					.getPropertyAsString("ID_FATHER")));
+					.getPropertyAsString(MenuTable.ID_FATHER)));
 
 			menuList.add(menu);
 		}
@@ -294,23 +302,29 @@ public class Connection extends Activity {
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) listSoap.getProperty(i);
 			order = new ZEORDER();
-			order.setAUFART(parseResult(item.getProperty("AUFART").toString()));
-			order.setAUFNR(parseResult(item.getProperty("AUFNR").toString()));
-			order.setAUFTEXT(parseResult(item.getProperty("AUFTEXT").toString()));
-			order.setCO_GSTRP(parseResult(item.getProperty("CO_GSTRP")
+			order.setAUFART(parseResult(item.getProperty(OrdersTable.AUFART)
 					.toString()));
-			order.setPARTNER(parseResult(item.getProperty("PARTNER").toString()));
-			order.setADDRESS(parseResult(item.getProperty("ADDRESS").toString()));
+			order.setAUFNR(parseResult(item.getProperty(OrdersTable.AUFNR)
+					.toString()));
+			order.setAUFTEXT(parseResult(item.getProperty(OrdersTable.AUFTEXT)
+					.toString()));
+			order.setCO_GSTRP(parseResult(item
+					.getProperty(OrdersTable.CO_GSTRP).toString()));
+			order.setPARTNER(parseResult(item.getProperty(OrdersTable.PARTNER)
+					.toString()));
+			order.setADDRESS(parseResult(item.getProperty(PartnerTable.ADDRESS)
+					.toString()));
 
 			order.setORDER_STATUS((int) parseNumericResult(item.getProperty(
-					"ORDER_STATUS").toString()));
-			order.setEXP_DAYS(parseResult(item.getProperty("EXP_DAYS")
+					OrdersTable.ORDER_STATUS).toString()));
+			order.setEXP_DAYS(parseResult(item
+					.getProperty(OrdersTable.EXP_DAYS).toString()));
+			order.setEXP_STATUS(parseResult(item.getProperty(
+					OrdersTable.EXP_STATUS).toString()));
+			order.setZHOURS(parseResult(item.getProperty(OrdersTable.ZHOURS)
 					.toString()));
-			order.setEXP_STATUS(parseResult(item.getProperty("EXP_STATUS")
-					.toString()));
-			order.setZHOURS(parseResult(item.getProperty("ZHOURS").toString()));
-			order.setASSIGNED_STATUS(parseBitResult(item.getProperty(
-					"ASSIGNED_STATUS").toString()));
+			// order.setASSIGNED_STATUS(parseBitResult(item.getProperty(
+			// "ASSIGNED_STATUS").toString()));
 
 			orders.add(order);
 		}
@@ -497,12 +511,12 @@ public class Connection extends Activity {
 
 		for (ZEORDER order : orders) {
 			SoapObject item = new SoapObject();
-			item.addProperty("AUFNR", order.getAUFNR());
+			item.addProperty(OrdersTable.AUFNR, order.getAUFNR());
 			itOrders.addProperty("item", item);
 		}
 
 		request.addProperty("IT_ORDERS", itOrders);
-		request.addProperty("P_ID_PROGRAM", idProgram);
+		request.addProperty(P_PROGRAM, idProgram);
 		request.addProperty(P_USER, userName);
 
 		// Create envelope
@@ -543,7 +557,7 @@ public class Connection extends Activity {
 		SoapObject request = new SoapObject(NAMESPACE,
 				Z_PM_AP_GET_SCHEDULE_DETAIL);
 
-		request.addProperty("P_ID_PROGRAM", idProgram);
+		request.addProperty(P_PROGRAM, idProgram);
 		request.addProperty(P_USER, userName);
 
 		// Create envelope
@@ -566,17 +580,31 @@ public class Connection extends Activity {
 				.getResponse();
 
 		SoapObject ordersSoap = response.get(0);
-		zProgram.setORDERS(getListOrders(ordersSoap));
 
-		for (ZEORDER order : zProgram.getORDERS()) {
-			order.setASSIGNED_STATUS(1);
-			// order.setID_PROGRAM(idProgram);
-		}
+		zProgram.setORDERS(getOrderNumbers(ordersSoap));
 
 		dbManager.insertScheduleDetail(idProgram, zProgram.getORDERS());
 
 		return zProgram;
 
+	}
+
+	private List<ZEORDER> getOrderNumbers(SoapObject ordersSoap) {
+		List<ZEORDER> orders = new ArrayList<ZEORDER>();
+
+		int count = ordersSoap.getPropertyCount();
+
+		for (int i = 0; i < count; i++) {
+			SoapObject item = (SoapObject) ordersSoap.getProperty(i);
+			ZEORDER order = new ZEORDER();
+
+			order.setAUFNR(parseResult(item
+					.getPropertyAsString(OrdersTable.AUFNR)));
+
+			orders.add(order);
+		}
+
+		return orders;
 	}
 
 	/**
@@ -625,7 +653,7 @@ public class Connection extends Activity {
 		// List<Message> errors = getMessageList(errorSoap);
 
 		// Este es el código anterior con la función Z_PM_CALENDAR
-		SoapObject scheduleSoap = response.get(0);
+		SoapObject scheduleSoap = response.get(1);
 
 		int count = scheduleSoap.getPropertyCount();
 
@@ -644,13 +672,14 @@ public class Connection extends Activity {
 		Schedule schedule = null;
 
 		if (item.getPropertyCount() > 0
-				&& parseResult(item.getPropertyAsString("STATUS")) != null) {
+				&& parseResult(item.getPropertyAsString(ScheduleTable.STATUS)) != null) {
 			schedule = new Schedule();
-			schedule.setSTATUS(parseResult(item.getPropertyAsString("STATUS")));
+			schedule.setSTATUS(parseResult(item
+					.getPropertyAsString(ScheduleTable.STATUS)));
 			schedule.setID_PROGRAM(parseResult(item
-					.getPropertyAsString("ID_PROGRAM")));
+					.getPropertyAsString(ScheduleTable.ID_PROGRAM)));
 			schedule.setCREATE_DATE(parseResult(item
-					.getPropertyAsString("CREATE_DATE")));
+					.getPropertyAsString(ScheduleTable.CREATE_DATE)));
 		}
 		return schedule;
 	}
@@ -737,15 +766,16 @@ public class Connection extends Activity {
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) parnersSoap.getProperty(i);
 			ZEPARTNER partner = new ZEPARTNER();
-			partner.setPARTN_ROLE(parseResult(item.getProperty("PARTN_ROLE")
+			partner.setPARTN_ROLE(parseResult(item.getProperty(
+					PartnerTable.PARTN_ROLE).toString()));
+			partner.setROL_TEXT(parseResult(item.getProperty(
+					PartnerTable.ROL_TEXT).toString()));
+			partner.setPARTNER(parseResult(item
+					.getProperty(OrdersTable.PARTNER).toString()));
+			partner.setNAME(parseResult(item.getProperty(PartnerTable.NAME)
 					.toString()));
-			partner.setROL_TEXT(parseResult(item.getProperty("ROL_TEXT")
-					.toString()));
-			partner.setPARTNER(parseResult(item.getProperty("PARTNER")
-					.toString()));
-			partner.setNAME(parseResult(item.getProperty("NAME").toString()));
-			partner.setADDRESS(parseResult(item.getProperty("ADDRESS")
-					.toString()));
+			partner.setADDRESS(parseResult(item.getProperty(
+					PartnerTable.ADDRESS).toString()));
 
 			partners.add(partner);
 		}
@@ -765,16 +795,16 @@ public class Connection extends Activity {
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) soapOperations.getProperty(i);
 			ZEOPERATION_ORDER operation = new ZEOPERATION_ORDER();
-			operation.setACTIVITY(parseResult(item.getProperty("ACTIVITY")
-					.toString()));
-			operation.setDESCRIPTION(parseResult(item
-					.getProperty("DESCRIPTION").toString()));
+			operation.setACTIVITY(parseResult(item.getProperty(
+					OperationTable.ACTIVITY).toString()));
+			operation.setDESCRIPTION(parseResult(item.getProperty(
+					OperationTable.DESCRIPTION).toString()));
 			operation.setDURATION_NORMAL(parseResult(item.getProperty(
-					"DURATION_NORMAL").toString()));
+					OperationTable.DURATION_NORMAL).toString()));
 			operation.setDURATION_NORMAL_UNIT(parseResult(item.getProperty(
-					"DURATION_NORMAL_UNIT").toString()));
-			operation.setWORK_CNTR(parseResult(item.getProperty("WORK_CNTR")
-					.toString()));
+					OperationTable.DURATION_NORMAL_UNIT).toString()));
+			operation.setWORK_CNTR(parseResult(item.getProperty(
+					OperationTable.WORK_CNTR).toString()));
 
 			operations.add(operation);
 		}
@@ -814,14 +844,14 @@ public class Connection extends Activity {
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) headerSoap.getProperty(i);
 			ZEHEADER_ORDER header = new ZEHEADER_ORDER();
-			header.setEQUIPMENT(parseResult(item.getProperty("EQUIPMENT")
-					.toString()));
-			header.setMN_WKCTR_ID(parseResult(item.getProperty("MN_WKCTR_ID")
-					.toString()));
-			header.setPLANGROUP(parseResult(item.getProperty("PLANGROUP")
-					.toString()));
-			header.setNOTIF_NO(parseResult(item.getProperty("NOTIF_NO")
-					.toString()));
+			header.setEQUIPMENT(parseResult(item.getProperty(
+					HeaderOrderTable.EQUIPMENT).toString()));
+			header.setMN_WKCTR_ID(parseResult(item.getProperty(
+					HeaderOrderTable.MN_WKCTR_ID).toString()));
+			header.setPLANGROUP(parseResult(item.getProperty(
+					HeaderOrderTable.PLANGROUP).toString()));
+			header.setNOTIF_NO(parseResult(item.getProperty(
+					HeaderOrderTable.NOTIF_NO).toString()));
 
 			headers.add(header);
 		}
@@ -842,16 +872,17 @@ public class Connection extends Activity {
 			SoapObject item = (SoapObject) soapComponents.getProperty(i);
 			ZECOMPONENTS_ORDER component = new ZECOMPONENTS_ORDER();
 
-			component.setACTIVITY(parseResult(item.getProperty("ACTIVITY")
-					.toString()));
-			component.setMATERIAL(parseResult(item.getProperty("MATERIAL")
-					.toString()));
-			component.setMATL_DESC(parseResult(item.getProperty("MATL_DESC")
-					.toString()));
+			component.setACTIVITY(parseResult(item.getProperty(
+					OperationTable.ACTIVITY).toString()));
+			component.setMATERIAL(parseResult(item.getProperty(
+					ComponentTable.MATERIAL).toString()));
+			component.setMATL_DESC(parseResult(item.getProperty(
+					ComponentTable.MATL_DESC).toString()));
 			component.setREQUIREMENT_QUANTITY(item.getProperty(
-					"REQUIREMENT_QUANTITY").toString());
+					ComponentTable.REQUIREMENT_QUANTITY).toString());
 			component.setREQUIREMENT_QUANTITY_UNIT(parseResult(item
-					.getProperty("REQUIREMENT_QUANTITY_UNIT").toString()));
+					.getProperty(ComponentTable.REQUIREMENT_QUANTITY_UNIT)
+					.toString()));
 
 			components.add(component);
 		}
@@ -877,7 +908,7 @@ public class Connection extends Activity {
 		String id = getIDProgram(year, week);
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_VISIT_LIST);
 
-		request.addProperty("P_PROGRAM", id);
+		request.addProperty(P_PROGRAM, id);
 		request.addProperty(P_USER, UserName);
 
 		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
@@ -914,7 +945,7 @@ public class Connection extends Activity {
 			visit.setID_VISIT((long) parseNumericResult(item
 					.getPropertyAsString("ID_VISIT")));
 			visit.setID_PROGRAM(parseResult(item
-					.getPropertyAsString("ID_PROGRAM")));
+					.getPropertyAsString(ScheduleTable.ID_PROGRAM)));
 			visit.setZUSER(parseResult(item.getPropertyAsString("ZUSER")));
 			visit.setFINI(parseResult(item.getPropertyAsString("FINI")));
 			visit.setHINI(parseResult(item.getPropertyAsString("HINI")));
@@ -922,7 +953,8 @@ public class Connection extends Activity {
 			visit.setFFIN(parseResult(item.getPropertyAsString("FFIN")));
 			visit.setHFIN(parseResult(item.getPropertyAsString("HFIN")));
 			visit.setTFIN(parseBitResult(item.getPropertyAsString("TFIN")));
-			visit.setSTATUS(parseBitResult(item.getPropertyAsString("STATUS")));
+			visit.setSTATUS(parseBitResult(item
+					.getPropertyAsString(ScheduleTable.STATUS)));
 			visit.setCOMENTARIO(parseResult(item
 					.getPropertyAsString("COMENTARIO")));
 			visit.setID_JUSTIFICATION(parseResult(item
@@ -942,7 +974,7 @@ public class Connection extends Activity {
 		request.addProperty(FINI, visit.getFINI());
 		request.addProperty(HINI, visit.getHINI());
 		request.addProperty(TINI, visit.getTINI() == 1 ? "X" : "");
-		request.addProperty("P_PROGRAM", visit.getID_PROGRAM());
+		request.addProperty(P_PROGRAM, visit.getID_PROGRAM());
 		request.addProperty(P_USER, visit.getZUSER());
 
 		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
@@ -990,7 +1022,8 @@ public class Connection extends Activity {
 			SoapObject item1 = new SoapObject();
 			SoapObject item2 = new SoapObject();
 
-			item1.addProperty("ACTIVITY", listCONFIRMATION.get(i).getACTIVITY());
+			item1.addProperty(OperationTable.ACTIVITY, listCONFIRMATION.get(i)
+					.getACTIVITY());
 			item1.addProperty("ACTUAL_DUR", listCONFIRMATION.get(i)
 					.getACTUAL_DUR());
 			item1.addProperty("UN_ACT_DUR", listCONFIRMATION.get(i)
@@ -1007,21 +1040,27 @@ public class Connection extends Activity {
 					.getEXEC_FIN_TIME());
 			item1.addProperty("CONF_TEXT", listCONFIRMATION.get(i)
 					.getCONF_TEXT());
-			item1.addProperty("COMPLETE", listCONFIRMATION.get(i).getCOMPLETE());
+			item1.addProperty(OperationTable.COMPLETE, listCONFIRMATION.get(i)
+					.getCOMPLETE());
 			// Operations
-			item2.addProperty("ACTIVITY", listOPERATIONS.get(i).getACTIVITY());
-			item2.addProperty("WORK_CNTR", listOPERATIONS.get(i).getWORK_CNTR());
-			item2.addProperty("DESCRIPTION", listOPERATIONS.get(i)
+			item2.addProperty(OperationTable.ACTIVITY, listOPERATIONS.get(i)
+					.getACTIVITY());
+			item2.addProperty(OperationTable.WORK_CNTR, listOPERATIONS.get(i)
+					.getWORK_CNTR());
+			item2.addProperty(OperationTable.DESCRIPTION, listOPERATIONS.get(i)
 					.getDESCRIPTION());
-			item2.addProperty("CONF_NO", listOPERATIONS.get(i).getCONF_NO());
-			item2.addProperty("PLANT", listOPERATIONS.get(i).getPLANT());
-			item2.addProperty("DURATION_NORMAL", listOPERATIONS.get(i)
-					.getDURATION_NORMAL());
-			item2.addProperty("DURATION_NORMAL_UNIT", listOPERATIONS.get(i)
-					.getDURATION_NORMAL_UNIT());
-			item2.addProperty("DURATION_NORMAL_UNIT_ISO", listOPERATIONS.get(i)
-					.getDURATION_NORMAL_UNIT_ISO());
-			item2.addProperty("COMPLETE", listOPERATIONS.get(i).getCOMPLETE());
+			item2.addProperty(OperationTable.CONF_NO, listOPERATIONS.get(i)
+					.getCONF_NO());
+			item2.addProperty(OperationTable.PLANT, listOPERATIONS.get(i)
+					.getPLANT());
+			item2.addProperty(OperationTable.DURATION_NORMAL, listOPERATIONS
+					.get(i).getDURATION_NORMAL());
+			item2.addProperty(OperationTable.DURATION_NORMAL_UNIT,
+					listOPERATIONS.get(i).getDURATION_NORMAL_UNIT());
+			item2.addProperty(OperationTable.DURATION_NORMAL_UNIT_ISO,
+					listOPERATIONS.get(i).getDURATION_NORMAL_UNIT_ISO());
+			item2.addProperty(OperationTable.COMPLETE, listOPERATIONS.get(i)
+					.getCOMPLETE());
 
 			tab.addProperty("item", item1);
 			tab2.addProperty("item", item2);
@@ -1039,8 +1078,6 @@ public class Connection extends Activity {
 		// envelope.dotNet = true;
 		// Set output SOAP object
 		envelope.setOutputSoapObject(request);
-		String out = envelope.bodyOut.toString();
-		Log.i("BodyOut", out);
 
 		// Create HTTP call object
 		HttpTransportBasicAuth httpTransport = new HttpTransportBasicAuth(URL,
@@ -1080,7 +1117,7 @@ public class Connection extends Activity {
 		String idProgram = "" + year + (week < 10 ? "0" : "") + week;
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_DELETE_SCHEDULE);
 
-		request.addProperty("P_ID_PROGRAM", idProgram);
+		request.addProperty(P_PROGRAM, idProgram);
 		request.addProperty(P_USER, userName);
 
 		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,

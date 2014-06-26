@@ -7,7 +7,6 @@ package com.sf.tracem.db;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import android.content.ContentValues;
@@ -95,8 +94,8 @@ public class DBManager {
 				ZEORDER order = new ZEORDER();
 				order.setADDRESS(cursor.getString(columnsMap
 						.get(OrdersTable.ADDRESS)));
-				order.setASSIGNED_STATUS(cursor.getShort(columnsMap
-						.get(OrdersTable.ASSIGNED_STATUS)));
+				// order.setASSIGNED_STATUS(cursor.getShort(columnsMap
+				// .get(OrdersTable.ASSIGNED_STATUS)));
 				order.setAUFART(cursor.getString(columnsMap
 						.get(OrdersTable.AUFART)));
 				order.setAUFNR(cursor.getString(columnsMap
@@ -160,7 +159,8 @@ public class DBManager {
 			values.put(OrdersTable.EXP_DAYS, order.getEXP_DAYS());
 			values.put(OrdersTable.EXP_STATUS, order.getEXP_STATUS());
 			values.put(OrdersTable.ZHOURS, order.getZHOURS());
-			values.put(OrdersTable.ASSIGNED_STATUS, order.getASSIGNED_STATUS());
+			// values.put(OrdersTable.ASSIGNED_STATUS,
+			// order.getASSIGNED_STATUS());
 			// values.put(OrdersTable.ID_PROGRAM, order.getID_PROGRAM());
 
 			long result = traceMwdb
@@ -191,7 +191,8 @@ public class DBManager {
 			values.put(OrdersTable.EXP_DAYS, order.getEXP_DAYS());
 			values.put(OrdersTable.EXP_STATUS, order.getEXP_STATUS());
 			values.put(OrdersTable.ZHOURS, order.getZHOURS());
-			values.put(OrdersTable.ASSIGNED_STATUS, order.getASSIGNED_STATUS());
+			// values.put(OrdersTable.ASSIGNED_STATUS,
+			// order.getASSIGNED_STATUS());
 			// values.put(OrdersTable.ID_PROGRAM, order.getID_PROGRAM());
 
 			long result = traceMwdb.update(OrdersTable.TABLE_NAME, values,
@@ -212,11 +213,21 @@ public class DBManager {
 		List<Schedule> schedules = new ArrayList<Schedule>();
 
 		if (cursor.moveToFirst()) {
+
+			Map<String, Integer> scheduleMap = new ArrayMap<String, Integer>();
+
+			for (String column : ScheduleTable.COLUMN_NAMES) {
+				scheduleMap.put(column, cursor.getColumnIndex(column));
+			}
+
 			do {
 				Schedule item = new Schedule();
-				item.setCREATE_DATE(cursor.getString(0));
-				item.setID_PROGRAM(cursor.getString(1));
-				item.setSTATUS(cursor.getString(2));
+				item.setCREATE_DATE(cursor.getString(scheduleMap
+						.get(ScheduleTable.CREATE_DATE)));
+				item.setID_PROGRAM(cursor.getString(scheduleMap
+						.get(ScheduleTable.ID_PROGRAM)));
+				item.setSTATUS(cursor.getString(scheduleMap
+						.get(ScheduleTable.STATUS)));
 				schedules.add(item);
 			} while (cursor.moveToNext());
 		}

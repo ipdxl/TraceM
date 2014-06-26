@@ -36,7 +36,7 @@ import com.sf.tracem.plan.MyJobNavigation;
  */
 public class MySchedulesFragment extends Fragment {
 	private static final String SCHEDULE = "SCHEDULE";
-	public static final String TAG = "SCHEDULES";
+	public static final String TAG = "SCHEDULES_FRAGMENT";
 	private ScheduleAdapter scheduleAdapter;
 	private List<Schedule> schedules;
 
@@ -176,7 +176,7 @@ public class MySchedulesFragment extends Fragment {
 			text1.setText(item.getID_PROGRAM());
 
 			text2 = (TextView) view.findViewById(android.R.id.text2);
-			text2.setText(item.getCREATE_DATE());
+			text2.setText(item.getSTATUS());
 
 			return view;
 		}
