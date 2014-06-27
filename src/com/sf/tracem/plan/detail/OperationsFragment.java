@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -65,6 +66,7 @@ public class OperationsFragment extends Fragment {
 	private class opsArrayAdapter extends ArrayAdapter<ZEOPERATION_ORDER> {
 
 		private TextView activity, description, time;
+		private CheckBox opStatus;
 
 		public opsArrayAdapter(Context context, ZEOPERATION_ORDER[] objects) {
 			super(context, R.layout.operation_detail, R.id.eqktx, objects);
@@ -79,16 +81,19 @@ public class OperationsFragment extends Fragment {
 			activity = (TextView) view.findViewById(R.id.activity);
 			description = (TextView) view.findViewById(R.id.eqktx);
 			time = (TextView) view.findViewById(R.id.time);
+			opStatus = (CheckBox) view.findViewById(R.id.operarion_status);
 
 			ZEOPERATION_ORDER operation = getItem(position);
 
 			activity.setText(operation.getACTIVITY());
 			description.setText(operation.getDESCRIPTION());
-			time.setText(operation.getDURATION_NORMAL()
+			time.setText(operation.getDURATION_NORMAL() + " "
 					+ operation.getDURATION_NORMAL_UNIT());
+
+			opStatus.setChecked(operation.getCOMPLETE() == 1);
+			opStatus.setActivated(false);
 
 			return view;
 		}
-
 	}
 }

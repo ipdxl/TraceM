@@ -3,17 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="10dp"
     tools:ignore="HardcodedText" >
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/eqktx"
-        android:layout_alignBottom="@+id/eqktx"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="14dp"
-        android:text="Time" />
 
     <TextView
         android:id="@+id/eqktx"
@@ -22,7 +13,9 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/activity"
         android:layout_marginLeft="15dp"
+        android:layout_toLeftOf="@+id/operarion_status"
         android:hint="Description"
+        android:maxLines="5"
         android:text="Description"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -35,5 +28,26 @@
         android:layout_margin="3dp"
         android:hint="Activity"
         android:text="Activity" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/activity"
+        android:layout_alignBottom="@+id/activity"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="14dp"
+        android:text="Time" />
+
+    <CheckBox
+        android:id="@+id/operarion_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/time"
+        android:layout_below="@+id/activity"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="@string/complete" />
 
 </RelativeLayout>

@@ -1,6 +1,5 @@
 package com.sf.tracem.db;
 
-
 public class OperationTable {
 	/**
 	 * Operation table name
@@ -25,10 +24,6 @@ public class OperationTable {
 	 */
 	public final static String DESCRIPTION = "DESCRIPTION";
 	/**
-	 * Completion confirmation number for the operation
-	 */
-	public final static String CONF_NO = "CONF_NO";
-	/**
 	 * Plant
 	 */
 	public final static String PLANT = "PLANT";
@@ -41,27 +36,29 @@ public class OperationTable {
 	 */
 	public final static String DURATION_NORMAL_UNIT = "DURATION_NORMAL_UNIT";
 	/**
-	 * ISO code for unit of measurement
-	 */
-	public final static String DURATION_NORMAL_UNIT_ISO = "DURATION_NORMAL_UNIT_ISO";
-	/**
 	 * Indicator: No Remaining Work Expected
 	 */
 	public final static String COMPLETE = "COMPLETE";
 	/**
 	 * Create operation table statement
 	 */
-	public final static String CREATE_TABLE = 
-	"CREATE TABLE OPERATION ("
-		+"ACTIVITY		INTEGER PRIMARY KEY"
-		+", AUFNR 		TEXT REFERENCES ORDERS (AUFNR) ON DELETE CASCADE ON UPDATE CASCADE"
-		+", WORK_CNTR 	INTEGER"
-		+", DESCRIPTION 	TEXT"
-		+", CONF_NO 		TEXT"
-		+", PLANT 		INTEGER"
-		+", DURATION_NORMAL 			REAL"
-		+", DURATION_NORMAL_UNIT 		TEXT"
-		+", DURATION_NORMAL_UNIT_ISO 	TEXT"
-		+", COMPLETE 					INTEGER"
-	+");";
+	public final static String CREATE_TABLE = "CREATE TABLE OPERATION ("
+			+ "ACTIVITY		INTEGER PRIMARY KEY"
+			+ ", AUFNR 		TEXT REFERENCES ORDERS (AUFNR) ON DELETE CASCADE ON UPDATE CASCADE"
+			+ ", WORK_CNTR 	INTEGER"
+			+ ", DESCRIPTION 	TEXT"
+			// +", CONF_NO 		TEXT"
+			+ ", PLANT 		INTEGER"
+			+ ", DURATION_NORMAL 			REAL"
+			+ ", DURATION_NORMAL_UNIT 		TEXT"
+			// +", DURATION_NORMAL_UNIT_ISO 	TEXT"
+			+ ", COMPLETE 					INTEGER"
+			+ ");"
+			+ "CREATE TRIGGER update_order_status"
+			+ "AFTER UPDATE OF COMPLETE  ON OPERATION"
+			+ "BEGIN"
+			+ "	IF NOT EXISTS (SELECT COMPLETE FROM OPERATION WHERE COMPLETE = 0)"
+			+ "	BEGIN"
+			+ "		UPDATE ORDERS SET COMPLETE = 1 WHERE AUFNR = NEW.AUFNR"
+			+ "	END" + "END;";
 }

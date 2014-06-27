@@ -5,15 +5,21 @@ package com.sf.tracem.connection;
 
 import java.io.Serializable;
 
-
 @SuppressWarnings("serial")
-public class ZEOPERATION_ORDER implements Serializable{
+public class ZEOPERATION_ORDER implements Serializable {
 
 	private String ACTIVITY;
 	private String WORK_CNTR;
 	private String DESCRIPTION;
 	private String DURATION_NORMAL;
 	private String DURATION_NORMAL_UNIT;
+	public final static String TABLE_NAME = "OPERATION";
+	private int PLANT;
+	private byte COMPLETE;;
+
+	/**
+	 * Create operation table statement
+	 */
 
 	/**
 	 * Gets the Operation/Activity Number
@@ -42,7 +48,7 @@ public class ZEOPERATION_ORDER implements Serializable{
 	}
 
 	/**
-	 * Gets the operation description Describes the operation or sub-operation
+	 * Gets the operation description, describes the operation or sub-operation
 	 * 
 	 * @return operation description
 	 */
@@ -78,6 +84,36 @@ public class ZEOPERATION_ORDER implements Serializable{
 
 	public void setDURATION_NORMAL_UNIT(String dURATION_NORMAL_UNIT) {
 		DURATION_NORMAL_UNIT = dURATION_NORMAL_UNIT;
+	}
+
+	/**
+	 * @return the pLANT
+	 */
+	public int getPLANT() {
+		return PLANT;
+	}
+
+	/**
+	 * @param pLANT
+	 *            the pLANT to set
+	 */
+	public void setPLANT(int pLANT) {
+		PLANT = pLANT;
+	}
+
+	/**
+	 * @return the cOMPLETE
+	 */
+	public byte getCOMPLETE() {
+		return COMPLETE;
+	}
+
+	/**
+	 * @param cOMPLETE
+	 *            the cOMPLETE to set
+	 */
+	public void setCOMPLETE(byte cOMPLETE) {
+		COMPLETE = cOMPLETE;
 	}
 
 }

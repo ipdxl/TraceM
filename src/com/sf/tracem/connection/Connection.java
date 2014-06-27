@@ -1049,16 +1049,12 @@ public class Connection extends Activity {
 					.getWORK_CNTR());
 			item2.addProperty(OperationTable.DESCRIPTION, listOPERATIONS.get(i)
 					.getDESCRIPTION());
-			item2.addProperty(OperationTable.CONF_NO, listOPERATIONS.get(i)
-					.getCONF_NO());
 			item2.addProperty(OperationTable.PLANT, listOPERATIONS.get(i)
 					.getPLANT());
 			item2.addProperty(OperationTable.DURATION_NORMAL, listOPERATIONS
 					.get(i).getDURATION_NORMAL());
 			item2.addProperty(OperationTable.DURATION_NORMAL_UNIT,
 					listOPERATIONS.get(i).getDURATION_NORMAL_UNIT());
-			item2.addProperty(OperationTable.DURATION_NORMAL_UNIT_ISO,
-					listOPERATIONS.get(i).getDURATION_NORMAL_UNIT_ISO());
 			item2.addProperty(OperationTable.COMPLETE, listOPERATIONS.get(i)
 					.getCOMPLETE());
 
