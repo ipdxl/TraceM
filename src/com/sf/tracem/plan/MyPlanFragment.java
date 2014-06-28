@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -29,7 +30,7 @@ import android.widget.Toast;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
-import com.sf.tracem.connection.ZEORDER;
+import com.sf.tracem.connection.Order;
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.login.CurrentConfig;
 
@@ -49,11 +50,13 @@ public class MyPlanFragment extends Fragment {
 
 	private TextView aufnr, aufart, auftext, co_gstrp, name, address;
 
-	private List<ZEORDER> orders = new ArrayList<ZEORDER>();
+	private List<Order> orders = new ArrayList<Order>();
 
 	private MyJobNavigation navigation;
 
 	private SharedPreferences loginPreferences;
+
+	protected ProgressDialog progress;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -96,10 +99,10 @@ public class MyPlanFragment extends Fragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
 
-			ZEORDER[] ordersArray;
-			ordersArray = (ZEORDER[]) savedInstanceState
+			Order[] ordersArray;
+			ordersArray = (Order[]) savedInstanceState
 					.getSerializable("orders");
-			orders = new ArrayList<ZEORDER>(Arrays.asList(ordersArray));
+			orders = new ArrayList<Order>(Arrays.asList(ordersArray));
 		} else {
 			getOrdersFromDB();
 		}
@@ -123,7 +126,7 @@ public class MyPlanFragment extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		ZEORDER[] ordersArray = new ZEORDER[orders.size()];
+		Order[] ordersArray = new Order[orders.size()];
 		orders.toArray(ordersArray);
 
 		outState.putSerializable("orders", ordersArray);
@@ -158,10 +161,19 @@ public class MyPlanFragment extends Fragment {
 		// final String dl = dateLow.replace("/", ".");
 		// final String dh = dateHigh.replace("/", ".");
 
-		AsyncTask<String, Void, List<ZEORDER>> task = new AsyncTask<String, Void, List<ZEORDER>>() {
+		AsyncTask<String, Void, List<Order>> task = new AsyncTask<String, Void, List<Order>>() {
 
 			@Override
-			protected List<ZEORDER> doInBackground(String... params) {
+			protected void onPreExecute() {
+				progress = new ProgressDialog(getActivity());
+				progress.setMessage(getResources().getString(R.string.loading));
+				progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progress.setIndeterminate(true);
+				progress.show();
+			}
+
+			@Override
+			protected List<Order> doInBackground(String... params) {
 				try {
 					Looper.prepare();
 				} catch (Exception e) {
@@ -185,8 +197,9 @@ public class MyPlanFragment extends Fragment {
 			}
 
 			@Override
-			protected void onPostExecute(List<ZEORDER> result) {
+			protected void onPostExecute(List<Order> result) {
 				fillContentTable();
+				progress.hide();
 			}
 		};
 
@@ -225,7 +238,7 @@ public class MyPlanFragment extends Fragment {
 		RowClickListener rcl = new RowClickListener();
 
 		boolean flag = false;
-		for (ZEORDER item : orders) {
+		for (Order item : orders) {
 
 			// for (int i = 0; i < 30; i++) {
 			contentRow = (TableRow) inflater.inflate(R.layout.my_job_table_row,

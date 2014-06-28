@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,13 +48,12 @@ public class VisitFragment extends Fragment {
 	protected int week;
 	private MyJobNavigation navigation;
 
-	
 	@Override
 	public void onAttach(Activity activity) {
-		navigation = (MyJobNavigation)activity;
+		navigation = (MyJobNavigation) activity;
 		super.onAttach(activity);
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -170,13 +170,21 @@ public class VisitFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.create_visist:
-		navigation.onCreateVisit();
+			createVisit();
+			// navigation.onCreateVisit();
 			break;
 
 		default:
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void createVisit() {
+		CreateVisitDialog cvd = new CreateVisitDialog();
+		FragmentManager fm = getActivity().getSupportFragmentManager();
+		cvd.show(fm, "CREATE_VISIT_DIALOG");
+
 	}
 
 }

@@ -12,13 +12,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sf.tracem.R;
-import com.sf.tracem.connection.ZEOPERATION_ORDER;
+import com.sf.tracem.connection.Operation;
 
 public class OperationsFragment extends Fragment {
 
 	private static final String OPERATIONS = "OPERATIONS";
 	private ListView operationList;
-	private ZEOPERATION_ORDER[] operations;
+	private Operation[] operations;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -30,12 +30,12 @@ public class OperationsFragment extends Fragment {
 	private void onRestoreSavedonstanceState(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
 			if (savedInstanceState.getSerializable(OPERATIONS) != null) {
-				operations = (ZEOPERATION_ORDER[]) savedInstanceState
+				operations = (Operation[]) savedInstanceState
 						.getSerializable(OPERATIONS);
 			}
 		}
 		if (operations == null) {
-			operations = (ZEOPERATION_ORDER[]) getArguments().getSerializable(
+			operations = (Operation[]) getArguments().getSerializable(
 					"operations");
 		}
 	}
@@ -63,12 +63,12 @@ public class OperationsFragment extends Fragment {
 		super.onSaveInstanceState(outState);
 	}
 
-	private class opsArrayAdapter extends ArrayAdapter<ZEOPERATION_ORDER> {
+	private class opsArrayAdapter extends ArrayAdapter<Operation> {
 
 		private TextView activity, description, time;
 		private CheckBox opStatus;
 
-		public opsArrayAdapter(Context context, ZEOPERATION_ORDER[] objects) {
+		public opsArrayAdapter(Context context, Operation[] objects) {
 			super(context, R.layout.operation_detail, R.id.eqktx, objects);
 		}
 
@@ -83,7 +83,7 @@ public class OperationsFragment extends Fragment {
 			time = (TextView) view.findViewById(R.id.time);
 			opStatus = (CheckBox) view.findViewById(R.id.operarion_status);
 
-			ZEOPERATION_ORDER operation = getItem(position);
+			Operation operation = getItem(position);
 
 			activity.setText(operation.getACTIVITY());
 			description.setText(operation.getDESCRIPTION());

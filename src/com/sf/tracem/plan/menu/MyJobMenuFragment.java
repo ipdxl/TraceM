@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Menu;
-import com.sf.tracem.db.MenuTable;
 import com.sf.tracem.db.TraceMOpenHelper;
 import com.sf.tracem.plan.MyJobNavigation;
 
@@ -58,10 +57,9 @@ public class MyJobMenuFragment extends Fragment {
 
 		tracemrdb = toh.getReadableDatabase();
 
-		menus = tracemrdb.query(MenuTable.TABLE_NAME,
-				new String[] { MenuTable.ID_MENU }, MenuTable.ID_FATHER
-						+ " = ?", new String[] { "1" }, null, null,
-				MenuTable.ID_MENU);
+		menus = tracemrdb.query(Menu.TABLE_NAME, new String[] { Menu.ID_MENU },
+				Menu.ID_FATHER + " = ?", new String[] { "1" }, null, null,
+				Menu.ID_MENU);
 
 		items = new ArrayList<Menu>();
 		if (menus.moveToFirst()) {

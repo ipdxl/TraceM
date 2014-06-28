@@ -27,7 +27,6 @@ import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Menu;
 import com.sf.tracem.connection.Message;
-import com.sf.tracem.db.MenuTable;
 import com.sf.tracem.db.TraceMOpenHelper;
 import com.sf.tracem.login.CurrentConfig;
 import com.sf.tracem.plan.MyJobActivity;
@@ -65,10 +64,10 @@ public class MainMenuFragment extends Fragment {
 		TraceMOpenHelper toh = new TraceMOpenHelper(getActivity());
 		tracemrdb = toh.getReadableDatabase();
 
-		cursorMenu = tracemrdb.query(MenuTable.TABLE_NAME,
-				new String[] { MenuTable.ID_MENU }, MenuTable.ID_FATHER
+		cursorMenu = tracemrdb.query(Menu.TABLE_NAME,
+				new String[] { Menu.ID_MENU }, Menu.ID_FATHER
 						+ " = ?", new String[] { "0" }, null, null,
-				MenuTable.ID_MENU);
+				Menu.ID_MENU);
 
 		menus = new ArrayList<Menu>();
 		if (cursorMenu.moveToFirst())

@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class Path implements Serializable {
-	private ZEPARTNER partner;
-	private ZEORDER[] orders;
+	private Partner partner;
+	private Order[] orders;
 
 	/**
 	 * @return
 	 */
-	public ZEPARTNER getPartner() {
+	public Partner getPartner() {
 		return partner;
 	}
 
@@ -18,14 +18,14 @@ public class Path implements Serializable {
 	 * @param partner
 	 *            the partner to set
 	 */
-	public void setPartner(ZEPARTNER partner) {
+	public void setPartner(Partner partner) {
 		this.partner = partner;
 	}
 
 	/**
 	 * @return the orders
 	 */
-	public ZEORDER[] getOrders() {
+	public Order[] getOrders() {
 		return orders;
 	}
 
@@ -33,7 +33,7 @@ public class Path implements Serializable {
 	 * @param orders
 	 *            the orders to set
 	 */
-	public void setOrders(ZEORDER[] orders) {
+	public void setOrders(Order[] orders) {
 		this.orders = orders;
 	}
 

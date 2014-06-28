@@ -16,10 +16,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
+import com.sf.tracem.connection.Component;
+import com.sf.tracem.connection.Equipment;
+import com.sf.tracem.connection.HeaderOrder;
+import com.sf.tracem.connection.Operation;
+import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.OrderSchedule;
+import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.connection.TraceMFormater;
-import com.sf.tracem.connection.ZEORDER;
 
 /**
  * 
@@ -35,24 +40,23 @@ public class DBManager {
 		toh = new TraceMOpenHelper(context);
 	}
 
-	public List<ZEORDER> getOrders() {
+	public List<Order> getOrders() {
 		traceMrdb = toh.getReadableDatabase();
 
-		List<ZEORDER> orders;
+		List<Order> orders;
 
-		Cursor ordersCursor = traceMrdb.query(OrdersTable.TABLE_NAME,
-				OrdersTable.COLUMN_NAMES, null, null, null, null,
-				OrdersTable.AUFNR);
+		Cursor ordersCursor = traceMrdb.query(Order.TABLE_NAME,
+				Order.COLUMN_NAMES, null, null, null, null, Order.AUFNR);
 
 		orders = getOrdersFrom(ordersCursor);
 
 		return orders;
 	}
 
-	public List<ZEORDER> getUnassignedOrders() {
+	public List<Order> getUnassignedOrders() {
 		traceMrdb = toh.getReadableDatabase();
 
-		List<ZEORDER> orders;
+		List<Order> orders;
 
 		String query =
 		// String
@@ -80,41 +84,35 @@ public class DBManager {
 	 *            Cursor with orders
 	 * @return A list of orders
 	 */
-	private List<ZEORDER> getOrdersFrom(Cursor cursor) {
-		List<ZEORDER> orders = new ArrayList<ZEORDER>();
+	private List<Order> getOrdersFrom(Cursor cursor) {
+		List<Order> orders = new ArrayList<Order>();
 
 		Map<String, Integer> columnsMap = new ArrayMap<String, Integer>();
 
-		for (String column : OrdersTable.COLUMN_NAMES) {
+		for (String column : Order.COLUMN_NAMES) {
 			columnsMap.put(column, cursor.getColumnIndex(column));
 		}
 
 		if (cursor.moveToFirst()) {
 			do {
-				ZEORDER order = new ZEORDER();
-				order.setADDRESS(cursor.getString(columnsMap
-						.get(OrdersTable.ADDRESS)));
+				Order order = new Order();
+				order.setADDRESS(cursor.getString(columnsMap.get(Order.ADDRESS)));
 				// order.setASSIGNED_STATUS(cursor.getShort(columnsMap
 				// .get(OrdersTable.ASSIGNED_STATUS)));
-				order.setAUFART(cursor.getString(columnsMap
-						.get(OrdersTable.AUFART)));
-				order.setAUFNR(cursor.getString(columnsMap
-						.get(OrdersTable.AUFNR)));
-				order.setAUFTEXT(cursor.getString(columnsMap
-						.get(OrdersTable.AUFTEXT)));
+				order.setAUFART(cursor.getString(columnsMap.get(Order.AUFART)));
+				order.setAUFNR(cursor.getString(columnsMap.get(Order.AUFNR)));
+				order.setAUFTEXT(cursor.getString(columnsMap.get(Order.AUFTEXT)));
 				order.setCO_GSTRP(cursor.getString(columnsMap
-						.get(OrdersTable.CO_GSTRP)));
+						.get(Order.CO_GSTRP)));
 				order.setEXP_DAYS(cursor.getString(columnsMap
-						.get(OrdersTable.EXP_DAYS)));
+						.get(Order.EXP_DAYS)));
 				order.setEXP_STATUS(cursor.getString(columnsMap
-						.get(OrdersTable.EXP_STATUS)));
+						.get(Order.EXP_STATUS)));
 				// order.setID_PROGRAM(cursor.getString(8));
 				order.setORDER_STATUS(cursor.getInt(columnsMap
-						.get(OrdersTable.ORDER_STATUS)));
-				order.setPARTNER(cursor.getString(columnsMap
-						.get(OrdersTable.PARTNER)));
-				order.setZHOURS(cursor.getString(columnsMap
-						.get(OrdersTable.ZHOURS)));
+						.get(Order.ORDER_STATUS)));
+				order.setPARTNER(cursor.getString(columnsMap.get(Order.PARTNER)));
+				order.setZHOURS(cursor.getString(columnsMap.get(Order.ZHOURS)));
 				orders.add(order);
 			} while (cursor.moveToNext());
 		}
@@ -127,18 +125,18 @@ public class DBManager {
 	 * 
 	 * @param orders
 	 */
-	public void insertOrders(List<ZEORDER> orders) {
+	public void insertOrders(List<Order> orders) {
 
 		traceMwdb = toh.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		for (ZEORDER order : orders) {
+		for (Order order : orders) {
 			values.clear();
 			if (order.getPARTNER() != null) {
-				values.put(PartnerTable.PARTNER, order.getPARTNER());
-				values.put(PartnerTable.ADDRESS, order.getADDRESS());
-				long result = traceMwdb.insert(PartnerTable.TABLE_NAME, null,
-						values);
+				values.put(Partner.PARTNER, order.getPARTNER());
+				values.put(Partner.ADDRESS, order.getADDRESS());
+				long result = traceMwdb
+						.insert(Partner.TABLE_NAME, null, values);
 				if (result != -1) {
 					Log.i("Insert Partner", "" + result);
 				} else {
@@ -147,24 +145,23 @@ public class DBManager {
 			}
 		}
 
-		for (ZEORDER order : orders) {
+		for (Order order : orders) {
 			values.clear();
-			values.put(OrdersTable.AUFNR, order.getAUFNR());
-			values.put(OrdersTable.AUFART, order.getAUFART());
-			values.put(OrdersTable.CO_GSTRP, order.getCO_GSTRP());
-			values.put(OrdersTable.AUFTEXT, order.getAUFTEXT());
-			values.put(OrdersTable.PARTNER, order.getPARTNER());
-			values.put(PartnerTable.ADDRESS, order.getADDRESS());
-			values.put(OrdersTable.ORDER_STATUS, order.getORDER_STATUS());
-			values.put(OrdersTable.EXP_DAYS, order.getEXP_DAYS());
-			values.put(OrdersTable.EXP_STATUS, order.getEXP_STATUS());
-			values.put(OrdersTable.ZHOURS, order.getZHOURS());
+			values.put(Order.AUFNR, order.getAUFNR());
+			values.put(Order.AUFART, order.getAUFART());
+			values.put(Order.CO_GSTRP, order.getCO_GSTRP());
+			values.put(Order.AUFTEXT, order.getAUFTEXT());
+			values.put(Order.PARTNER, order.getPARTNER());
+			values.put(Partner.ADDRESS, order.getADDRESS());
+			values.put(Order.ORDER_STATUS, order.getORDER_STATUS());
+			values.put(Order.EXP_DAYS, order.getEXP_DAYS());
+			values.put(Order.EXP_STATUS, order.getEXP_STATUS());
+			values.put(Order.ZHOURS, order.getZHOURS());
 			// values.put(OrdersTable.ASSIGNED_STATUS,
 			// order.getASSIGNED_STATUS());
 			// values.put(OrdersTable.ID_PROGRAM, order.getID_PROGRAM());
 
-			long result = traceMwdb
-					.insert(OrdersTable.TABLE_NAME, null, values);
+			long result = traceMwdb.insert(Order.TABLE_NAME, null, values);
 			if (result != -1) {
 				Log.i("Insert Order", "" + result);
 			} else {
@@ -173,31 +170,30 @@ public class DBManager {
 		}
 	}
 
-	public void updateOrders(List<ZEORDER> orders) {
+	public void updateOrders(List<Order> orders) {
 
 		traceMwdb = toh.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 
-		for (ZEORDER order : orders) {
+		for (Order order : orders) {
 			values.clear();
-			values.put(OrdersTable.AUFNR, order.getAUFNR());
-			values.put(OrdersTable.AUFART, order.getAUFART());
-			values.put(OrdersTable.CO_GSTRP, order.getCO_GSTRP());
-			values.put(OrdersTable.AUFTEXT, order.getAUFTEXT());
-			values.put(OrdersTable.PARTNER, order.getPARTNER());
-			values.put(PartnerTable.ADDRESS, order.getADDRESS());
-			values.put(OrdersTable.ORDER_STATUS, order.getORDER_STATUS());
-			values.put(OrdersTable.EXP_DAYS, order.getEXP_DAYS());
-			values.put(OrdersTable.EXP_STATUS, order.getEXP_STATUS());
-			values.put(OrdersTable.ZHOURS, order.getZHOURS());
+			values.put(Order.AUFNR, order.getAUFNR());
+			values.put(Order.AUFART, order.getAUFART());
+			values.put(Order.CO_GSTRP, order.getCO_GSTRP());
+			values.put(Order.AUFTEXT, order.getAUFTEXT());
+			values.put(Order.PARTNER, order.getPARTNER());
+			values.put(Partner.ADDRESS, order.getADDRESS());
+			values.put(Order.ORDER_STATUS, order.getORDER_STATUS());
+			values.put(Order.EXP_DAYS, order.getEXP_DAYS());
+			values.put(Order.EXP_STATUS, order.getEXP_STATUS());
+			values.put(Order.ZHOURS, order.getZHOURS());
 			// values.put(OrdersTable.ASSIGNED_STATUS,
 			// order.getASSIGNED_STATUS());
 			// values.put(OrdersTable.ID_PROGRAM, order.getID_PROGRAM());
 
-			long result = traceMwdb.update(OrdersTable.TABLE_NAME, values,
-					OrdersTable.AUFNR + " = ?",
-					new String[] { order.getAUFNR() });
+			long result = traceMwdb.update(Order.TABLE_NAME, values,
+					Order.AUFNR + " = ?", new String[] { order.getAUFNR() });
 			if (result != -1) {
 				Log.i("Insert Order", "" + result);
 			} else {
@@ -208,26 +204,26 @@ public class DBManager {
 
 	public List<Schedule> getSchedules() {
 		traceMrdb = toh.getReadableDatabase();
-		Cursor cursor = traceMrdb.query(ScheduleTable.TABLE_NAME,
-				ScheduleTable.COLUMN_NAMES, null, null, null, null, null);
+		Cursor cursor = traceMrdb.query(Schedule.TABLE_NAME,
+				Schedule.COLUMN_NAMES, null, null, null, null, null);
 		List<Schedule> schedules = new ArrayList<Schedule>();
 
 		if (cursor.moveToFirst()) {
 
 			Map<String, Integer> scheduleMap = new ArrayMap<String, Integer>();
 
-			for (String column : ScheduleTable.COLUMN_NAMES) {
+			for (String column : Schedule.COLUMN_NAMES) {
 				scheduleMap.put(column, cursor.getColumnIndex(column));
 			}
 
 			do {
 				Schedule item = new Schedule();
 				item.setCREATE_DATE(cursor.getString(scheduleMap
-						.get(ScheduleTable.CREATE_DATE)));
+						.get(Schedule.CREATE_DATE)));
 				item.setID_PROGRAM(cursor.getString(scheduleMap
-						.get(ScheduleTable.ID_PROGRAM)));
+						.get(Schedule.ID_PROGRAM)));
 				item.setSTATUS(cursor.getString(scheduleMap
-						.get(ScheduleTable.STATUS)));
+						.get(Schedule.STATUS)));
 				schedules.add(item);
 			} while (cursor.moveToNext());
 		}
@@ -241,25 +237,25 @@ public class DBManager {
 
 		ContentValues values = new ContentValues();
 
-		values.put(ScheduleTable.CREATE_DATE, schedule.getCREATE_DATE());
-		values.put(ScheduleTable.ID_PROGRAM, schedule.getID_PROGRAM());
-		values.put(ScheduleTable.STATUS, schedule.getSTATUS());
+		values.put(Schedule.CREATE_DATE, schedule.getCREATE_DATE());
+		values.put(Schedule.ID_PROGRAM, schedule.getID_PROGRAM());
+		values.put(Schedule.STATUS, schedule.getSTATUS());
 
-		traceMwdb.insert(ScheduleTable.TABLE_NAME, null, values);
+		traceMwdb.insert(Schedule.TABLE_NAME, null, values);
 	}
 
-	public void insertScheduleDetail(String iDProgram, List<ZEORDER> orders) {
+	public void insertScheduleDetail(String iDProgram, List<Order> orders) {
 
 		updateSchedule(orders, iDProgram);
 
 	}
 
-	public List<ZEORDER> getScheduleDetail(int year, int week) {
+	public List<Order> getScheduleDetail(int year, int week) {
 		traceMrdb = toh.getReadableDatabase();
 
 		String id = getID_Program(year, week);
 
-		List<ZEORDER> orders;
+		List<Order> orders;
 
 		String query =
 		// String
@@ -281,17 +277,17 @@ public class DBManager {
 		return orders;
 	}
 
-	public void updateSchedule(List<ZEORDER> newSchedule, String iDProgram) {
+	public void updateSchedule(List<Order> newSchedule, String iDProgram) {
 		updateSchedule(newSchedule, TraceMFormater.getScheduleYear(iDProgram),
 				TraceMFormater.getScheduleWeek(iDProgram));
 	}
 
-	public void updateSchedule(List<ZEORDER> newSchedule, int year, int week) {
+	public void updateSchedule(List<Order> newSchedule, int year, int week) {
 		String id = getID_Program(year, week);
 
 		List<OrderSchedule> oss = new ArrayList<OrderSchedule>();
 
-		for (ZEORDER order : newSchedule) {
+		for (Order order : newSchedule) {
 			OrderSchedule os = new OrderSchedule();
 			os.setAUFNR(order.getAUFNR());
 			os.setID_PROGRAM(id);
@@ -300,14 +296,14 @@ public class DBManager {
 
 		traceMwdb = toh.getWritableDatabase();
 
-		traceMwdb.delete(OrderScheduleTable.TABLE_NAME,
-				OrderScheduleTable.ID_PROGRAM + " = ?", new String[] { id });
+		traceMwdb.delete(OrderSchedule.TABLE_NAME, OrderSchedule.ID_PROGRAM
+				+ " = ?", new String[] { id });
 
 		for (OrderSchedule os : oss) {
 			ContentValues values = new ContentValues();
-			values.put(OrderScheduleTable.AUFNR, os.getAUFNR());
-			values.put(OrderScheduleTable.ID_PROGRAM, os.getID_PROGRAM());
-			traceMwdb.insert(OrderScheduleTable.TABLE_NAME, null, values);
+			values.put(OrderSchedule.AUFNR, os.getAUFNR());
+			values.put(OrderSchedule.ID_PROGRAM, os.getID_PROGRAM());
+			traceMwdb.insert(OrderSchedule.TABLE_NAME, null, values);
 		}
 
 	}
@@ -319,8 +315,8 @@ public class DBManager {
 	public void deleteSchedule(int year, int week) {
 		String id = getID_Program(year, week);
 
-		traceMwdb.delete(OrderScheduleTable.TABLE_NAME,
-				ScheduleTable.ID_PROGRAM + " = ?", new String[] { id });
+		traceMwdb.delete(OrderSchedule.TABLE_NAME,
+				Schedule.ID_PROGRAM + " = ?", new String[] { id });
 
 	}
 
@@ -328,8 +324,8 @@ public class DBManager {
 
 		traceMrdb = toh.getReadableDatabase();
 
-		Cursor cursor = traceMrdb.query(ScheduleTable.TABLE_NAME,
-				ScheduleTable.COLUMN_NAMES, ScheduleTable.STATUS + " = ?",
+		Cursor cursor = traceMrdb.query(Schedule.TABLE_NAME,
+				Schedule.COLUMN_NAMES, Schedule.STATUS + " = ?",
 				new String[] { "002" }, null, null, null);
 
 		String idProgram = null;
@@ -338,6 +334,73 @@ public class DBManager {
 		}
 
 		return idProgram;
+	}
+
+	public void insertHeader(List<HeaderOrder> headers) {
+
+		traceMwdb = toh.getWritableDatabase();
+
+		for (HeaderOrder header : headers) {
+			ContentValues values = new ContentValues();
+
+			values.put(HeaderOrder.AUFNR, header.getAUFNR());
+			values.put(HeaderOrder.EQUIPMENT, header.getEQUIPMENT());
+			values.put(HeaderOrder.MN_WKCTR_ID, header.getMN_WKCTR_ID());
+			values.put(HeaderOrder.NOTIF_NO, header.getNOTIF_NO());
+			values.put(HeaderOrder.PLANGROUP, header.getPLANGROUP());
+
+			traceMwdb.insert(HeaderOrder.TABLE_NAME, null, values);
+		}
+
+	}
+
+	public void insertEquipment(String order, List<Equipment> equipments) {
+		traceMwdb = toh.getWritableDatabase();
+		for (Equipment equipment : equipments) {
+			ContentValues values = new ContentValues();
+
+			values.put(Equipment.AUFNR, order);
+			values.put(Equipment.EQTXT, equipment.getEQKTX());
+			values.put(Equipment.EQUNR, equipment.getEQUNR());
+
+			traceMwdb.insert(Equipment.TABLE_NAME, null, values);
+		}
+	}
+
+	public void insertOperations(String order, List<Operation> operations) {
+		traceMwdb = toh.getWritableDatabase();
+		for (Operation op : operations) {
+			ContentValues values = new ContentValues();
+
+			values.put(Operation.AUFNR, order);
+			values.put(Operation.ACTIVITY, op.getACTIVITY());
+			values.put(Operation.COMPLETE, op.getCOMPLETE());
+			values.put(Operation.DESCRIPTION, op.getDESCRIPTION());
+			values.put(Operation.DURATION_NORMAL, op.getDURATION_NORMAL());
+			values.put(Operation.DURATION_NORMAL_UNIT,
+					op.getDURATION_NORMAL_UNIT());
+			values.put(Operation.PLANT, op.getPLANT());
+			values.put(Operation.WORK_CNTR, op.getWORK_CNTR());
+
+			traceMwdb.insert(Operation.TABLE_NAME, null, values);
+		}
+	}
+
+	public void insertComponents(String order, List<Component> components) {
+		traceMwdb = toh.getWritableDatabase();
+		for (Component comp : components) {
+			ContentValues values = new ContentValues();
+
+			values.put(Component.AUFNR, order);
+			values.put(Component.ACTIVITY, comp.getACTIVITY());
+			values.put(Component.MATERIAL, comp.getMATERIAL());
+			values.put(Component.MATL_DESC, comp.getMATL_DESC());
+			values.put(Component.REQUIREMENT_QUANTITY,
+					comp.getREQUIREMENT_QUANTITY());
+			values.put(Component.REQUIREMENT_QUANTITY_UNIT,
+					comp.getREQUIREMENT_QUANTITY_UNIT());
+			traceMwdb.insert(Component.TABLE_NAME, null, values);
+		}
 	}
 
 }

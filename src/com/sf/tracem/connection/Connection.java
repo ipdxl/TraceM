@@ -16,14 +16,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.app.Activity;
 import android.content.Context;
 
-import com.sf.tracem.db.ComponentTable;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.db.HeaderOrderTable;
-import com.sf.tracem.db.MenuTable;
-import com.sf.tracem.db.OperationTable;
-import com.sf.tracem.db.OrdersTable;
-import com.sf.tracem.db.PartnerTable;
-import com.sf.tracem.db.ScheduleTable;
+import com.sf.tracem.db.TraceMOpenHelper;
 
 public class Connection extends Activity {
 
@@ -40,7 +34,7 @@ public class Connection extends Activity {
 	private final static String Z_PM_AP_GET_SCHEDULE_DETAIL = "Z_PM_AP_GET_SCHEDULE_DETAIL";
 	private final static String Z_PM_AP_GET_ORDER_DETAIL = "Z_PM_AP_GET_ORDER_DETAIL";
 	// private final static String Z_PM_LOG = "Z_PM_LOG";
-	private static final String CONFIRMATION = "Z_PM_ORDER_CONFIRMATION";
+	private static final String Z_PM_AP_CONFIRMATION = "Z_PM_ORDER_CONFIRMATION";
 	/*
 	 * Web Service 2
 	 */
@@ -59,7 +53,8 @@ public class Connection extends Activity {
 	private static final String TINI = "TINI";
 	private static final String P_PROGRAM = "P_PROGRAM";
 	private static final String P_PASSWORD = "P_PASSWORD";
-	@SuppressWarnings("unused")
+	private static final String P_ORDER_NUMBER = "P_ORDER_NUMBER";
+	private static final String ITEM = "item";
 	private Context context;
 	private DBManager dbManager;
 
@@ -114,13 +109,21 @@ public class Connection extends Activity {
 		login.setMenuList(getMenuList((SoapObject) response.get(0)));
 		login.setMessageList(getMessageList((SoapObject) response.get(1)));
 		login.setLocation(((SoapPrimitive) response.get(2)).toString());
-		login.setPlanta(((SoapPrimitive) response.get(3)).toString());
+		login.setPlant(((SoapPrimitive) response.get(3)).toString());
 		login.setRol(((SoapPrimitive) response.get(4)).toString());
 
 		return login;
 
 	}
 
+	/**
+	 * 
+	 * @param userName
+	 * @return A Message List
+	 * @throws HttpResponseException
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
 	public List<Message> logout(String userName) throws HttpResponseException,
 			IOException, XmlPullParserException {
 
@@ -231,9 +234,9 @@ public class Connection extends Activity {
 			SoapObject item = (SoapObject) object.getProperty(i);
 
 			menu.setIdMenu((byte) parseNumericResult(item
-					.getPropertyAsString(MenuTable.ID_MENU)));
+					.getPropertyAsString(Menu.ID_MENU)));
 			menu.setIdFather((byte) parseNumericResult(item
-					.getPropertyAsString(MenuTable.ID_FATHER)));
+					.getPropertyAsString(Menu.ID_FATHER)));
 
 			menuList.add(menu);
 		}
@@ -241,6 +244,12 @@ public class Connection extends Activity {
 		return menuList;
 	}
 
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
 	public ZEMYEFFORT getMyEffort(String user) throws Exception {
 
 		// Create request
@@ -294,34 +303,33 @@ public class Connection extends Activity {
 	 *            {@link SoapObject} containig a list of orders
 	 * @return
 	 */
-	private List<ZEORDER> getListOrders(SoapObject listSoap) {
+	private List<Order> getListOrders(SoapObject listSoap) {
 		int count = listSoap.getPropertyCount();
-		List<ZEORDER> orders = new ArrayList<ZEORDER>();
+		List<Order> orders = new ArrayList<Order>();
 
-		ZEORDER order;
+		Order order;
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) listSoap.getProperty(i);
-			order = new ZEORDER();
-			order.setAUFART(parseResult(item.getProperty(OrdersTable.AUFART)
+			order = new Order();
+			order.setAUFART(parseResult(item.getProperty(Order.AUFART)
 					.toString()));
-			order.setAUFNR(parseResult(item.getProperty(OrdersTable.AUFNR)
+			order.setAUFNR(parseResult(item.getProperty(Order.AUFNR).toString()));
+			order.setAUFTEXT(parseResult(item.getProperty(Order.AUFTEXT)
 					.toString()));
-			order.setAUFTEXT(parseResult(item.getProperty(OrdersTable.AUFTEXT)
+			order.setCO_GSTRP(parseResult(item.getProperty(Order.CO_GSTRP)
 					.toString()));
-			order.setCO_GSTRP(parseResult(item
-					.getProperty(OrdersTable.CO_GSTRP).toString()));
-			order.setPARTNER(parseResult(item.getProperty(OrdersTable.PARTNER)
+			order.setPARTNER(parseResult(item.getProperty(Order.PARTNER)
 					.toString()));
-			order.setADDRESS(parseResult(item.getProperty(PartnerTable.ADDRESS)
+			order.setADDRESS(parseResult(item.getProperty(Partner.ADDRESS)
 					.toString()));
 
 			order.setORDER_STATUS((int) parseNumericResult(item.getProperty(
-					OrdersTable.ORDER_STATUS).toString()));
-			order.setEXP_DAYS(parseResult(item
-					.getProperty(OrdersTable.EXP_DAYS).toString()));
-			order.setEXP_STATUS(parseResult(item.getProperty(
-					OrdersTable.EXP_STATUS).toString()));
-			order.setZHOURS(parseResult(item.getProperty(OrdersTable.ZHOURS)
+					Order.ORDER_STATUS).toString()));
+			order.setEXP_DAYS(parseResult(item.getProperty(Order.EXP_DAYS)
+					.toString()));
+			order.setEXP_STATUS(parseResult(item.getProperty(Order.EXP_STATUS)
+					.toString()));
+			order.setZHOURS(parseResult(item.getProperty(Order.ZHOURS)
 					.toString()));
 			// order.setASSIGNED_STATUS(parseBitResult(item.getProperty(
 			// "ASSIGNED_STATUS").toString()));
@@ -352,7 +360,7 @@ public class Connection extends Activity {
 	 * @return Single user's plan
 	 * @throws Exception
 	 */
-	public List<ZEORDER> getPlan(String UserName) throws Exception {
+	public List<Order> getPlan(String UserName) throws Exception {
 		return getPlan(new String[] { UserName });
 	}
 
@@ -366,7 +374,7 @@ public class Connection extends Activity {
 	 * @throws HttpResponseException
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ZEORDER> getPlan(String[] users) throws HttpResponseException,
+	public List<Order> getPlan(String[] users) throws HttpResponseException,
 			IOException, XmlPullParserException {
 
 		// Create request
@@ -377,7 +385,7 @@ public class Connection extends Activity {
 		for (String user : users) {
 			SoapObject item = new SoapObject();
 			item.addProperty("ZUSER", user);
-			userslist.addProperty("item", item);
+			userslist.addProperty(ITEM, item);
 		}
 		request.addProperty("IT_USERS", userslist);
 
@@ -393,14 +401,23 @@ public class Connection extends Activity {
 
 		// httpTrandport.debug = true;
 		Vector<SoapObject> response = null;
-		List<ZEORDER> zOrders = null;
+		List<Order> zOrders = null;
 		// Involve web service
 
 		httpTrandport.call(SOAP_ACTION, envelope);
 		response = (Vector<SoapObject>) envelope.getResponse();
 		SoapObject soapOrder = (SoapObject) response.get(0);
 		zOrders = getListOrders(soapOrder);
+
+		// Clear database
+		new TraceMOpenHelper(context).clear();
+
 		dbManager.insertOrders(zOrders);
+
+		for (Order order : zOrders) {
+			getOrderDetails(order.getAUFNR());
+		}
+
 		List<Schedule> schedules = getScheduleList(users[0]);
 		for (Schedule schedule : schedules) {
 			getScheduleDetail(users[0], schedule.getID_PROGRAM());
@@ -427,7 +444,7 @@ public class Connection extends Activity {
 	 * @see #updateSchedule(String, int, int, List)
 	 */
 	public Schedule createSchedule(String userName, int year, int week,
-			List<ZEORDER> orders) throws HttpResponseException, IOException,
+			List<Order> orders) throws HttpResponseException, IOException,
 			XmlPullParserException {
 
 		// Create request
@@ -466,7 +483,7 @@ public class Connection extends Activity {
 	 * @see #createSchedule(String, int, int, List)
 	 */
 	public List<Message> updateSchedule(String userName, int year, int week,
-			List<ZEORDER> schedule) throws HttpResponseException, IOException,
+			List<Order> schedule) throws HttpResponseException, IOException,
 			XmlPullParserException {
 
 		// Create request
@@ -500,19 +517,18 @@ public class Connection extends Activity {
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-
 	private Object prepareSchedule(String userName, int year, int week,
-			List<ZEORDER> orders, SoapObject request)
+			List<Order> orders, SoapObject request)
 			throws HttpResponseException, IOException, XmlPullParserException {
 
 		String idProgram = "" + year + (week < 10 ? "0" : "") + week;
 
 		SoapObject itOrders = new SoapObject();
 
-		for (ZEORDER order : orders) {
+		for (Order order : orders) {
 			SoapObject item = new SoapObject();
-			item.addProperty(OrdersTable.AUFNR, order.getAUFNR());
-			itOrders.addProperty("item", item);
+			item.addProperty(Order.AUFNR, order.getAUFNR());
+			itOrders.addProperty(ITEM, item);
 		}
 
 		request.addProperty("IT_ORDERS", itOrders);
@@ -548,7 +564,7 @@ public class Connection extends Activity {
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	public ZEMYPROGRAM getScheduleDetail(String userName, String idProgram)
+	public List<Order> getScheduleDetail(String userName, String idProgram)
 			throws HttpResponseException, IOException, XmlPullParserException {
 		// int year, int week
 		// String idProgram = "" + year + (week < 10 ? "0" : "") + week;
@@ -571,7 +587,7 @@ public class Connection extends Activity {
 				SAP_USER, SAP_PASSWORD);
 		httpTransport.debug = true;
 
-		ZEMYPROGRAM zProgram = new ZEMYPROGRAM();
+		List<Order> orders = new ArrayList<Order>();
 		// Involve web service
 		httpTransport.call(SOAP_ACTION, envelope);
 		// Get the response
@@ -581,25 +597,29 @@ public class Connection extends Activity {
 
 		SoapObject ordersSoap = response.get(0);
 
-		zProgram.setORDERS(getOrderNumbers(ordersSoap));
+		orders = (getOrderNumbers(ordersSoap));
 
-		dbManager.insertScheduleDetail(idProgram, zProgram.getORDERS());
+		dbManager.insertScheduleDetail(idProgram, orders);
 
-		return zProgram;
+		return orders;
 
 	}
 
-	private List<ZEORDER> getOrderNumbers(SoapObject ordersSoap) {
-		List<ZEORDER> orders = new ArrayList<ZEORDER>();
+	/**
+	 * 
+	 * @param ordersSoap
+	 * @return An {@link Order} {@link List}
+	 */
+	private List<Order> getOrderNumbers(SoapObject ordersSoap) {
+		List<Order> orders = new ArrayList<Order>();
 
 		int count = ordersSoap.getPropertyCount();
 
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) ordersSoap.getProperty(i);
-			ZEORDER order = new ZEORDER();
+			Order order = new Order();
 
-			order.setAUFNR(parseResult(item
-					.getPropertyAsString(OrdersTable.AUFNR)));
+			order.setAUFNR(parseResult(item.getPropertyAsString(Order.AUFNR)));
 
 			orders.add(order);
 		}
@@ -668,18 +688,23 @@ public class Connection extends Activity {
 
 	}
 
+	/**
+	 * 
+	 * @param item
+	 * @return A single Schedule instance
+	 */
 	private Schedule getSingleSchedule(SoapObject item) {
 		Schedule schedule = null;
 
 		if (item.getPropertyCount() > 0
-				&& parseResult(item.getPropertyAsString(ScheduleTable.STATUS)) != null) {
+				&& parseResult(item.getPropertyAsString(Schedule.STATUS)) != null) {
 			schedule = new Schedule();
 			schedule.setSTATUS(parseResult(item
-					.getPropertyAsString(ScheduleTable.STATUS)));
+					.getPropertyAsString(Schedule.STATUS)));
 			schedule.setID_PROGRAM(parseResult(item
-					.getPropertyAsString(ScheduleTable.ID_PROGRAM)));
+					.getPropertyAsString(Schedule.ID_PROGRAM)));
 			schedule.setCREATE_DATE(parseResult(item
-					.getPropertyAsString(ScheduleTable.CREATE_DATE)));
+					.getPropertyAsString(Schedule.CREATE_DATE)));
 		}
 		return schedule;
 	}
@@ -699,7 +724,7 @@ public class Connection extends Activity {
 		// Create request
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_ORDER_DETAIL);
 
-		request.addProperty("P_ORDER_NUMBER", order);
+		request.addProperty(P_ORDER_NUMBER, order);
 		// Create envelope
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
@@ -736,7 +761,7 @@ public class Connection extends Activity {
 
 		SoapObject headerSoap = response.get(1);
 
-		zOrder.setHeader(getHeader(headerSoap));
+		zOrder.setHeader(getHeader(order, headerSoap));
 
 		SoapObject equipmentSoap = response.get(2);
 
@@ -749,6 +774,11 @@ public class Connection extends Activity {
 		SoapObject parnersSoap = response.get(4);
 		zOrder.setPartners(getPartners(parnersSoap));
 
+		dbManager.insertHeader(zOrder.getHeader());
+		dbManager.insertEquipment(order, zOrder.getEquipments());
+		dbManager.insertOperations(order, zOrder.getOperations());
+		dbManager.insertComponents(order, zOrder.getComponents());
+
 		return zOrder;
 
 	}
@@ -757,25 +787,25 @@ public class Connection extends Activity {
 	 * 
 	 * @param parnersSoap
 	 *            SoapObject containig partners information
-	 * @return A {@link List} {@link ZEPARTNER}
+	 * @return A {@link List} {@link Partner}
 	 */
-	private List<ZEPARTNER> getPartners(SoapObject parnersSoap) {
+	private List<Partner> getPartners(SoapObject parnersSoap) {
 		int count = parnersSoap.getPropertyCount();
-		List<ZEPARTNER> partners = new ArrayList<ZEPARTNER>();
+		List<Partner> partners = new ArrayList<Partner>();
 
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) parnersSoap.getProperty(i);
-			ZEPARTNER partner = new ZEPARTNER();
+			Partner partner = new Partner();
 			partner.setPARTN_ROLE(parseResult(item.getProperty(
-					PartnerTable.PARTN_ROLE).toString()));
-			partner.setROL_TEXT(parseResult(item.getProperty(
-					PartnerTable.ROL_TEXT).toString()));
-			partner.setPARTNER(parseResult(item
-					.getProperty(OrdersTable.PARTNER).toString()));
-			partner.setNAME(parseResult(item.getProperty(PartnerTable.NAME)
+					Partner.PARTN_ROLE).toString()));
+			partner.setROL_TEXT(parseResult(item.getProperty(Partner.ROL_TEXT)
 					.toString()));
-			partner.setADDRESS(parseResult(item.getProperty(
-					PartnerTable.ADDRESS).toString()));
+			partner.setPARTNER(parseResult(item.getProperty(Order.PARTNER)
+					.toString()));
+			partner.setNAME(parseResult(item.getProperty(Partner.NAME)
+					.toString()));
+			partner.setADDRESS(parseResult(item.getProperty(Partner.ADDRESS)
+					.toString()));
 
 			partners.add(partner);
 		}
@@ -788,23 +818,26 @@ public class Connection extends Activity {
 	 * @param soapOperations
 	 * @return
 	 */
-	private List<ZEOPERATION_ORDER> getOperations(SoapObject soapOperations) {
+	private List<Operation> getOperations(SoapObject soapOperations) {
 		int count = soapOperations.getPropertyCount();
-		List<ZEOPERATION_ORDER> operations = new ArrayList<ZEOPERATION_ORDER>();
+		List<Operation> operations = new ArrayList<Operation>();
 
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) soapOperations.getProperty(i);
-			ZEOPERATION_ORDER operation = new ZEOPERATION_ORDER();
+			
+			Operation operation = new Operation();
 			operation.setACTIVITY(parseResult(item.getProperty(
-					OperationTable.ACTIVITY).toString()));
+					Operation.ACTIVITY).toString()));
 			operation.setDESCRIPTION(parseResult(item.getProperty(
-					OperationTable.DESCRIPTION).toString()));
+					Operation.DESCRIPTION).toString()));
 			operation.setDURATION_NORMAL(parseResult(item.getProperty(
-					OperationTable.DURATION_NORMAL).toString()));
+					Operation.DURATION_NORMAL).toString()));
 			operation.setDURATION_NORMAL_UNIT(parseResult(item.getProperty(
-					OperationTable.DURATION_NORMAL_UNIT).toString()));
+					Operation.DURATION_NORMAL_UNIT).toString()));
 			operation.setWORK_CNTR(parseResult(item.getProperty(
-					OperationTable.WORK_CNTR).toString()));
+					Operation.WORK_CNTR).toString()));
+			operation.setCOMPLETE(parseBitResult(item.getProperty(
+					Operation.COMPLETE).toString()));
 
 			operations.add(operation);
 		}
@@ -817,13 +850,13 @@ public class Connection extends Activity {
 	 * @param equipmentSoap
 	 * @return
 	 */
-	private List<ZEOBJECT_ORDER> getEquipments(SoapObject equipmentSoap) {
+	private List<Equipment> getEquipments(SoapObject equipmentSoap) {
 		int count = equipmentSoap.getPropertyCount();
-		List<ZEOBJECT_ORDER> equipments = new ArrayList<ZEOBJECT_ORDER>();
+		List<Equipment> equipments = new ArrayList<Equipment>();
 
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) equipmentSoap.getProperty(i);
-			ZEOBJECT_ORDER equipment = new ZEOBJECT_ORDER();
+			Equipment equipment = new Equipment();
 			equipment
 					.setEQKTX(parseResult(item.getProperty("EQKTX").toString()));
 			equipment
@@ -838,20 +871,23 @@ public class Connection extends Activity {
 	 * @param headerSoap
 	 * @return
 	 */
-	private List<ZEHEADER_ORDER> getHeader(SoapObject headerSoap) {
+	private List<HeaderOrder> getHeader(String aufnr, SoapObject headerSoap) {
 		int count = headerSoap.getPropertyCount();
-		List<ZEHEADER_ORDER> headers = new ArrayList<ZEHEADER_ORDER>();
+		List<HeaderOrder> headers = new ArrayList<HeaderOrder>();
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) headerSoap.getProperty(i);
-			ZEHEADER_ORDER header = new ZEHEADER_ORDER();
+
+			HeaderOrder header = new HeaderOrder();
+
+			header.setAUFNR(aufnr);
 			header.setEQUIPMENT(parseResult(item.getProperty(
-					HeaderOrderTable.EQUIPMENT).toString()));
+					HeaderOrder.EQUIPMENT).toString()));
 			header.setMN_WKCTR_ID(parseResult(item.getProperty(
-					HeaderOrderTable.MN_WKCTR_ID).toString()));
+					HeaderOrder.MN_WKCTR_ID).toString()));
 			header.setPLANGROUP(parseResult(item.getProperty(
-					HeaderOrderTable.PLANGROUP).toString()));
+					HeaderOrder.PLANGROUP).toString()));
 			header.setNOTIF_NO(parseResult(item.getProperty(
-					HeaderOrderTable.NOTIF_NO).toString()));
+					HeaderOrder.NOTIF_NO).toString()));
 
 			headers.add(header);
 		}
@@ -863,25 +899,25 @@ public class Connection extends Activity {
 	 * @param soapComponents
 	 * @return
 	 */
-	private List<ZECOMPONENTS_ORDER> getComponents(SoapObject soapComponents) {
+	private List<Component> getComponents(SoapObject soapComponents) {
 
-		List<ZECOMPONENTS_ORDER> components = new ArrayList<ZECOMPONENTS_ORDER>();
+		List<Component> components = new ArrayList<Component>();
 
 		// get components
 		for (int i = 0; i < soapComponents.getPropertyCount(); i++) {
 			SoapObject item = (SoapObject) soapComponents.getProperty(i);
-			ZECOMPONENTS_ORDER component = new ZECOMPONENTS_ORDER();
+			Component component = new Component();
 
 			component.setACTIVITY(parseResult(item.getProperty(
-					OperationTable.ACTIVITY).toString()));
+					Operation.ACTIVITY).toString()));
 			component.setMATERIAL(parseResult(item.getProperty(
-					ComponentTable.MATERIAL).toString()));
+					Component.MATERIAL).toString()));
 			component.setMATL_DESC(parseResult(item.getProperty(
-					ComponentTable.MATL_DESC).toString()));
+					Component.MATL_DESC).toString()));
 			component.setREQUIREMENT_QUANTITY(item.getProperty(
-					ComponentTable.REQUIREMENT_QUANTITY).toString());
+					Component.REQUIREMENT_QUANTITY).toString());
 			component.setREQUIREMENT_QUANTITY_UNIT(parseResult(item
-					.getProperty(ComponentTable.REQUIREMENT_QUANTITY_UNIT)
+					.getProperty(Component.REQUIREMENT_QUANTITY_UNIT)
 					.toString()));
 
 			components.add(component);
@@ -945,7 +981,7 @@ public class Connection extends Activity {
 			visit.setID_VISIT((long) parseNumericResult(item
 					.getPropertyAsString("ID_VISIT")));
 			visit.setID_PROGRAM(parseResult(item
-					.getPropertyAsString(ScheduleTable.ID_PROGRAM)));
+					.getPropertyAsString(Schedule.ID_PROGRAM)));
 			visit.setZUSER(parseResult(item.getPropertyAsString("ZUSER")));
 			visit.setFINI(parseResult(item.getPropertyAsString("FINI")));
 			visit.setHINI(parseResult(item.getPropertyAsString("HINI")));
@@ -954,7 +990,7 @@ public class Connection extends Activity {
 			visit.setHFIN(parseResult(item.getPropertyAsString("HFIN")));
 			visit.setTFIN(parseBitResult(item.getPropertyAsString("TFIN")));
 			visit.setSTATUS(parseBitResult(item
-					.getPropertyAsString(ScheduleTable.STATUS)));
+					.getPropertyAsString(Schedule.STATUS)));
 			visit.setCOMENTARIO(parseResult(item
 					.getPropertyAsString("COMENTARIO")));
 			visit.setID_JUSTIFICATION(parseResult(item
@@ -966,6 +1002,14 @@ public class Connection extends Activity {
 		return visits;
 	}
 
+	/**
+	 * 
+	 * @param visit
+	 * @return
+	 * @throws HttpResponseException
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
 	public String createVisit(Visit visit) throws HttpResponseException,
 			IOException, XmlPullParserException {
 
@@ -998,75 +1042,48 @@ public class Connection extends Activity {
 		return idVisit;
 	}
 
+	/**
+	 * 
+	 * @param year
+	 * @param week
+	 * @return a {@link String} formatted as yyyymm
+	 */
 	private String getIDProgram(int year, int week) {
 		return "" + year + (week < 10 ? "0" : "") + week;
 	}
 
-	public List<Message> Confirmation(
-			ArrayList<IT_CONFIRMATION> listCONFIRMATION,
-			ArrayList<IT_OPERATIONS> listOPERATIONS, String N_Order)
-			throws Exception {
+	public List<Message> Confirmation(List<Confirmation> confirmations,
+			String aufnr) throws Exception {
 
-		int mayor = 0;
+		SoapObject itConfirmation = new SoapObject();
 
-		if (listCONFIRMATION.size() > listOPERATIONS.size()) {
-			mayor = listCONFIRMATION.size();
-		} else {
-			mayor = listOPERATIONS.size();
-		}
+		for (Confirmation item : confirmations) {
+			SoapObject confObject = new SoapObject();
 
-		SoapObject tab = new SoapObject();
-		SoapObject tab2 = new SoapObject();
+			confObject.addProperty(Confirmation.ACTIVITY, item.getACTIVITY());
+			confObject.addProperty(Confirmation.ACTUAL_DUR,
+					item.getACTUAL_DUR());
+			confObject.addProperty(Confirmation.UN_ACT_DUR,
+					item.getUN_ACT_DUR());
+			confObject.addProperty(Confirmation.EXEC_START_DATE,
+					item.getEXEC_START_DATE());
+			confObject.addProperty(Confirmation.EXEC_FIN_DATE,
+					item.getEXEC_FIN_DATE());
+			confObject.addProperty(Confirmation.EXEC_START_TIME,
+					item.getEXEC_START_TIME());
+			confObject.addProperty(Confirmation.EXEC_FIN_TIME,
+					item.getEXEC_FIN_TIME());
+			confObject.addProperty(Confirmation.CONF_TEXT, item.getCONF_TEXT());
+			confObject.addProperty(Confirmation.COMPLETE,
+					TraceMFormater.getBool(item.getCOMPLETE()));
 
-		for (int i = 0; i < mayor; i++) {
-			SoapObject item1 = new SoapObject();
-			SoapObject item2 = new SoapObject();
-
-			item1.addProperty(OperationTable.ACTIVITY, listCONFIRMATION.get(i)
-					.getACTIVITY());
-			item1.addProperty("ACTUAL_DUR", listCONFIRMATION.get(i)
-					.getACTUAL_DUR());
-			item1.addProperty("UN_ACT_DUR", listCONFIRMATION.get(i)
-					.getUN_ACT_DUR());
-			item1.addProperty("UN_ACT_DUR_ISO", listCONFIRMATION.get(i)
-					.getUN_ACT_DUR_ISO());
-			item1.addProperty("EXEC_START_DATE", listCONFIRMATION.get(i)
-					.getEXEC_START_DATE());
-			item1.addProperty("EXEC_FIN_DATE", listCONFIRMATION.get(i)
-					.getEXEC_FIN_DATE());
-			item1.addProperty("EXEC_START_TIME", listCONFIRMATION.get(i)
-					.getEXEC_START_TIME());
-			item1.addProperty("EXEC_FIN_TIME", listCONFIRMATION.get(i)
-					.getEXEC_FIN_TIME());
-			item1.addProperty("CONF_TEXT", listCONFIRMATION.get(i)
-					.getCONF_TEXT());
-			item1.addProperty(OperationTable.COMPLETE, listCONFIRMATION.get(i)
-					.getCOMPLETE());
-			// Operations
-			item2.addProperty(OperationTable.ACTIVITY, listOPERATIONS.get(i)
-					.getACTIVITY());
-			item2.addProperty(OperationTable.WORK_CNTR, listOPERATIONS.get(i)
-					.getWORK_CNTR());
-			item2.addProperty(OperationTable.DESCRIPTION, listOPERATIONS.get(i)
-					.getDESCRIPTION());
-			item2.addProperty(OperationTable.PLANT, listOPERATIONS.get(i)
-					.getPLANT());
-			item2.addProperty(OperationTable.DURATION_NORMAL, listOPERATIONS
-					.get(i).getDURATION_NORMAL());
-			item2.addProperty(OperationTable.DURATION_NORMAL_UNIT,
-					listOPERATIONS.get(i).getDURATION_NORMAL_UNIT());
-			item2.addProperty(OperationTable.COMPLETE, listOPERATIONS.get(i)
-					.getCOMPLETE());
-
-			tab.addProperty("item", item1);
-			tab2.addProperty("item", item2);
+			itConfirmation.addProperty(ITEM, confObject);
 		}
 
 		// Create request
-		SoapObject request = new SoapObject(NAMESPACE, CONFIRMATION);
-		request.addProperty("IT_CONFIRMATION", tab);
-		request.addProperty("IT_OPERATIONS", tab2);
-		request.addProperty("P_NO_ORDER", N_Order);
+		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_CONFIRMATION);
+		request.addProperty("IT_CONFIRMATION", itConfirmation);
+		request.addProperty(P_ORDER_NUMBER, aufnr);
 
 		// Create envelope
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
@@ -1084,8 +1101,8 @@ public class Connection extends Activity {
 		httpTransport.call(SOAP_ACTION, envelope);
 		// Get the response
 
-		SoapObject response3 = (SoapObject) envelope.getResponse();
-		List<Message> errors = getMessageList(response3);
+		SoapObject response = (SoapObject) envelope.getResponse();
+		List<Message> errors = getMessageList(response);
 
 		return errors;
 

@@ -29,7 +29,6 @@ import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Menu;
 import com.sf.tracem.connection.Z_PM_AP_LOGIN;
-import com.sf.tracem.db.MenuTable;
 import com.sf.tracem.db.TraceMOpenHelper;
 import com.sf.tracem.mainmenu.MainMenuFragment;
 
@@ -119,9 +118,9 @@ public class LoginFragment extends Fragment {
 
 		ContentValues values = new ContentValues();
 		for (Menu item : menuList) {
-			values.put(MenuTable.ID_MENU, item.getIdMenu());
-			values.put(MenuTable.ID_FATHER, item.getIdFather());
-			tracemdb.insert(MenuTable.TABLE_NAME, null, values);
+			values.put(Menu.ID_MENU, item.getIdMenu());
+			values.put(Menu.ID_FATHER, item.getIdFather());
+			tracemdb.insert(Menu.TABLE_NAME, null, values);
 		}
 
 		editor.commit();

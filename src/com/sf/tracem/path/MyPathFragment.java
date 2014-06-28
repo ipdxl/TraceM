@@ -32,8 +32,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Path;
-import com.sf.tracem.connection.ZEORDER;
-import com.sf.tracem.connection.ZEPARTNER;
+import com.sf.tracem.connection.Order;
+import com.sf.tracem.connection.Partner;
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.login.CurrentConfig;
 
@@ -202,18 +202,18 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 			try {
 				DBManager dbManager = new DBManager(getActivity());
 
-				List<ZEORDER> orders = dbManager.getOrders();
+				List<Order> orders = dbManager.getOrders();
 
-				List<ZEPARTNER> partnerList = new ArrayList<ZEPARTNER>();
+				List<Partner> partnerList = new ArrayList<Partner>();
 				ArrayList<String> names = new ArrayList<String>();
 
-				for (ZEORDER item : orders) {
+				for (Order item : orders) {
 					if (names.contains(item.getPARTNER())) {
 						continue;
 					}
 					names.add(item.getPARTNER());
 
-					ZEPARTNER partner = new ZEPARTNER();
+					Partner partner = new Partner();
 					partner.setPARTNER(item.getPARTNER());
 					partner.setADDRESS(item.getADDRESS());
 					partnerList.add(partner);
@@ -223,15 +223,15 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 					Path path = new Path();
 					path.setPartner(partnerList.get(i));
 
-					List<ZEORDER> ordersList = new ArrayList<ZEORDER>();
-					for (ZEORDER item : orders) {
+					List<Order> ordersList = new ArrayList<Order>();
+					for (Order item : orders) {
 						if (item.getPARTNER() == path.getPartner().getPARTNER()) {
 							ordersList.add(item);
 						}
 					}
 
-					path.setOrders((ZEORDER[]) ordersList
-							.toArray(new ZEORDER[] {}));
+					path.setOrders((Order[]) ordersList
+							.toArray(new Order[] {}));
 
 					listPath.add(path);
 				}
@@ -244,14 +244,14 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 	}
 
 	@Override
-	public void locatePartner(ZEPARTNER partner) {
+	public void locatePartner(Partner partner) {
 		map.clear();
 		builder = null;
 		addLocation(partner);
 	}
 
 	@Override
-	public void addLocation(ZEPARTNER partner) {
+	public void addLocation(Partner partner) {
 		Geocoder coder = new Geocoder(getActivity());
 		List<Address> positions = new ArrayList<Address>();
 		String address = partner.getADDRESS();

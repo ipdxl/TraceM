@@ -12,29 +12,56 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Schedule implements Serializable {
 
-	private String CREATE_DATE;
-	private String ID_PROGRAM;
-	private String STATUS;
+	private String create_date;
+	private String id_program;
+	private String status;
+
+	/**
+	 * Program Id
+	 */
+	public static final String ID_PROGRAM = "ID_PROGRAM";
+	/**
+	 * Schedule status
+	 */
+	public static final String STATUS = "STATUS";
+	/**
+	 * Schedule status
+	 */
+	public static final String CREATE_DATE = "CREATE_DATE";
+	/**
+	 * Schedule table name
+	 */
+	public static final String TABLE_NAME = "SCHEDULE";
+
+	/**
+	 * Column names ordered alphabetically
+	 */
+	public static final String[] COLUMN_NAMES = new String[] { CREATE_DATE,
+			ID_PROGRAM, STATUS };
+
+	public static final String CREATE_TABLE = "CREATE TABLE SCHEDULE("
+			+ "ID_PROGRAM INTEGER PRIMARY KEY" + ", CREATE_DATE TEXT"
+			+ ", STATUS TEXT" + ")";
 
 	/**
 	 * @return the dATE
 	 */
 	public String getCREATE_DATE() {
-		return CREATE_DATE;
+		return create_date;
 	}
 
 	/**
 	 * @return the iD_PROGRAM
 	 */
 	public String getID_PROGRAM() {
-		return ID_PROGRAM;
+		return id_program;
 	}
 
 	/**
 	 * @return the sTATUS
 	 */
 	public String getSTATUS() {
-		return STATUS;
+		return status;
 	}
 
 	/**
@@ -42,7 +69,7 @@ public class Schedule implements Serializable {
 	 *            the dATE to set
 	 */
 	public void setCREATE_DATE(String createDate) {
-		CREATE_DATE = createDate;
+		create_date = createDate;
 	}
 
 	/**
@@ -50,7 +77,7 @@ public class Schedule implements Serializable {
 	 *            the iD_PROGRAM to set
 	 */
 	public void setID_PROGRAM(String iD_PROGRAM) {
-		ID_PROGRAM = iD_PROGRAM;
+		id_program = iD_PROGRAM;
 	}
 
 	/**
@@ -58,19 +85,19 @@ public class Schedule implements Serializable {
 	 *            the sTATUS to set
 	 */
 	public void setSTATUS(String sTATUS) {
-		STATUS = sTATUS;
+		status = sTATUS;
 	}
 
 	@Override
 	public String toString() {
-		return ID_PROGRAM;
+		return id_program;
 	}
 
 	public int getYear() {
-		return Integer.parseInt(ID_PROGRAM.substring(0, 4));
+		return Integer.parseInt(id_program.substring(0, 4));
 	}
 
 	public int getWeek() {
-		return Integer.parseInt(ID_PROGRAM.substring(4));
+		return Integer.parseInt(id_program.substring(4));
 	}
 }

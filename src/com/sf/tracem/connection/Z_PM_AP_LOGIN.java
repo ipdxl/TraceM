@@ -15,7 +15,7 @@ public class Z_PM_AP_LOGIN implements Serializable {
 
 	// , KvmSerializable
 	private String rol;
-	private String planta;
+	private String plant;
 	private String location;
 
 	private List<Message> messageList;
@@ -39,16 +39,16 @@ public class Z_PM_AP_LOGIN implements Serializable {
 	/**
 	 * @return the planta
 	 */
-	public String getPlanta() {
-		return planta;
+	public String getPlant() {
+		return plant;
 	}
 
 	/**
 	 * @param planta
 	 *            the planta to set
 	 */
-	public void setPlanta(String planta) {
-		this.planta = planta;
+	public void setPlant(String planta) {
+		this.plant = planta;
 	}
 
 	/**

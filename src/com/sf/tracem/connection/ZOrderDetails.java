@@ -5,42 +5,42 @@ import java.util.List;
 
 @SuppressWarnings("serial")
 public class ZOrderDetails implements Serializable {
-	private List<ZECOMPONENTS_ORDER> components;
-	private List<ZEHEADER_ORDER> header;
-	private List<ZEOPERATION_ORDER> operations;
-	private List<ZEPARTNER> partners;
+	private List<Component> components;
+	private List<HeaderOrder> header;
+	private List<Operation> operations;
+	private List<Partner> partners;
 	private List<Message> errors;
-	private List<ZEOBJECT_ORDER> equipments;
+	private List<Equipment> equipments;
 
-	public List<ZECOMPONENTS_ORDER> getComponents() {
+	public List<Component> getComponents() {
 		return components;
 	}
 
-	public void setComponents(List<ZECOMPONENTS_ORDER> components) {
+	public void setComponents(List<Component> components) {
 		this.components = components;
 	}
 
-	public List<ZEHEADER_ORDER> getHeader() {
+	public List<HeaderOrder> getHeader() {
 		return header;
 	}
 
-	public void setHeader(List<ZEHEADER_ORDER> header) {
+	public void setHeader(List<HeaderOrder> header) {
 		this.header = header;
 	}
 
-	public List<ZEOPERATION_ORDER> getOperations() {
+	public List<Operation> getOperations() {
 		return operations;
 	}
 
-	public void setOperations(List<ZEOPERATION_ORDER> operations) {
+	public void setOperations(List<Operation> operations) {
 		this.operations = operations;
 	}
 
-	public List<ZEPARTNER> getPartners() {
+	public List<Partner> getPartners() {
 		return partners;
 	}
 
-	public void setPartners(List<ZEPARTNER> partners) {
+	public void setPartners(List<Partner> partners) {
 		this.partners = partners;
 	}
 
@@ -52,11 +52,11 @@ public class ZOrderDetails implements Serializable {
 		this.errors = errors;
 	}
 
-	public List<ZEOBJECT_ORDER> getEquipments() {
+	public List<Equipment> getEquipments() {
 		return equipments;
 	}
 
-	public void setEquipments(List<ZEOBJECT_ORDER> equipments) {
+	public void setEquipments(List<Equipment> equipments) {
 		this.equipments = equipments;
 	}
 }

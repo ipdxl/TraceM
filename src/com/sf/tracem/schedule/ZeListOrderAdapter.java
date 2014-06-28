@@ -13,13 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.sf.tracem.R;
-import com.sf.tracem.connection.ZEORDER;
+import com.sf.tracem.connection.Order;
 
 /**
  * @author José Guadalupe Mandujano Serrano
  * 
  */
-public class ZeListOrderAdapter extends ArrayAdapter<ZEORDER> {
+public class ZeListOrderAdapter extends ArrayAdapter<Order> {
 
 	private TextView aufnr;
 	private TextView co_gstrpPlan;
@@ -27,7 +27,7 @@ public class ZeListOrderAdapter extends ArrayAdapter<ZEORDER> {
 	private TextView auftx;
 
 	public ZeListOrderAdapter(Context context, int resource,
-			int textViewResourceId, List<ZEORDER> orders) {
+			int textViewResourceId, List<Order> orders) {
 		super(context, resource, textViewResourceId, orders);
 		// TODO Auto-generated constructor stub
 	}
@@ -36,7 +36,7 @@ public class ZeListOrderAdapter extends ArrayAdapter<ZEORDER> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 		View view = inflater.inflate(R.layout.order_item, parent, false);
-		ZEORDER order = getItem(position);
+		Order order = getItem(position);
 
 		aufnr = (TextView) view.findViewById(R.id.aufnrVplan);
 		auftx = (TextView) view.findViewById(R.id.auftextPlan);

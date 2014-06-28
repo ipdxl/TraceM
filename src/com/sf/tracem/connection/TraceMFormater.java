@@ -53,4 +53,8 @@ public class TraceMFormater {
 		return Integer.parseInt(iDProgram.substring(4));
 	}
 
+	public static String getBool(int complete) {
+		return complete == 1 ? "X" : "";
+	}
+
 }

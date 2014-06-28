@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sf.tracem.R;
-import com.sf.tracem.connection.ZEOBJECT_ORDER;
+import com.sf.tracem.connection.Equipment;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -23,7 +23,7 @@ import com.sf.tracem.connection.ZEOBJECT_ORDER;
 public class EquipmentMenu extends Fragment {
 
 	private static final String EQUIPMENTS = "EQUIPMENTS";
-	private ZEOBJECT_ORDER[] equipments;
+	private Equipment[] equipments;
 
 	private ListView equipmentsList;
 
@@ -37,12 +37,12 @@ public class EquipmentMenu extends Fragment {
 	private void onRestoreSavedInstanceState(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
 			if (savedInstanceState.getSerializable(EQUIPMENTS) != null) {
-				equipments = (ZEOBJECT_ORDER[]) savedInstanceState
+				equipments = (Equipment[]) savedInstanceState
 						.getSerializable(EQUIPMENTS);
 			}
 		}
 		if (equipments == null) {
-			equipments = (ZEOBJECT_ORDER[]) getArguments().getSerializable(
+			equipments = (Equipment[]) getArguments().getSerializable(
 					"equipments");
 		}
 	}
@@ -73,11 +73,11 @@ public class EquipmentMenu extends Fragment {
 		super.onSaveInstanceState(outState);
 	}
 
-	private class eqArrayAdapter extends ArrayAdapter<ZEOBJECT_ORDER> {
+	private class eqArrayAdapter extends ArrayAdapter<Equipment> {
 
 		private TextView eqktx, equnr;
 
-		public eqArrayAdapter(Context context, ZEOBJECT_ORDER[] objects) {
+		public eqArrayAdapter(Context context, Equipment[] objects) {
 			super(context, R.layout.equipment_item, R.id.eqktx, objects);
 		}
 
@@ -96,7 +96,7 @@ public class EquipmentMenu extends Fragment {
 			eqktx = (TextView) view.findViewById(android.R.id.text1);
 			equnr = (TextView) view.findViewById(android.R.id.text2);
 
-			ZEOBJECT_ORDER equipment = getItem(position);
+			Equipment equipment = getItem(position);
 
 			equnr.setText(equipment.getEQUNR());
 			eqktx.setText(equipment.getEQKTX());

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Path;
-import com.sf.tracem.connection.ZEORDER;
+import com.sf.tracem.connection.Order;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -104,7 +104,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View child = inflater.inflate(R.layout.order_item, parent, false);
 
-		ZEORDER order = pathList.get(groupPosition).getOrders()[childPosition];
+		Order order = pathList.get(groupPosition).getOrders()[childPosition];
 
 		TextView aufnr = (TextView) child.findViewById(R.id.aufnrVplan);
 		TextView auftx = (TextView) child.findViewById(R.id.auftextPlan);

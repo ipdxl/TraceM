@@ -3,6 +3,16 @@
  */
 package com.sf.tracem.db;
 
+import com.sf.tracem.connection.Component;
+import com.sf.tracem.connection.Equipment;
+import com.sf.tracem.connection.HeaderOrder;
+import com.sf.tracem.connection.Menu;
+import com.sf.tracem.connection.Operation;
+import com.sf.tracem.connection.Order;
+import com.sf.tracem.connection.OrderSchedule;
+import com.sf.tracem.connection.Partner;
+import com.sf.tracem.connection.Schedule;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -34,15 +44,16 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(MenuTable.CREATE_TABLE);
-		db.execSQL(PartnerTable.CREATE_TABLE);
-		db.execSQL(ScheduleTable.CREATE_TABLE);
-		db.execSQL(OrdersTable.CREATE_TABLE);
-		db.execSQL(OrderScheduleTable.CREATE_TABLE);
-		db.execSQL(HeaderOrderTable.CREATE_TABLE);
-		db.execSQL(OperationTable.CREATE_TABLE);
-		db.execSQL(ComponentTable.CREATE_TABLE);
-		db.execSQL(EquipmentTable.CREATE_TABLE);
+		db.execSQL(Menu.CREATE_TABLE);
+		db.execSQL(Partner.CREATE_TABLE);
+		db.execSQL(Schedule.CREATE_TABLE);
+		db.execSQL(Order.CREATE_TABLE);
+		db.execSQL(OrderSchedule.CREATE_TABLE);
+		db.execSQL(HeaderOrder.CREATE_TABLE);
+		db.execSQL(Operation.CREATE_TABLE);
+		db.execSQL(Component.CREATE_TABLE);
+		db.execSQL(Equipment.CREATE_TABLE);
+		db.execSQL(Operation.TRIGGERS);
 	}
 
 	/*
@@ -60,13 +71,13 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 
 	public void clear() {
 		SQLiteDatabase db = getWritableDatabase();
-		db.delete(MenuTable.TABLE_NAME, null, null);
-		db.delete(EquipmentTable.TABLE_NAME, null, null);
-		db.delete(OperationTable.TABLE_NAME, null, null);
-		db.delete(ComponentTable.TABLE_NAME, null, null);
-		db.delete(HeaderOrderTable.TABLE_NAME, null, null);
-		db.delete(OrdersTable.TABLE_NAME, null, null);
-		db.delete(ScheduleTable.TABLE_NAME, null, null);
-		db.delete(PartnerTable.TABLE_NAME, null, null);
+		db.delete(Menu.TABLE_NAME, null, null);
+		db.delete(Equipment.TABLE_NAME, null, null);
+		db.delete(Operation.TABLE_NAME, null, null);
+		db.delete(Component.TABLE_NAME, null, null);
+		db.delete(HeaderOrder.TABLE_NAME, null, null);
+		db.delete(Operation.TABLE_NAME, null, null);
+		db.delete(Schedule.TABLE_NAME, null, null);
+		db.delete(Partner.TABLE_NAME, null, null);
 	}
 }

@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
-import com.sf.tracem.connection.ZEOBJECT_ORDER;
-import com.sf.tracem.connection.ZEOPERATION_ORDER;
+import com.sf.tracem.connection.Equipment;
+import com.sf.tracem.connection.Operation;
 import com.sf.tracem.connection.ZOrderDetails;
 
 /**
@@ -69,7 +69,7 @@ public class OrderDetail extends Fragment {
 		// if (em == null) {
 		em = new EquipmentMenu();
 		Bundle eqArgs = new Bundle();
-		ZEOBJECT_ORDER[] equipmentsArray = new ZEOBJECT_ORDER[orderDetails
+		Equipment[] equipmentsArray = new Equipment[orderDetails
 				.getEquipments().size()];
 		orderDetails.getEquipments().toArray(equipmentsArray);
 		eqArgs.putSerializable("equipments", equipmentsArray);
@@ -83,7 +83,7 @@ public class OrderDetail extends Fragment {
 		of = new OperationsFragment();
 		Bundle ofArgs = new Bundle();
 
-		ZEOPERATION_ORDER[] operationsArray = new ZEOPERATION_ORDER[orderDetails
+		Operation[] operationsArray = new Operation[orderDetails
 				.getOperations().size()];
 		orderDetails.getOperations().toArray(operationsArray);
 		ofArgs.putSerializable("operations", operationsArray);

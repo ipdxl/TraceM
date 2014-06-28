@@ -3,7 +3,7 @@
  */
 package com.sf.tracem.path;
 
-import com.sf.tracem.connection.ZEPARTNER;
+import com.sf.tracem.connection.Partner;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -11,8 +11,8 @@ import com.sf.tracem.connection.ZEPARTNER;
  */
 public interface PathNavigation {
 
-	void locatePartner(ZEPARTNER partner);
+	void locatePartner(Partner partner);
 
-	void addLocation(ZEPARTNER partner);
+	void addLocation(Partner partner);
 
 }

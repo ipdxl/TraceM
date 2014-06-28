@@ -37,7 +37,7 @@ import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Message;
 import com.sf.tracem.connection.Schedule;
-import com.sf.tracem.connection.ZEORDER;
+import com.sf.tracem.connection.Order;
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.login.CurrentConfig;
 
@@ -91,15 +91,15 @@ public class ScheduleDetailFragment extends Fragment {
 	private ZeListOrderAdapter ordersAdapter;
 	private ZeListOrderAdapter scheduleAdapter;
 	private ImageButton toOrdersButton;
-	private List<ZEORDER> orders = new ArrayList<ZEORDER>();
-	private List<ZEORDER> schedule = new ArrayList<ZEORDER>();
+	private List<Order> orders = new ArrayList<Order>();
+	private List<Order> schedule = new ArrayList<Order>();
 	private SharedPreferences loginPreferences;
 	private int year;
 	private int week;
 
 	private MenuItem deletemenu;
 
-	protected List<ZEORDER> oldSchedule;
+	protected List<Order> oldSchedule;
 
 	private String id;
 
@@ -118,9 +118,9 @@ public class ScheduleDetailFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		if (savedInstanceState != null) {
-			orders = (ArrayList<ZEORDER>) savedInstanceState
+			orders = (ArrayList<Order>) savedInstanceState
 					.getSerializable(ORDERS);
-			schedule = (ArrayList<ZEORDER>) savedInstanceState
+			schedule = (ArrayList<Order>) savedInstanceState
 					.getSerializable(PLANS);
 		} else {
 		}
@@ -185,7 +185,7 @@ public class ScheduleDetailFragment extends Fragment {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				ZEORDER value = orders.get(position);
+				Order value = orders.get(position);
 				orders.remove(position);
 				schedule.add(value);
 				scheduleAdapter.notifyDataSetChanged();
@@ -213,7 +213,7 @@ public class ScheduleDetailFragment extends Fragment {
 					int index = checkeditems.keyAt(i);
 
 					if (checkeditems.get(index)) {
-						ZEORDER selectedItem = ordersAdapter.getItem(index);
+						Order selectedItem = ordersAdapter.getItem(index);
 						scheduleAdapter.add(selectedItem);
 					}
 				}
@@ -222,7 +222,7 @@ public class ScheduleDetailFragment extends Fragment {
 					int index = checkeditems.keyAt(i);
 
 					if (checkeditems.get(index)) {
-						ZEORDER selectedItem = ordersAdapter.getItem(index - i);
+						Order selectedItem = ordersAdapter.getItem(index - i);
 						ordersAdapter.remove(selectedItem);
 						ordersList.setItemChecked(index, false);
 					}
@@ -248,7 +248,7 @@ public class ScheduleDetailFragment extends Fragment {
 					int index = checkeditems.keyAt(i);
 
 					if (checkeditems.get(index)) {
-						ZEORDER selectedItem = scheduleAdapter.getItem(index);
+						Order selectedItem = scheduleAdapter.getItem(index);
 						ordersAdapter.add(selectedItem);
 					}
 				}
@@ -256,7 +256,7 @@ public class ScheduleDetailFragment extends Fragment {
 					int index = checkeditems.keyAt(i);
 
 					if (checkeditems.get(index)) {
-						ZEORDER selectedItem = scheduleAdapter.getItem(index
+						Order selectedItem = scheduleAdapter.getItem(index
 								- i);
 						scheduleAdapter.remove(selectedItem);
 						scheduleList.setItemChecked(index, false);
@@ -279,7 +279,7 @@ public class ScheduleDetailFragment extends Fragment {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				ZEORDER value = schedule.get(position);
+				Order value = schedule.get(position);
 				schedule.remove(position);
 				orders.add(value);
 				scheduleAdapter.notifyDataSetChanged();
@@ -302,7 +302,7 @@ public class ScheduleDetailFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(ORDERS, orders.toArray());
-		outState.putSerializable(PLANS, (ArrayList<ZEORDER>) schedule);
+		outState.putSerializable(PLANS, (ArrayList<Order>) schedule);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -479,10 +479,10 @@ public class ScheduleDetailFragment extends Fragment {
 	}
 
 	private void getOrdersFromDB() {
-		AsyncTask<String, Integer, List<ZEORDER>> scheduleDetailTask = new AsyncTask<String, Integer, List<ZEORDER>>() {
+		AsyncTask<String, Integer, List<Order>> scheduleDetailTask = new AsyncTask<String, Integer, List<Order>>() {
 
 			@Override
-			protected List<ZEORDER> doInBackground(String... params) {
+			protected List<Order> doInBackground(String... params) {
 				try {
 					Looper.prepare();
 				} catch (Exception e) {
@@ -498,7 +498,7 @@ public class ScheduleDetailFragment extends Fragment {
 					case UPDATE:
 						orders = dbManager.getUnassignedOrders();
 						oldSchedule = dbManager.getScheduleDetail(year, week);
-						schedule = new ArrayList<ZEORDER>();
+						schedule = new ArrayList<Order>();
 						schedule.addAll(oldSchedule);
 						break;
 					default:
@@ -506,13 +506,13 @@ public class ScheduleDetailFragment extends Fragment {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					orders = new ArrayList<ZEORDER>();
+					orders = new ArrayList<Order>();
 				}
 				return orders;
 			}
 
 			@Override
-			protected void onPostExecute(List<ZEORDER> result) {
+			protected void onPostExecute(List<Order> result) {
 				PopulateView();
 			};
 
