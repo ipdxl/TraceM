@@ -90,7 +90,7 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 					R.id.map)).getMap();
 			return view;
 		}
-		view = inflater.inflate(R.layout.my_path_layout, container, false);
+		view = inflater.inflate(R.layout.path_layout, container, false);
 
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(
 				R.id.map)).getMap();

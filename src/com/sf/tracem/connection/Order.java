@@ -14,12 +14,13 @@ public class Order implements Serializable {
 	private int order_status;
 	private String exp_days;
 	private String exp_status;
-	private String zhours;
+	private float zhours;
 
 	/**
 	 * Orders table name
 	 */
 	public final static String TABLE_NAME = "ORDERS";
+
 	/**
 	 * Order Number
 	 */
@@ -169,7 +170,7 @@ public class Order implements Serializable {
 	/**
 	 * @return the zHOURS
 	 */
-	public String getZHOURS() {
+	public float getZHOURS() {
 		return zhours;
 	}
 
@@ -177,7 +178,7 @@ public class Order implements Serializable {
 	 * @param zHOURS
 	 *            the zHOURS to set
 	 */
-	public void setZHOURS(String zHOURS) {
+	public void setZHOURS(float zHOURS) {
 		zhours = zHOURS;
 	}
 

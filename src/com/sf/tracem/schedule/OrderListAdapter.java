@@ -4,6 +4,7 @@
 package com.sf.tracem.schedule;
 
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -19,17 +20,17 @@ import com.sf.tracem.connection.Order;
  * @author José Guadalupe Mandujano Serrano
  * 
  */
-public class ZeListOrderAdapter extends ArrayAdapter<Order> {
+public class OrderListAdapter extends ArrayAdapter<Order> {
 
 	private TextView aufnr;
 	private TextView co_gstrpPlan;
 	private TextView name;
 	private TextView auftx;
+	private TextView hour;
 
-	public ZeListOrderAdapter(Context context, int resource,
+	public OrderListAdapter(Context context, int resource,
 			int textViewResourceId, List<Order> orders) {
 		super(context, resource, textViewResourceId, orders);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -42,11 +43,13 @@ public class ZeListOrderAdapter extends ArrayAdapter<Order> {
 		auftx = (TextView) view.findViewById(R.id.auftextPlan);
 		co_gstrpPlan = (TextView) view.findViewById(R.id.co_gstrpPlan);
 		name = (TextView) view.findViewById(R.id.namePlan);
+		hour = (TextView) view.findViewById(R.id.zhour);
 
 		aufnr.setText(order.getAUFNR());
 		auftx.setText(order.getAUFTEXT());
 		co_gstrpPlan.setText(order.getCO_GSTRP());
 		name.setText(order.getPARTNER());
+		hour.setText(String.format(Locale.US, "%.1f", order.getZHOURS()));
 
 		return view;
 	}

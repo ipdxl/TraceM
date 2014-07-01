@@ -112,7 +112,7 @@ public class DBManager {
 				order.setORDER_STATUS(cursor.getInt(columnsMap
 						.get(Order.ORDER_STATUS)));
 				order.setPARTNER(cursor.getString(columnsMap.get(Order.PARTNER)));
-				order.setZHOURS(cursor.getString(columnsMap.get(Order.ZHOURS)));
+				order.setZHOURS(cursor.getFloat(columnsMap.get(Order.ZHOURS)));
 				orders.add(order);
 			} while (cursor.moveToNext());
 		}

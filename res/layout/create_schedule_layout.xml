@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/background_light" >
+    android:background="@android:color/background_light"
+    tools:ignore="HardcodedText" >
 
     <Spinner
         android:id="@+id/weekNumberSpinner"
@@ -58,7 +59,7 @@
         style="@style/listview_selected_item"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/hours_plan_text"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/mycheduleJobText"
         android:layout_toLeftOf="@+id/directionLinearLayout"
@@ -70,11 +71,51 @@
         style="@style/listview_selected_item"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_alignBottom="@+id/orderList"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/weekNumberSpinner"
         android:layout_toRightOf="@+id/directionLinearLayout"
         android:choiceMode="singleChoice" >
     </ListView>
+
+    <TextView
+        android:id="@+id/hours_plan_text"
+        style="@style/total_hours_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/directionLinearLayout"
+        android:text="@string/hours"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/hours_plan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/hours_plan_text"
+        android:layout_toLeftOf="@+id/hours_plan_text"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/hours_schedule_text"
+        style="@style/total_hours_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/hours_plan_text"
+        android:layout_alignBottom="@+id/hours_plan_text"
+        android:layout_toRightOf="@+id/hours_schedule"
+        android:text="@string/hours"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/hours_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/hours_schedule_text"
+        android:layout_alignBottom="@+id/hours_schedule_text"
+        android:layout_alignLeft="@+id/planList"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

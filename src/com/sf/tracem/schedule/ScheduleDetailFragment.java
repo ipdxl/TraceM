@@ -6,6 +6,7 @@ package com.sf.tracem.schedule;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
@@ -25,19 +26,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Message;
-import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.connection.Order;
+import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.login.CurrentConfig;
 
@@ -88,8 +88,8 @@ public class ScheduleDetailFragment extends Fragment {
 	private Spinner yearSpinner;
 	private Spinner weekSpinner;
 	private ImageButton toSchedulenButton;
-	private ZeListOrderAdapter ordersAdapter;
-	private ZeListOrderAdapter scheduleAdapter;
+	private OrderListAdapter ordersAdapter;
+	private OrderListAdapter scheduleAdapter;
 	private ImageButton toOrdersButton;
 	private List<Order> orders = new ArrayList<Order>();
 	private List<Order> schedule = new ArrayList<Order>();
@@ -104,6 +104,11 @@ public class ScheduleDetailFragment extends Fragment {
 	private String id;
 
 	protected Schedule newSchedule;
+
+	private float planHours;
+	private TextView planHoursText;
+	private float scheduleHours;
+	private TextView scheduleHoursText;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -174,26 +179,30 @@ public class ScheduleDetailFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.create_plan_layout, container,
-				false);
+		View view = inflater.inflate(R.layout.create_schedule_layout,
+				container, false);
 
 		ordersList = (ListView) view.findViewById(R.id.orderList);
 		ordersList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-		ordersList.setOnItemLongClickListener(new OnItemLongClickListener() {
+		planHoursText = (TextView) view.findViewById(R.id.hours_plan);
+		scheduleHoursText = (TextView) view.findViewById(R.id.hours_schedule);
 
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int position, long arg3) {
-				Order value = orders.get(position);
-				orders.remove(position);
-				schedule.add(value);
-				scheduleAdapter.notifyDataSetChanged();
-				ordersAdapter.notifyDataSetChanged();
-				return false;
-			}
-		});
-		ordersAdapter = new ZeListOrderAdapter(getActivity(),
+		// ordersList.setOnItemLongClickListener(new OnItemLongClickListener() {
+		//
+		// @Override
+		// public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+		// int position, long arg3) {
+		// Order value = orders.get(position);
+		// orders.remove(position);
+		// schedule.add(value);
+		// scheduleAdapter.notifyDataSetChanged();
+		// ordersAdapter.notifyDataSetChanged();
+		// return false;
+		// }
+		// });
+
+		ordersAdapter = new OrderListAdapter(getActivity(),
 				android.R.layout.simple_list_item_1, android.R.id.text1, orders);
 
 		ordersList.setAdapter(ordersAdapter);
@@ -203,7 +212,7 @@ public class ScheduleDetailFragment extends Fragment {
 		toSchedulenButton.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View view) {
 
 				// for (int i = 0; i < planAdapter.getCount(); i++) {
 
@@ -222,9 +231,14 @@ public class ScheduleDetailFragment extends Fragment {
 					int index = checkeditems.keyAt(i);
 
 					if (checkeditems.get(index)) {
+						ordersList.setItemChecked(index, false);
 						Order selectedItem = ordersAdapter.getItem(index - i);
 						ordersAdapter.remove(selectedItem);
-						ordersList.setItemChecked(index, false);
+
+						scheduleHours = addHours(selectedItem,
+								scheduleHoursText);
+						planHours = substractHours(selectedItem, planHoursText);
+
 					}
 				}
 
@@ -256,10 +270,14 @@ public class ScheduleDetailFragment extends Fragment {
 					int index = checkeditems.keyAt(i);
 
 					if (checkeditems.get(index)) {
-						Order selectedItem = scheduleAdapter.getItem(index
-								- i);
-						scheduleAdapter.remove(selectedItem);
 						scheduleList.setItemChecked(index, false);
+						Order selectedItem = scheduleAdapter.getItem(index - i);
+						scheduleAdapter.remove(selectedItem);
+
+						planHours = addHours(selectedItem, planHoursText);
+						scheduleHours = substractHours(selectedItem,
+								scheduleHoursText);
+
 					}
 				}
 
@@ -274,21 +292,22 @@ public class ScheduleDetailFragment extends Fragment {
 
 		scheduleList.setSelector(R.drawable.list_view_keep_selection);
 
-		scheduleList.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int position, long arg3) {
-				Order value = schedule.get(position);
-				schedule.remove(position);
-				orders.add(value);
-				scheduleAdapter.notifyDataSetChanged();
-				ordersAdapter.notifyDataSetChanged();
-				scheduleAdapter.notifyDataSetChanged();
-				ordersAdapter.notifyDataSetChanged();
-				return false;
-			}
-		});
+		// scheduleList.setOnItemLongClickListener(new OnItemLongClickListener()
+		// {
+		//
+		// @Override
+		// public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+		// int position, long arg3) {
+		// Order value = schedule.get(position);
+		// schedule.remove(position);
+		// orders.add(value);
+		// scheduleAdapter.notifyDataSetChanged();
+		// ordersAdapter.notifyDataSetChanged();
+		// scheduleAdapter.notifyDataSetChanged();
+		// ordersAdapter.notifyDataSetChanged();
+		// return false;
+		// }
+		// });
 		yearSpinner = (Spinner) view.findViewById(R.id.yearSpinner);
 		weekSpinner = (Spinner) view.findViewById(R.id.weekNumberSpinner);
 		return view;
@@ -524,7 +543,7 @@ public class ScheduleDetailFragment extends Fragment {
 
 	private void PopulateView() {
 
-		scheduleAdapter = new ZeListOrderAdapter(getActivity(),
+		scheduleAdapter = new OrderListAdapter(getActivity(),
 				android.R.layout.simple_list_item_1, android.R.id.text1,
 				schedule);
 
@@ -544,8 +563,39 @@ public class ScheduleDetailFragment extends Fragment {
 				android.R.layout.simple_spinner_item, android.R.id.text1,
 				new String[] { "" + week }));
 
+		for (Order order : schedule) {
+			planHours = addHours(order, scheduleHoursText);
+		}
+
+		for (Order order : orders) {
+			scheduleHours = addHours(order, planHoursText);
+		}
+
 	}
 
+	private float addHours(Order order, TextView textView) {
+		float hour = order.getZHOURS();
+		float startHours = 0;
+		try {
+			startHours = Float.parseFloat(textView.getText().toString());
+		} catch (Exception e) {
+		}
+		startHours += hour;
+		textView.setText(String.format(Locale.US, "%.1f", startHours));
+		return startHours;
+	}
+
+	private float substractHours(Order order, TextView textView) {
+		float hour = order.getZHOURS();
+		float startHours = 0;
+		try {
+			startHours = Float.parseFloat(textView.getText().toString());
+		} catch (Exception e) {
+		}
+		startHours -= hour;
+		textView.setText(String.format(Locale.US, "%.1f", startHours));
+		return startHours;
+	}
 	// @Override
 	// public void onDetach() {
 	// getActivity().getSupportFragmentManager().popBackStack(SCHEDULE_DETAIL,

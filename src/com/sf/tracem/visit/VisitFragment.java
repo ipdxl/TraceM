@@ -46,6 +46,7 @@ public class VisitFragment extends Fragment {
 	protected String activeID;
 	protected int year;
 	protected int week;
+	@SuppressWarnings("unused")
 	private MyJobNavigation navigation;
 
 	@Override

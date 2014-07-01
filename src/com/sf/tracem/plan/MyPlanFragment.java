@@ -85,7 +85,7 @@ public class MyPlanFragment extends Fragment {
 		}
 
 		// getOrders();
-		view = inflater.inflate(R.layout.my_job_layout, container, false);
+		view = inflater.inflate(R.layout.job_layout, container, false);
 
 		// headerTable = (TableLayout) view.findViewById(R.id.headerTable);
 		contentTable = (TableLayout) view.findViewById(R.id.contentTable);
@@ -212,7 +212,7 @@ public class MyPlanFragment extends Fragment {
 
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 
-		headerRow = (TableRow) inflater.inflate(R.layout.my_job_table_row,
+		headerRow = (TableRow) inflater.inflate(R.layout.job_table_row,
 				contentTable, false);
 		aufnrHdr = (TextView) headerRow.findViewById(R.id.aufnrVplan);
 		aufnrHdr.setText(getResources().getString(R.string.aufnr));
@@ -241,7 +241,7 @@ public class MyPlanFragment extends Fragment {
 		for (Order item : orders) {
 
 			// for (int i = 0; i < 30; i++) {
-			contentRow = (TableRow) inflater.inflate(R.layout.my_job_table_row,
+			contentRow = (TableRow) inflater.inflate(R.layout.job_table_row,
 					contentTable, false);
 
 			aufnr = (TextView) contentRow.findViewById(R.id.aufnrVplan);

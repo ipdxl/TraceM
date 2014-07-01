@@ -329,8 +329,8 @@ public class Connection extends Activity {
 					.toString()));
 			order.setEXP_STATUS(parseResult(item.getProperty(Order.EXP_STATUS)
 					.toString()));
-			order.setZHOURS(parseResult(item.getProperty(Order.ZHOURS)
-					.toString()));
+			order.setZHOURS((float) parseNumericResult(item.getProperty(
+					Order.ZHOURS).toString()));
 			// order.setASSIGNED_STATUS(parseBitResult(item.getProperty(
 			// "ASSIGNED_STATUS").toString()));
 
@@ -824,7 +824,7 @@ public class Connection extends Activity {
 
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) soapOperations.getProperty(i);
-			
+
 			Operation operation = new Operation();
 			operation.setACTIVITY(parseResult(item.getProperty(
 					Operation.ACTIVITY).toString()));

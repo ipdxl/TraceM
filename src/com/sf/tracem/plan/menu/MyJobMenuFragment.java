@@ -47,7 +47,7 @@ public class MyJobMenuFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.my_job_menu_fragment, container,
+		View view = inflater.inflate(R.layout.job_menu_fragment, container,
 				false);
 
 		menuList = (ListView) view.findViewById(R.id.my_job_menu_drawer_list);
