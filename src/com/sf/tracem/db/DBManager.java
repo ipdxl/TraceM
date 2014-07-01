@@ -313,11 +313,10 @@ public class DBManager {
 	}
 
 	public void deleteSchedule(int year, int week) {
+		traceMwdb = toh.getWritableDatabase();
 		String id = getID_Program(year, week);
-
-		traceMwdb.delete(OrderSchedule.TABLE_NAME,
-				Schedule.ID_PROGRAM + " = ?", new String[] { id });
-
+		traceMwdb.delete(Schedule.TABLE_NAME, Schedule.ID_PROGRAM + " = ?",
+				new String[] { id });
 	}
 
 	public String getActiveSchedule() {

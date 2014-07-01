@@ -106,6 +106,7 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 				.findViewById(R.id.expandablePahtList);
 		adapter = new ExpandableListAdapter(getActivity(), this, pathList);
 		expPathList.setAdapter(adapter);
+		expPathList.setChoiceMode(ExpandableListView.CHOICE_MODE_SINGLE);
 		return view;
 	}
 

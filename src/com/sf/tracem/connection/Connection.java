@@ -410,7 +410,7 @@ public class Connection extends Activity {
 		zOrders = getListOrders(soapOrder);
 
 		// Clear database
-		new TraceMOpenHelper(context).clear();
+		new TraceMOpenHelper(context).clearData();
 
 		dbManager.insertOrders(zOrders);
 
@@ -454,7 +454,7 @@ public class Connection extends Activity {
 		Vector<SoapObject> response = (Vector<SoapObject>) prepareSchedule(
 				userName, year, week, orders, request);
 
-		Schedule schedule = getSingleSchedule(response.get(0));
+		Schedule schedule = getSingleSchedule(response.get(1));
 
 		if (schedule != null) {
 			dbManager.insertScheduleDetail(schedule.getID_PROGRAM(), orders);

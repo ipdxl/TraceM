@@ -5,20 +5,21 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:background="?android:attr/activatedBackgroundIndicator"
+    android:descendantFocusability="blocksDescendants"
     tools:ignore="HardcodedText" >
 
     <TextView
-        android:id="@+id/aufnrVplan"
+        android:id="@+id/aufnr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/co_gstrpPlan"
+        android:layout_toLeftOf="@+id/co_gstrp"
         android:text="Order Number"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/co_gstrpPlan"
+        android:id="@+id/co_gstrp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -27,23 +28,23 @@
         android:text="Date" />
 
     <TextView
-        android:id="@+id/namePlan"
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/aufnrVplan"
+        android:layout_below="@+id/aufnr"
         android:layout_margin="1dp"
         android:text="Name" />
 
     <TextView
-        android:id="@+id/auftextPlan"
+        android:id="@+id/auftext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/co_gstrpPlan"
-        android:layout_below="@+id/namePlan"
+        android:layout_below="@+id/name"
         android:layout_margin="1dp"
+        android:layout_toLeftOf="@+id/order_status"
         android:maxLines="5"
         android:text="Description" />
 
@@ -51,10 +52,18 @@
         android:id="@+id/zhour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/namePlan"
-        android:layout_alignBottom="@+id/namePlan"
+        android:layout_alignBaseline="@+id/name"
+        android:layout_alignBottom="@+id/name"
         android:layout_alignParentRight="true"
-        android:layout_alignRight="@+id/co_gstrpPlan"
+        android:layout_alignRight="@+id/co_gstrp"
         android:text="Time" />
+
+    <CheckBox
+        android:id="@+id/order_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/co_gstrp"
+        android:layout_alignTop="@+id/auftext"
+        android:text="@string/complete" />
 
 </RelativeLayout>

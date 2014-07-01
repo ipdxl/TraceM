@@ -80,4 +80,15 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 		db.delete(Schedule.TABLE_NAME, null, null);
 		db.delete(Partner.TABLE_NAME, null, null);
 	}
+
+	public void clearData() {
+		SQLiteDatabase db = getWritableDatabase();
+		db.delete(Equipment.TABLE_NAME, null, null);
+		db.delete(Operation.TABLE_NAME, null, null);
+		db.delete(Component.TABLE_NAME, null, null);
+		db.delete(HeaderOrder.TABLE_NAME, null, null);
+		db.delete(Operation.TABLE_NAME, null, null);
+		db.delete(Schedule.TABLE_NAME, null, null);
+		db.delete(Partner.TABLE_NAME, null, null);
+	}
 }

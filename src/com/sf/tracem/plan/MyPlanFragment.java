@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -21,10 +20,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+//import android.widget.TableLayout;
+//import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,13 +43,13 @@ public class MyPlanFragment extends Fragment {
 
 	public static final String TAG = "MY_PLAN_FRAGMENT";
 
-	private TableLayout contentTable;
-
-	private TableRow headerRow, contentRow;
-	private TextView aufnrHdr, aufartHdr, auftextHdr, co_gstrpHdr, nameHdr,
-			addressHdr;
-
-	private TextView aufnr, aufart, auftext, co_gstrp, name, address;
+	// private TableLayout contentTable;
+	//
+	// private TableRow headerRow, contentRow;
+	// private TextView aufnrHdr, aufartHdr, auftextHdr, co_gstrpHdr, nameHdr,
+	// addressHdr;
+	//
+	// private TextView aufnr, aufart, auftext, co_gstrp, name, address;
 
 	private List<Order> orders = new ArrayList<Order>();
 
@@ -57,6 +58,8 @@ public class MyPlanFragment extends Fragment {
 	private SharedPreferences loginPreferences;
 
 	protected ProgressDialog progress;
+
+	private ListView list;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -85,10 +88,13 @@ public class MyPlanFragment extends Fragment {
 		}
 
 		// getOrders();
-		view = inflater.inflate(R.layout.job_layout, container, false);
+		// view = inflater.inflate(R.layout.job_layout, container, false);
+		view = inflater
+				.inflate(android.R.layout.list_content, container, false);
+		list = (ListView) view.findViewById(android.R.id.list);
 
 		// headerTable = (TableLayout) view.findViewById(R.id.headerTable);
-		contentTable = (TableLayout) view.findViewById(R.id.contentTable);
+		// contentTable = (TableLayout) view.findViewById(R.id.contentTable);
 
 		// headerRow = (TableRow) inflater.inflate(R.layout.my_job_table_row,
 		// headerTable, false);
@@ -208,88 +214,98 @@ public class MyPlanFragment extends Fragment {
 
 	private synchronized void fillContentTable() {
 
-		contentTable.removeAllViews();
+		OrderPlanListAdapter adapter = new OrderPlanListAdapter(getActivity(),
+				R.layout.order_item, R.id.aufnr, orders);
 
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
+		list.setAdapter(adapter);
 
-		headerRow = (TableRow) inflater.inflate(R.layout.job_table_row,
-				contentTable, false);
-		aufnrHdr = (TextView) headerRow.findViewById(R.id.aufnrVplan);
-		aufnrHdr.setText(getResources().getString(R.string.aufnr));
+		list.setOnItemClickListener(new RowClickListener());
 
-		aufartHdr = (TextView) headerRow.findViewById(R.id.aufart);
-		aufartHdr.setText(getResources().getString(R.string.aufart));
-
-		auftextHdr = (TextView) headerRow.findViewById(R.id.auftext);
-		auftextHdr.setText(getResources().getString(R.string.auftext));
-
-		co_gstrpHdr = (TextView) headerRow.findViewById(R.id.co_gstrp);
-		co_gstrpHdr.setText(getResources().getString(R.string.co_gstrp));
-
-		nameHdr = (TextView) headerRow.findViewById(R.id.name);
-		nameHdr.setText(getResources().getString(R.string.name));
-
-		addressHdr = (TextView) headerRow.findViewById(R.id.address);
-		addressHdr.setText(getResources().getString(R.string.address));
-
-		headerRow.setBackgroundColor(Color.GRAY);
-		contentTable.addView(headerRow);
-
-		RowClickListener rcl = new RowClickListener();
-
-		boolean flag = false;
-		for (Order item : orders) {
-
-			// for (int i = 0; i < 30; i++) {
-			contentRow = (TableRow) inflater.inflate(R.layout.job_table_row,
-					contentTable, false);
-
-			aufnr = (TextView) contentRow.findViewById(R.id.aufnrVplan);
-			aufnr.setText(item.getAUFNR());
-
-			aufart = (TextView) contentRow.findViewById(R.id.aufart);
-			aufart.setText(item.getAUFART());
-
-			auftext = (TextView) contentRow.findViewById(R.id.auftext);
-			auftext.setText(item.getAUFTEXT());
-
-			co_gstrp = (TextView) contentRow.findViewById(R.id.co_gstrp);
-			co_gstrp.setText(item.getCO_GSTRP());
-
-			name = (TextView) contentRow.findViewById(R.id.name);
-			name.setText(item.getPARTNER());
-
-			address = (TextView) contentRow.findViewById(R.id.address);
-			address.setText(item.getADDRESS());
-
-			contentRow.setOnClickListener(rcl);
-
-			if (flag) {
-				contentRow.setBackgroundResource(R.color.blue_sf);
-			} else {
-				contentRow.setBackgroundResource(R.color.light_gray);
-			}
-
-			flag = !flag;
-			contentTable.addView(contentRow);
-
-			// }
-		}
-		contentTable.setStretchAllColumns(true);
-		contentTable.setShrinkAllColumns(true);
+		//
+		// contentTable.removeAllViews();
+		//
+		// LayoutInflater inflater = LayoutInflater.from(getActivity());
+		//
+		// headerRow = (TableRow) inflater.inflate(R.layout.job_table_row,
+		// contentTable, false);
+		// aufnrHdr = (TextView) headerRow.findViewById(R.id.aufnr);
+		// aufnrHdr.setText(getResources().getString(R.string.aufnr));
+		//
+		// aufartHdr = (TextView) headerRow.findViewById(R.id.aufart);
+		// aufartHdr.setText(getResources().getString(R.string.aufart));
+		//
+		// auftextHdr = (TextView) headerRow.findViewById(R.id.auftext);
+		// auftextHdr.setText(getResources().getString(R.string.auftext));
+		//
+		// co_gstrpHdr = (TextView) headerRow.findViewById(R.id.co_gstrp);
+		// co_gstrpHdr.setText(getResources().getString(R.string.co_gstrp));
+		//
+		// nameHdr = (TextView) headerRow.findViewById(R.id.name);
+		// nameHdr.setText(getResources().getString(R.string.name));
+		//
+		// addressHdr = (TextView) headerRow.findViewById(R.id.address);
+		// addressHdr.setText(getResources().getString(R.string.address));
+		//
+		// headerRow.setBackgroundColor(Color.GRAY);
+		// contentTable.addView(headerRow);
+		//
+		// RowClickListener rcl = new RowClickListener();
+		//
+		// boolean flag = false;
+		// for (Order item : orders) {
+		//
+		// // for (int i = 0; i < 30; i++) {
+		// contentRow = (TableRow) inflater.inflate(R.layout.job_table_row,
+		// contentTable, false);
+		//
+		// aufnr = (TextView) contentRow.findViewById(R.id.aufnr);
+		// aufnr.setText(item.getAUFNR());
+		//
+		// aufart = (TextView) contentRow.findViewById(R.id.aufart);
+		// aufart.setText(item.getAUFART());
+		//
+		// auftext = (TextView) contentRow.findViewById(R.id.auftext);
+		// auftext.setText(item.getAUFTEXT());
+		//
+		// co_gstrp = (TextView) contentRow.findViewById(R.id.co_gstrp);
+		// co_gstrp.setText(item.getCO_GSTRP());
+		//
+		// name = (TextView) contentRow.findViewById(R.id.name);
+		// name.setText(item.getPARTNER());
+		//
+		// address = (TextView) contentRow.findViewById(R.id.address);
+		// address.setText(item.getADDRESS());
+		//
+		// contentRow.setOnClickListener(rcl);
+		//
+		// if (flag) {
+		// contentRow.setBackgroundResource(R.color.blue_sf);
+		// } else {
+		// contentRow.setBackgroundResource(R.color.light_gray);
+		// }
+		//
+		// flag = !flag;
+		// contentTable.addView(contentRow);
+		//
+		// // }
+		// }
+		// contentTable.setStretchAllColumns(true);
+		// contentTable.setShrinkAllColumns(true);
 	}
 
-	private class RowClickListener implements OnClickListener {
+	private class RowClickListener implements OnItemClickListener {
 
 		@Override
-		public void onClick(View v) {
-			TextView aufnr = (TextView) v.findViewById(R.id.aufnrVplan);
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			TextView aufnr = (TextView) view.findViewById(R.id.aufnr);
 
-			TextView name = (TextView) v.findViewById(R.id.name);
-			Toast.makeText(v.getContext(), aufnr.getText().toString(),
+			TextView name = (TextView) view.findViewById(R.id.name);
+			Toast.makeText(view.getContext(), aufnr.getText().toString(),
 					Toast.LENGTH_SHORT).show();
 			navigation.onShowOrderDetail(aufnr.getText().toString(), name
 					.getText().toString());
+
 		}
 	}
 }

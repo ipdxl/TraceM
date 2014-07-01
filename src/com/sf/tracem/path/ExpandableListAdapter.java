@@ -75,6 +75,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 		partnerAddress.setText(pathList.get(groupPosition).getPartner()
 				.getADDRESS());
+
+		group.setBackgroundResource(R.color.blue_sf);
+
 		return group;
 	}
 
@@ -106,11 +109,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 		Order order = pathList.get(groupPosition).getOrders()[childPosition];
 
-		TextView aufnr = (TextView) child.findViewById(R.id.aufnrVplan);
-		TextView auftx = (TextView) child.findViewById(R.id.auftextPlan);
-		TextView co_gstrpPlan = (TextView) child
-				.findViewById(R.id.co_gstrpPlan);
-		TextView name = (TextView) child.findViewById(R.id.namePlan);
+		TextView aufnr = (TextView) child.findViewById(R.id.aufnr);
+		TextView auftx = (TextView) child.findViewById(R.id.auftext);
+		TextView co_gstrpPlan = (TextView) child.findViewById(R.id.co_gstrp);
+		TextView name = (TextView) child.findViewById(R.id.name);
 
 		aufnr.setText(order.getAUFNR());
 		auftx.setText(order.getAUFTEXT());

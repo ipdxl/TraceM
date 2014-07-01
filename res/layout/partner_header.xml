@@ -2,10 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:background="?android:attr/activatedBackgroundIndicator"
     android:descendantFocusability="blocksDescendants"
     android:padding="5dp"
     tools:context=".MainActivity"
-    tools:ignore="HardcodedText" >
+    tools:ignore="HardcodedText,ContentDescription" >
 
     <TextView
         android:id="@+id/partnerName"
@@ -13,36 +15,43 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="10dp"
         android:layout_toLeftOf="@+id/addLocationButton"
         android:maxLines="3"
+        android:paddingLeft="?android:attr/expandableListPreferredChildIndicatorLeft"
         android:text="User Name"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/partnerAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/partnerName"
-        android:layout_below="@+id/partnerName"
-        android:layout_marginTop="5dp"
-        android:maxLines="5"
-        android:text="Address"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="16sp" />
+    <!--
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+    -->
 
     <ImageButton
         android:id="@+id/locationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@id/addLocationButton"
+        android:layout_alignTop="@+id/partnerName"
         android:layout_toRightOf="@+id/partnerName"
         android:background="#FFFFFF"
         android:src="@android:drawable/ic_menu_mylocation"
         android:text="Edit Data"
         android:textColor="#0099CC" />
+
+    <TextView
+        android:id="@+id/partnerAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/partnerName"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/partnerName"
+        android:layout_below="@+id/partnerName"
+        android:maxLines="5"
+        android:text="Address"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="16sp" />
 
     <ImageButton
         android:id="@+id/addLocationButton"
@@ -50,16 +59,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/locationButton"
-        android:layout_marginTop="3dp"
         android:background="#FFFFFF"
         android:src="@android:drawable/ic_menu_myplaces"
         android:text="@string/add_location"
-        android:textColor="#0099CC" >
-    </ImageButton>
-
-    <!--
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-    -->
+        android:textColor="#0099CC" />
 
 </RelativeLayout>

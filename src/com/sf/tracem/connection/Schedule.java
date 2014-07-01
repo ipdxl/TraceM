@@ -40,8 +40,10 @@ public class Schedule implements Serializable {
 			ID_PROGRAM, STATUS };
 
 	public static final String CREATE_TABLE = "CREATE TABLE SCHEDULE("
-			+ "ID_PROGRAM INTEGER PRIMARY KEY" + ", CREATE_DATE TEXT"
-			+ ", STATUS TEXT" + ")";
+			+ "ID_PROGRAM INTEGER PRIMARY KEY"
+			+ ", CREATE_DATE TEXT"
+			+ ", STATUS TEXT" 
+			+ ")";
 
 	/**
 	 * @return the dATE

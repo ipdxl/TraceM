@@ -8,7 +8,7 @@
     android:showDividers="end|middle">
 
     <TextView
-        android:id="@+id/aufnrVplan"
+        android:id="@+id/aufnr"
         style="@style/celltext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -218,33 +218,29 @@ public class ScheduleDetailFragment extends Fragment {
 
 				SparseBooleanArray checkeditems = ordersList
 						.getCheckedItemPositions();
-				for (int i = 0; i < checkeditems.size(); i++) {
-					int index = checkeditems.keyAt(i);
-
-					if (checkeditems.get(index)) {
-						Order selectedItem = ordersAdapter.getItem(index);
-						scheduleAdapter.add(selectedItem);
-					}
-				}
-
+				List<Order> temp = new ArrayList<Order>();
 				for (int i = 0; i < checkeditems.size(); i++) {
 					int index = checkeditems.keyAt(i);
 
 					if (checkeditems.get(index)) {
 						ordersList.setItemChecked(index, false);
-						Order selectedItem = ordersAdapter.getItem(index - i);
-						ordersAdapter.remove(selectedItem);
-
-						scheduleHours = addHours(selectedItem,
-								scheduleHoursText);
-						planHours = substractHours(selectedItem, planHoursText);
-
+						Order selectedItem = ordersAdapter.getItem(index);
+						temp.add(selectedItem);
 					}
+
+				}
+
+				for (Order order : temp) {
+					ordersAdapter.remove(order);
+					scheduleAdapter.add(order);
+
+					scheduleHours = addHours(order, scheduleHours,
+							scheduleHoursText);
+					planHours = substractHours(order, planHours, planHoursText);
 				}
 
 				ordersAdapter.notifyDataSetChanged();
 				scheduleAdapter.notifyDataSetChanged();
-
 			}
 		});
 
@@ -258,32 +254,30 @@ public class ScheduleDetailFragment extends Fragment {
 
 				SparseBooleanArray checkeditems = scheduleList
 						.getCheckedItemPositions();
-				for (int i = 0; i < checkeditems.size(); i++) {
-					int index = checkeditems.keyAt(i);
 
-					if (checkeditems.get(index)) {
-						Order selectedItem = scheduleAdapter.getItem(index);
-						ordersAdapter.add(selectedItem);
-					}
-				}
+				List<Order> temp = new ArrayList<Order>();
+
 				for (int i = 0; i < checkeditems.size(); i++) {
 					int index = checkeditems.keyAt(i);
 
 					if (checkeditems.get(index)) {
 						scheduleList.setItemChecked(index, false);
-						Order selectedItem = scheduleAdapter.getItem(index - i);
-						scheduleAdapter.remove(selectedItem);
-
-						planHours = addHours(selectedItem, planHoursText);
-						scheduleHours = substractHours(selectedItem,
-								scheduleHoursText);
-
+						Order selectedItem = scheduleAdapter.getItem(index);
+						temp.add(selectedItem);
 					}
+				}
+
+				for (Order order : temp) {
+					scheduleAdapter.remove(order);
+					ordersAdapter.add(order);
+
+					planHours = addHours(order, planHours, planHoursText);
+					scheduleHours = substractHours(order, scheduleHours,
+							scheduleHoursText);
 				}
 
 				ordersAdapter.notifyDataSetChanged();
 				scheduleAdapter.notifyDataSetChanged();
-
 			}
 		});
 
@@ -447,7 +441,7 @@ public class ScheduleDetailFragment extends Fragment {
 				} catch (Exception e) {
 					e.printStackTrace();
 					messages = new ArrayList<Message>();
-					newSchedule = new Schedule();
+					newSchedule = null;
 				}
 				return messages;
 			}
@@ -470,6 +464,9 @@ public class ScheduleDetailFragment extends Fragment {
 						messageText = getResources().getString(
 								R.string.create_program_success);
 						lockActionBar();
+						DBManager dbManager = new DBManager(getActivity());
+						dbManager.insertSchedule(newSchedule);
+						dbManager.insertScheduleDetail(id, schedule);
 					}
 					break;
 				case UPDATE:
@@ -564,37 +561,28 @@ public class ScheduleDetailFragment extends Fragment {
 				new String[] { "" + week }));
 
 		for (Order order : schedule) {
-			planHours = addHours(order, scheduleHoursText);
+			scheduleHours = addHours(order, scheduleHours, scheduleHoursText);
 		}
 
 		for (Order order : orders) {
-			scheduleHours = addHours(order, planHoursText);
+			planHours = addHours(order, planHours, planHoursText);
 		}
 
 	}
 
-	private float addHours(Order order, TextView textView) {
+	private float addHours(Order order, float initialHours, TextView textView) {
 		float hour = order.getZHOURS();
-		float startHours = 0;
-		try {
-			startHours = Float.parseFloat(textView.getText().toString());
-		} catch (Exception e) {
-		}
-		startHours += hour;
-		textView.setText(String.format(Locale.US, "%.1f", startHours));
-		return startHours;
+		initialHours += hour;
+		textView.setText(String.format(Locale.US, "%.1f", initialHours));
+		return initialHours;
 	}
 
-	private float substractHours(Order order, TextView textView) {
+	private float substractHours(Order order, float initialHours,
+			TextView textView) {
 		float hour = order.getZHOURS();
-		float startHours = 0;
-		try {
-			startHours = Float.parseFloat(textView.getText().toString());
-		} catch (Exception e) {
-		}
-		startHours -= hour;
-		textView.setText(String.format(Locale.US, "%.1f", startHours));
-		return startHours;
+		initialHours -= hour;
+		textView.setText(String.format(Locale.US, "%.1f", initialHours));
+		return initialHours;
 	}
 	// @Override
 	// public void onDetach() {
