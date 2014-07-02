@@ -29,11 +29,15 @@ public class Equipment implements Serializable {
 	/**
 	 * CREATE TABLE Equipment
 	 */
-	public final static String CREATE_TABLE = 
-			"CREATE TABLE EQUIPMENT("
-			+ "EQUNR TEXT PRIMARY KEY"
+	public final static String CREATE_TABLE = "CREATE TABLE EQUIPMENT("
+			+ "EQUNR TEXT"
 			+ ", AUFNR TEXT REFERENCES ORDERS(AUFNR) ON DELETE CASCADE ON UPDATE CASCADE"
-			+ ", EQTXT TEXT" + ");";
+			+ ", EQTXT TEXT"
+			+ ", PRIMARY KEY (EQUNR,AUFNR)" 
+			+ ");";
+
+	public static final String[] COLUMN_NAMES = new String[] { AUFNR, EQUNR,
+			EQTXT };
 
 	public String getEQUNR() {
 		return equnr;

@@ -20,7 +20,7 @@ import android.view.View;
 import com.sf.tracem.R;
 import com.sf.tracem.login.CurrentConfig;
 import com.sf.tracem.path.MyPathFragment;
-import com.sf.tracem.plan.detail.OrderDetail;
+import com.sf.tracem.plan.detail.OrderDetailFragment;
 import com.sf.tracem.plan.menu.MyJobMenuFragment;
 import com.sf.tracem.schedule.MySchedulesFragment;
 import com.sf.tracem.schedule.ScheduleDetailFragment;
@@ -36,7 +36,7 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 	private ActionBarDrawerToggle mDrawerToggle;
 	private MyJobMenuFragment mjmf;
 	private MyPlanFragment mpf;
-	private OrderDetail od;
+	private OrderDetailFragment od;
 	private FragmentManager fm;
 	private FragmentTransaction ft;
 	private ActionBar actionBar;
@@ -171,7 +171,7 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		// FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		// }
 		// if (od == null) {
-		od = new OrderDetail();
+		od = new OrderDetailFragment();
 		Bundle args = new Bundle();
 		args.putString("aufnr", orderNumber);
 		args.putString("name", name);
@@ -180,8 +180,8 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		// od.getArguments().putString("aufnr", orderNumber);
 		// }
 		ft = fm.beginTransaction();
-		ft.replace(R.id.content_frame, od, OrderDetail.TAG).addToBackStack(
-				OrderDetail.TAG);
+		ft.replace(R.id.content_frame, od, OrderDetailFragment.TAG).addToBackStack(
+				OrderDetailFragment.TAG);
 		ft.commit();
 	}
 

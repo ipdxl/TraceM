@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class ZOrderDetails implements Serializable {
+public class OrderDetails implements Serializable {
 	private List<Component> components;
 	private List<HeaderOrder> header;
 	private List<Operation> operations;
@@ -44,11 +44,11 @@ public class ZOrderDetails implements Serializable {
 		this.partners = partners;
 	}
 
-	public List<Message> getErrors() {
+	public List<Message> getMessages() {
 		return errors;
 	}
 
-	public void setErrors(List<Message> errors) {
+	public void setMessages(List<Message> errors) {
 		this.errors = errors;
 	}
 

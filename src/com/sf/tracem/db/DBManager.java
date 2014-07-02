@@ -21,10 +21,12 @@ import com.sf.tracem.connection.Equipment;
 import com.sf.tracem.connection.HeaderOrder;
 import com.sf.tracem.connection.Operation;
 import com.sf.tracem.connection.Order;
+import com.sf.tracem.connection.OrderDetails;
 import com.sf.tracem.connection.OrderSchedule;
 import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.connection.TraceMFormater;
+import com.tracem.connection.MeasurementPoint;
 
 /**
  * 
@@ -400,6 +402,180 @@ public class DBManager {
 					comp.getREQUIREMENT_QUANTITY_UNIT());
 			traceMwdb.insert(Component.TABLE_NAME, null, values);
 		}
+	}
+
+	public OrderDetails getOrderDetails(String aufnr) {
+		OrderDetails od = new OrderDetails();
+		od.setOperations(getOperations(aufnr));
+		od.setEquipments(getEquipments(aufnr));
+		od.setComponents(getComponents(aufnr));
+
+		return od;
+	}
+
+	private List<Component> getComponents(String aufnr) {
+
+		traceMrdb = toh.getReadableDatabase();
+
+		Cursor cursor = traceMrdb.query(Component.TABLE_NAME,
+				Component.COLUMN_NAMES, Component.AUFNR + " = ?",
+				new String[] { aufnr }, null, null, null);
+
+		List<Component> components = new ArrayList<Component>();
+
+		if (cursor.moveToFirst()) {
+			Map<String, Integer> map = getColumnMap(cursor,
+					Component.COLUMN_NAMES);
+			do {
+				Component component = new Component();
+
+				try {
+					component.setACTIVITY(cursor.getString(map
+							.get(Component.ACTIVITY)));
+					component.setMATERIAL(cursor.getString(map
+							.get(Component.MATERIAL)));
+					component.setMATL_DESC(cursor.getString(map
+							.get(Component.MATL_DESC)));
+					component.setREQUIREMENT_QUANTITY(cursor.getString(map
+							.get(Component.REQUIREMENT_QUANTITY)));
+					component.setREQUIREMENT_QUANTITY_UNIT(cursor.getString(map
+							.get(Component.REQUIREMENT_QUANTITY_UNIT)));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				components.add(component);
+
+			} while (cursor.moveToNext());
+		}
+
+		return components;
+	}
+
+	private List<Equipment> getEquipments(String aufnr) {
+
+		traceMrdb = toh.getReadableDatabase();
+
+		Cursor cursor = traceMrdb.query(Equipment.TABLE_NAME,
+				Equipment.COLUMN_NAMES, Equipment.AUFNR + " = ?",
+				new String[] { aufnr }, null, null, null);
+
+		List<Equipment> equipments = new ArrayList<Equipment>();
+
+		if (cursor.moveToFirst()) {
+
+			Map<String, Integer> columnMap = getColumnMap(cursor,
+					Equipment.COLUMN_NAMES);
+			do {
+				Equipment equipment = new Equipment();
+
+				equipment.setEQUNR(cursor.getString(columnMap
+						.get(Equipment.EQUNR)));
+				equipment.setEQKTX(cursor.getString(columnMap
+						.get(Equipment.EQTXT)));
+
+				equipments.add(equipment);
+			} while (cursor.moveToNext());
+		}
+		return equipments;
+	}
+
+	private List<Operation> getOperations(String aufnr) {
+		traceMrdb = toh.getReadableDatabase();
+
+		Cursor cursor = traceMrdb.query(Operation.TABLE_NAME,
+				Operation.COLUMN_NAMES, Operation.AUFNR + " = ?",
+				new String[] { aufnr }, null, null, null);
+
+		List<Operation> operations = new ArrayList<Operation>();
+
+		if (cursor.moveToFirst()) {
+
+			Map<String, Integer> columnMap = getColumnMap(cursor,
+					Operation.COLUMN_NAMES);
+			do {
+				Operation operation = new Operation();
+
+				operation.setACTIVITY(cursor.getString(columnMap
+						.get(Operation.ACTIVITY)));
+				operation.setCOMPLETE(cursor.getInt(columnMap
+						.get(Operation.COMPLETE)));
+				operation.setDESCRIPTION(cursor.getString(columnMap
+						.get(Operation.DESCRIPTION)));
+				operation.setDURATION_NORMAL(cursor.getString(columnMap
+						.get(Operation.DURATION_NORMAL)));
+				operation.setDURATION_NORMAL_UNIT(cursor.getString(columnMap
+						.get(Operation.DURATION_NORMAL_UNIT)));
+				operation.setPLANT(cursor.getString(columnMap
+						.get(Operation.PLANT)));
+				operation.setWORK_CNTR(cursor.getString(columnMap
+						.get(Operation.WORK_CNTR)));
+
+				operations.add(operation);
+			} while (cursor.moveToNext());
+		}
+		return operations;
+	}
+
+	private Map<String, Integer> getColumnMap(Cursor cursor,
+			String[] columnNames) {
+		Map<String, Integer> columnMap = new ArrayMap<String, Integer>();
+
+		for (String column : columnNames) {
+			columnMap.put(column, cursor.getColumnIndex(column));
+		}
+		return columnMap;
+	}
+
+	public void insertMeasurementPoints(String equnr,
+			List<MeasurementPoint> points) {
+
+		traceMwdb = toh.getWritableDatabase();
+
+		for (MeasurementPoint point : points) {
+			ContentValues values = new ContentValues();
+
+			values.put(MeasurementPoint.EQUNR, point.getEqunr());
+			values.put(MeasurementPoint.POINT, point.getPoint());
+			values.put(MeasurementPoint.READ, point.getRead());
+			values.put(MeasurementPoint.UNIT, point.getUnit());
+			values.put(MeasurementPoint.DESCRIPTION, point.getDescription());
+			values.put(MeasurementPoint.NOTES, point.getNotes());
+
+			traceMwdb.insert(MeasurementPoint.TABLE_NAME, null, values);
+		}
+
+	}
+
+	public List<MeasurementPoint> getMeasurementPoints(String equnr) {
+		traceMrdb = toh.getReadableDatabase();
+
+		Cursor cursor = traceMrdb.query(MeasurementPoint.TABLE_NAME,
+				MeasurementPoint.COLUMN_NAMES, MeasurementPoint.EQUNR + " = ?",
+				new String[] { equnr }, null, null, null);
+
+		List<MeasurementPoint> points = new ArrayList<MeasurementPoint>();
+
+		if (cursor.moveToFirst()) {
+			Map<String, Integer> map = getColumnMap(cursor,
+					MeasurementPoint.COLUMN_NAMES);
+
+			do {
+				MeasurementPoint point = new MeasurementPoint();
+
+				point.setEqunr(cursor.getString(map.get(MeasurementPoint.EQUNR)));
+				point.setPoint(cursor.getString(map.get(MeasurementPoint.POINT)));
+				point.setRead(cursor.getDouble(map.get(MeasurementPoint.READ)));
+				point.setUnit(cursor.getString(map.get(MeasurementPoint.UNIT)));
+				point.setDescription(cursor.getString(map
+						.get(MeasurementPoint.DESCRIPTION)));
+				point.setNotes(cursor.getString(map.get(MeasurementPoint.NOTES)));
+
+				points.add(point);
+
+			} while (cursor.moveToNext());
+		}
+
+		return points;
 	}
 
 }

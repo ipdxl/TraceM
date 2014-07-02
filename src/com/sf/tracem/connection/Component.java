@@ -44,11 +44,23 @@ public class Component implements Serializable {
 	 * CREATE TABLE statement
 	 */
 	public final static String CREATE_TABLE = "CREATE TABLE COMPONENT (\n"
-			+ "	  AUFNR 	TEXT\n" + "	, MATERIAL 	TEXT\n"
-			+ "	, ACTIVITY 	TEXT\n" + "	, MATL_DESC TEXT\n"
+			+ "	  AUFNR 	TEXT REFERENCES ORDERS(AUFNR) ON UPDATE CASCADE ON DELETE CASCADE \n"
+			+ "	, ACTIVITY 	TEXT\n"  
+			+ "	, MATERIAL 	TEXT\n"
+			+ "	, MATL_DESC TEXT\n"
 			+ "	, REQUIREMENT_QUANTITY 		REAL\n"
 			+ "	, REQUIREMENT_QUANTITY_UNIT TEXT\n"
-			+ "	, PRIMARY KEY (MATERIAL, ACTIVITY)\n" + ");";
+			+ "	, PRIMARY KEY (AUFNR,ACTIVITY,MATERIAL)\n" 
+			+ ");";
+
+	public static final String[] COLUMN_NAMES = new String[] { 
+		AUFNR
+		, ACTIVITY
+		, MATERIAL
+		, MATL_DESC
+		, REQUIREMENT_QUANTITY
+		, REQUIREMENT_QUANTITY_UNIT 
+		};
 
 	public String getMATERIAL() {
 		return material;

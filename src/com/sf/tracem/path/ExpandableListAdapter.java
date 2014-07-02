@@ -3,6 +3,7 @@
  */
 package com.sf.tracem.path;
 
+import java.util.Arrays;
 import java.util.List;
 
 import android.content.Context;
@@ -16,7 +17,7 @@ import android.widget.TextView;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Path;
-import com.sf.tracem.connection.Order;
+import com.sf.tracem.schedule.OrderListAdapter;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -30,9 +31,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 	private int addLocationPressed;
 	public PathNavigation pathNavigation;
 	private OnLocationClickListener locationclickListener;
+	private OrderListAdapter[] childAdapter;
 
 	public ExpandableListAdapter(Context context,
 			PathNavigation pathNavigation, List<Path> pathList) {
+
+		childAdapter = new OrderListAdapter[pathList.size()];
 		this.context = context;
 		this.pathList = pathList;
 		this.pathNavigation = pathNavigation;
@@ -104,21 +108,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-		LayoutInflater inflater = LayoutInflater.from(context);
-		View child = inflater.inflate(R.layout.order_item, parent, false);
 
-		Order order = pathList.get(groupPosition).getOrders()[childPosition];
+		if (childAdapter[groupPosition] == null) {
+			childAdapter[groupPosition] = new OrderListAdapter(context,
+					R.layout.order_item, R.id.aufnr, Arrays.asList(pathList
+							.get(groupPosition).getOrders()));
+		}
 
-		TextView aufnr = (TextView) child.findViewById(R.id.aufnr);
-		TextView auftx = (TextView) child.findViewById(R.id.auftext);
-		TextView co_gstrpPlan = (TextView) child.findViewById(R.id.co_gstrp);
-		TextView name = (TextView) child.findViewById(R.id.name);
-
-		aufnr.setText(order.getAUFNR());
-		auftx.setText(order.getAUFTEXT());
-		co_gstrpPlan.setText(order.getCO_GSTRP());
-		name.setText(order.getPARTNER());
-		return child;
+		return childAdapter[groupPosition].getView(childPosition, convertView,
+				parent);
 	}
 
 	@Override

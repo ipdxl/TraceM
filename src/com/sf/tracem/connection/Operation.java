@@ -50,14 +50,16 @@ public class Operation implements Serializable {
 	 * Create operation table statement
 	 */
 	public final static String CREATE_TABLE = "CREATE TABLE OPERATION ("
-			+ "ACTIVITY		INTEGER PRIMARY KEY"
+			+ "ACTIVITY		INTEGER"
 			+ ", AUFNR 		TEXT REFERENCES ORDERS (AUFNR) ON DELETE CASCADE ON UPDATE CASCADE"
 			+ ", WORK_CNTR 	INTEGER" + ", DESCRIPTION 	TEXT"
 			// +", CONF_NO 		TEXT"
 			+ ", PLANT 		INTEGER" + ", DURATION_NORMAL 			REAL"
 			+ ", DURATION_NORMAL_UNIT 		TEXT"
 			// +", DURATION_NORMAL_UNIT_ISO 	TEXT"
-			+ ", COMPLETE 					INTEGER" + ");";
+			+ ", COMPLETE 					INTEGER"
+			+ ", PRIMARY KEY (ACTIVITY,AUFNR)"
+			+ ");";
 
 	public final static String TRIGGERS = "CREATE TRIGGER update_order_status"
 			+ " AFTER UPDATE OF COMPLETE ON OPERATION"
@@ -67,6 +69,10 @@ public class Operation implements Serializable {
 			+ "		WHERE AUFNR = NEW.AUFNR"
 			+ "		AND 0 NOT IN (SELECT COMPLETE FROM OPERATION WHERE AUFNR = NEW.AUFNR);"
 			+ " END";
+
+	public static final String[] COLUMN_NAMES = new String[] { ACTIVITY, AUFNR,
+			COMPLETE, DESCRIPTION, DURATION_NORMAL, DURATION_NORMAL_UNIT,
+			PLANT, WORK_CNTR };
 
 	public Operation() {
 	}

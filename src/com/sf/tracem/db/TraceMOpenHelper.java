@@ -12,6 +12,7 @@ import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.OrderSchedule;
 import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Schedule;
+import com.tracem.connection.MeasurementPoint;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -53,6 +54,8 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 		db.execSQL(Operation.CREATE_TABLE);
 		db.execSQL(Component.CREATE_TABLE);
 		db.execSQL(Equipment.CREATE_TABLE);
+		db.execSQL(MeasurementPoint.CREATE_TABLE);
+		
 		db.execSQL(Operation.TRIGGERS);
 	}
 

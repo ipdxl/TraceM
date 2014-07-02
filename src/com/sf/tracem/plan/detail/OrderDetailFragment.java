@@ -3,6 +3,7 @@
  */
 package com.sf.tracem.plan.detail;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import android.os.AsyncTask;
@@ -20,23 +21,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sf.tracem.R;
-import com.sf.tracem.connection.Connection;
+import com.sf.tracem.connection.Component;
 import com.sf.tracem.connection.Equipment;
 import com.sf.tracem.connection.Operation;
-import com.sf.tracem.connection.ZOrderDetails;
+import com.sf.tracem.connection.OrderDetails;
+import com.sf.tracem.db.DBManager;
 
 /**
  * @author José Guadalupe Mandujano Serrano
  * 
  */
-public class OrderDetail extends Fragment {
+public class OrderDetailFragment extends Fragment {
 
 	private static final String EQUIPMENT_MENU = "EQUIPMENT_MENU";
 	private static final String ORDER_DETAILS = "ORDER_DETAILS";
 	private static final String OPERATIONS_FRAGMENT = "OPERATIONS_FRAGMENT";
 	public static final String TAG = "ORDER_DETAIL";
 	private String aufnr;
-	private ZOrderDetails orderDetails;
+	private OrderDetails orderDetails;
 	private EquipmentMenu em;
 	private OperationsFragment of;
 	private FragmentManager fm;
@@ -105,7 +107,7 @@ public class OrderDetail extends Fragment {
 
 	private void onRestoreSavedInstanceState(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
-			orderDetails = (ZOrderDetails) savedInstanceState
+			orderDetails = (OrderDetails) savedInstanceState
 					.getSerializable(ORDER_DETAILS);
 			aufnr = savedInstanceState.getString("aufnr");
 		} else {
@@ -128,7 +130,7 @@ public class OrderDetail extends Fragment {
 
 			aufnr = getArguments().getString("aufnr");
 			if (orderDetails == null) {
-				DummyTask task = new DummyTask();
+				OrderDetailsTask task = new OrderDetailsTask();
 				task.execute();
 				try {
 					orderDetails = task.get();
@@ -167,18 +169,48 @@ public class OrderDetail extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	private class DummyTask extends AsyncTask<String, Integer, ZOrderDetails> {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.components:
+			showComponents();
+			break;
+
+		default:
+			break;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void showComponents() {
+
+		ComponentsDialog compDialog = new ComponentsDialog();
+		Bundle args = new Bundle();
+		args.putSerializable(ComponentsDialog.COMPONENTS,
+				(ArrayList<Component>) orderDetails.getComponents());
+		compDialog.setArguments(args);
+
+		compDialog.show(getFragmentManager(), ComponentsDialog.COMPONENTS);
+
+	}
+
+	private class OrderDetailsTask extends
+			AsyncTask<String, Integer, OrderDetails> {
 
 		@Override
-		protected ZOrderDetails doInBackground(String... params) {
+		protected OrderDetails doInBackground(String... params) {
 			try {
 				Looper.prepare();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			try {
-				Connection connection = new Connection(getActivity());
-				orderDetails = connection.getOrderDetails(aufnr);
+				DBManager dbManager = new DBManager(getActivity());
+				// Connection connection = new Connection(getActivity());
+				// orderDetails = connection.getOrderDetails(aufnr);
+				orderDetails = dbManager.getOrderDetails(aufnr);
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
@@ -188,9 +220,9 @@ public class OrderDetail extends Fragment {
 		}
 
 		@Override
-		protected void onPostExecute(ZOrderDetails result) {
+		protected void onPostExecute(OrderDetails result) {
 			if (result == null) {
-				result = new ZOrderDetails();
+				result = new OrderDetails();
 			}
 			super.onPostExecute(result);
 		}

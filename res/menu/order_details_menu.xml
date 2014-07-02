@@ -7,5 +7,11 @@
         android:showAsAction="always"
         android:title="@string/order_description">
     </item>
+    <item
+        android:id="@+id/components"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:showAsAction="always"
+        android:title="@string/components">
+    </item>
 
 </menu>
