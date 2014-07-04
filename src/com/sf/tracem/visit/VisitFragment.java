@@ -182,9 +182,12 @@ public class VisitFragment extends Fragment {
 	}
 
 	private void createVisit() {
-		CreateVisitDialog cvd = new CreateVisitDialog();
-		FragmentManager fm = getActivity().getSupportFragmentManager();
-		cvd.show(fm, "CREATE_VISIT_DIALOG");
+		LayoutInflater inflater = LayoutInflater.from(getActivity());
+		View view = inflater.inflate(R.layout.create_visit, null);
+		CreateVisitDialog cvd = new CreateVisitDialog(getActivity());
+		cvd.setView(view);
+		cvd.setTitle(R.string.create_visit);
+		cvd.show();
 
 	}
 

@@ -164,8 +164,6 @@ public class MyPlanFragment extends Fragment {
 	}
 
 	private void getOrders() {
-		// final String dl = dateLow.replace("/", ".");
-		// final String dh = dateHigh.replace("/", ".");
 
 		AsyncTask<String, Void, List<Order>> task = new AsyncTask<String, Void, List<Order>>() {
 

@@ -19,6 +19,7 @@ import android.util.Log;
 import com.sf.tracem.connection.Component;
 import com.sf.tracem.connection.Equipment;
 import com.sf.tracem.connection.HeaderOrder;
+import com.sf.tracem.connection.MeasurementPoint;
 import com.sf.tracem.connection.Operation;
 import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.OrderDetails;
@@ -26,7 +27,6 @@ import com.sf.tracem.connection.OrderSchedule;
 import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.connection.TraceMFormater;
-import com.tracem.connection.MeasurementPoint;
 
 /**
  * 
@@ -153,6 +153,9 @@ public class DBManager {
 			values.put(Order.AUFART, order.getAUFART());
 			values.put(Order.CO_GSTRP, order.getCO_GSTRP());
 			values.put(Order.AUFTEXT, order.getAUFTEXT());
+			if (order.getPARTNER() == null) {
+				continue;
+			}
 			values.put(Order.PARTNER, order.getPARTNER());
 			values.put(Partner.ADDRESS, order.getADDRESS());
 			values.put(Order.ORDER_STATUS, order.getORDER_STATUS());
@@ -363,6 +366,7 @@ public class DBManager {
 			values.put(Equipment.AUFNR, order);
 			values.put(Equipment.EQTXT, equipment.getEQKTX());
 			values.put(Equipment.EQUNR, equipment.getEQUNR());
+			values.put(Equipment.COMPLETE, equipment.getComplete());
 
 			traceMwdb.insert(Equipment.TABLE_NAME, null, values);
 		}
@@ -472,6 +476,8 @@ public class DBManager {
 						.get(Equipment.EQUNR)));
 				equipment.setEQKTX(cursor.getString(columnMap
 						.get(Equipment.EQTXT)));
+				equipment.setComplete(cursor.getInt(columnMap
+						.get(Equipment.COMPLETE)));
 
 				equipments.add(equipment);
 			} while (cursor.moveToNext());
@@ -526,32 +532,55 @@ public class DBManager {
 		return columnMap;
 	}
 
-	public void insertMeasurementPoints(String equnr,
-			List<MeasurementPoint> points) {
+	public void insertMeasurementPoints(List<MeasurementPoint> points) {
 
 		traceMwdb = toh.getWritableDatabase();
 
 		for (MeasurementPoint point : points) {
-			ContentValues values = new ContentValues();
-
-			values.put(MeasurementPoint.EQUNR, point.getEqunr());
-			values.put(MeasurementPoint.POINT, point.getPoint());
-			values.put(MeasurementPoint.READ, point.getRead());
-			values.put(MeasurementPoint.UNIT, point.getUnit());
-			values.put(MeasurementPoint.DESCRIPTION, point.getDescription());
-			values.put(MeasurementPoint.NOTES, point.getNotes());
+			ContentValues values = getMeasurementPointsValues(point);
 
 			traceMwdb.insert(MeasurementPoint.TABLE_NAME, null, values);
 		}
 
 	}
 
-	public List<MeasurementPoint> getMeasurementPoints(String equnr) {
+	private ContentValues getMeasurementPointsValues(MeasurementPoint point) {
+		ContentValues values = new ContentValues();
+
+		values.put(MeasurementPoint.AUFNR, point.getAufnr());
+		values.put(MeasurementPoint.EQUNR, point.getEqunr());
+		values.put(MeasurementPoint.POINT, point.getPoint());
+		values.put(MeasurementPoint.READ, point.getRead());
+		values.put(MeasurementPoint.UNIT, point.getUnit());
+		values.put(MeasurementPoint.DESCRIPTION, point.getDescription());
+		values.put(MeasurementPoint.NOTES, point.getNotes());
+		return null;
+	}
+
+	public void updateMeasurementPoints(List<MeasurementPoint> points) {
+
+		traceMrdb = toh.getReadableDatabase();
+
+		for (MeasurementPoint point : points) {
+			ContentValues values = getMeasurementPointsValues(point);
+
+			int result = traceMrdb.update(MeasurementPoint.TABLE_NAME, values,
+					MeasurementPoint.EQUNR + " = ? AND "
+							+ MeasurementPoint.AUFNR + " = ?", new String[] {
+							point.getEqunr(), point.getAufnr() });
+
+			Log.i("Update Measurement point", "" + result);
+		}
+	}
+
+	public List<MeasurementPoint> getMeasurementPoints(String aufnr,
+			String equnr) {
 		traceMrdb = toh.getReadableDatabase();
 
 		Cursor cursor = traceMrdb.query(MeasurementPoint.TABLE_NAME,
-				MeasurementPoint.COLUMN_NAMES, MeasurementPoint.EQUNR + " = ?",
-				new String[] { equnr }, null, null, null);
+				MeasurementPoint.COLUMN_NAMES, MeasurementPoint.EQUNR
+						+ " = ? AND " + MeasurementPoint.AUFNR + " = ?",
+				new String[] { equnr, aufnr }, null, null, null);
 
 		List<MeasurementPoint> points = new ArrayList<MeasurementPoint>();
 
@@ -562,7 +591,8 @@ public class DBManager {
 			do {
 				MeasurementPoint point = new MeasurementPoint();
 
-				point.setEqunr(cursor.getString(map.get(MeasurementPoint.EQUNR)));
+				point.setAufnr(aufnr);
+				point.setEqunr(equnr);
 				point.setPoint(cursor.getString(map.get(MeasurementPoint.POINT)));
 				point.setRead(cursor.getDouble(map.get(MeasurementPoint.READ)));
 				point.setUnit(cursor.getString(map.get(MeasurementPoint.UNIT)));

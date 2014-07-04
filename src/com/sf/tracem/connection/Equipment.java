@@ -5,8 +5,10 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Equipment implements Serializable {
 
+	private String aufnr;
 	private String equnr;
 	private String eqktxt;
+	private int complete;
 
 	/**
 	 * Equipment number
@@ -19,25 +21,30 @@ public class Equipment implements Serializable {
 	/**
 	 * Order number
 	 * 
-	 * @see OrdersTable#AUFNR
+	 * @see Order#AUFNR
 	 */
-	public final static String AUFNR = "AUFNR";
+	public final static String AUFNR = Order.AUFNR;
 	/**
 	 * Description of technical object
 	 */
 	public final static String EQTXT = "EQTXT";
+	/**
+ * 
+ */
+	public final static String COMPLETE = "COMPLETE";
+
 	/**
 	 * CREATE TABLE Equipment
 	 */
 	public final static String CREATE_TABLE = "CREATE TABLE EQUIPMENT("
 			+ "EQUNR TEXT"
 			+ ", AUFNR TEXT REFERENCES ORDERS(AUFNR) ON DELETE CASCADE ON UPDATE CASCADE"
-			+ ", EQTXT TEXT"
-			+ ", PRIMARY KEY (EQUNR,AUFNR)" 
-			+ ");";
+			+ ", EQTXT TEXT" + ", COMPLETE INTEGER NOT NULL DEFAULT 0"
+			+ ", PRIMARY KEY (EQUNR,AUFNR)"
+			+ ", CHECK(COMPLETE = 0 OR COMPLETE = 1)" + ");";
 
-	public static final String[] COLUMN_NAMES = new String[] { AUFNR, EQUNR,
-			EQTXT };
+	public static final String[] COLUMN_NAMES = new String[] { AUFNR, COMPLETE,
+			EQUNR, EQTXT };
 
 	public String getEQUNR() {
 		return equnr;
@@ -53,5 +60,35 @@ public class Equipment implements Serializable {
 
 	public void setEQKTX(String eQKTX) {
 		eqktxt = eQKTX;
+	}
+
+	/**
+	 * @return the aufnr
+	 */
+	public String getAufnr() {
+		return aufnr;
+	}
+
+	/**
+	 * @param aufnr
+	 *            the aufnr to set
+	 */
+	public void setAufnr(String aufnr) {
+		this.aufnr = aufnr;
+	}
+
+	/**
+	 * @return the complete
+	 */
+	public int getComplete() {
+		return complete;
+	}
+
+	/**
+	 * @param complete
+	 *            the complete to set
+	 */
+	public void setComplete(int complete) {
+		this.complete = complete;
 	}
 }

@@ -5,17 +5,18 @@ package com.sf.tracem.plan;
 
 import java.util.List;
 
-import com.sf.tracem.R;
-import com.sf.tracem.connection.Order;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.sf.tracem.connection.Order;
 
 /**
  * @author USER-7
  * 
  */
+@SuppressLint("ViewConstructor")
 public class OrderPlanListAdapter extends
 		com.sf.tracem.schedule.OrderListAdapter {
 
@@ -31,11 +32,11 @@ public class OrderPlanListAdapter extends
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = super.getView(position, convertView, parent);
 
-		if (position % 2 == 0) {
-			view.setBackgroundResource(R.color.blue_sf);
-		} else {
-			view.setBackgroundResource(R.color.light_gray);
-		}
+		// if (position % 2 == 0) {
+		// view.setBackgroundResource(R.color.blue_sf);
+		// } else {
+		// view.setBackgroundResource(R.color.light_gray);
+		// }
 
 		return view;
 	}

@@ -179,7 +179,7 @@ public class ScheduleDetailFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.create_schedule_layout,
+		View view = inflater.inflate(R.layout.create_schedule,
 				container, false);
 
 		ordersList = (ListView) view.findViewById(R.id.orderList);

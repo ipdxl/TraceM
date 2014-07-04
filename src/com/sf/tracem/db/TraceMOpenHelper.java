@@ -3,20 +3,20 @@
  */
 package com.sf.tracem.db;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 import com.sf.tracem.connection.Component;
 import com.sf.tracem.connection.Equipment;
 import com.sf.tracem.connection.HeaderOrder;
+import com.sf.tracem.connection.MeasurementPoint;
 import com.sf.tracem.connection.Menu;
 import com.sf.tracem.connection.Operation;
 import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.OrderSchedule;
 import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Schedule;
-import com.tracem.connection.MeasurementPoint;
-
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -86,6 +86,7 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 
 	public void clearData() {
 		SQLiteDatabase db = getWritableDatabase();
+		db.delete(Order.TABLE_NAME, null, null);
 		db.delete(Equipment.TABLE_NAME, null, null);
 		db.delete(Operation.TABLE_NAME, null, null);
 		db.delete(Component.TABLE_NAME, null, null);

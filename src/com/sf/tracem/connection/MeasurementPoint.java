@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tracem.connection;
+package com.sf.tracem.connection;
 
 import java.io.Serializable;
 
@@ -15,6 +15,7 @@ import com.sf.tracem.connection.Equipment;
 public class MeasurementPoint implements Serializable {
 
 	public final static String TABLE_NAME = "MEASUREMENT_POINT";
+	public final static String AUFNR = Equipment.AUFNR;
 	public final static String EQUNR = Equipment.EQUNR;
 	public final static String POINT = "POINT";
 	public final static String READ = "READ";
@@ -22,7 +23,8 @@ public class MeasurementPoint implements Serializable {
 	public final static String DESCRIPTION = "DESCRIPTION";
 	public final static String NOTES = "NOTES";
 	public final static String[] COLUMN_NAMES = new String[] { 
-		EQUNR
+		AUFNR
+		, EQUNR
 		, POINT
 		, READ
 		, UNIT
@@ -30,13 +32,14 @@ public class MeasurementPoint implements Serializable {
 		, NOTES };
 
 	public final static String CREATE_TABLE = "CREATE TABLE MEASUREMENT_POINT("
-			+ "	EQUNR TEXT REFERENCES EQUIPMENT(EQUNR) ON UPDATE CASCADE ON DELETE CASCADE"
+			+ "AUFNR TEXT REFERENCES EQUIPMENT(AUFNR) ON UPDATE CASCADE ON DELETE CASCADE"
+			+ ", EQUNR TEXT REFERENCES EQUIPMENT(EQUNR) ON UPDATE CASCADE ON DELETE CASCADE"
 			+ ", POINT TEXT" 
 			+ ", READ REAL" 
 			+ ", UNIT TEXT"
 			+ ", DESCRIPTION TEXT" 
 			+ ", NOTES TEXT"
-			+ ", PRIMARY KEY (EQUNR,POINT)" 
+			+ ", PRIMARY KEY (AUFNR,EQUNR,POINT)" 
 			+ ");";
 
 	private String equnr;
@@ -45,6 +48,7 @@ public class MeasurementPoint implements Serializable {
 	private String unit;
 	private String notes;
 	private double read;
+	private String aufnr;
 
 	/**
 	 * @return the equnr
@@ -134,6 +138,14 @@ public class MeasurementPoint implements Serializable {
 	 */
 	public void setPoint(String point) {
 		this.point = point;
+	}
+
+	public void setAufnr(String aufnr) {
+		this.aufnr = aufnr;
+	}
+	
+	public String getAufnr(){
+		return aufnr;
 	}
 
 }

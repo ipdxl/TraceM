@@ -3,17 +3,13 @@
  */
 package com.sf.tracem.plan.detail;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.sf.tracem.R;
 import com.sf.tracem.connection.Equipment;
 
 /**
@@ -62,7 +58,7 @@ public class EquipmentMenu extends Fragment {
 		equipmentsList = (ListView) view.findViewById(android.R.id.list);
 
 		equipmentsList
-				.setAdapter(new eqArrayAdapter(getActivity(), equipments));
+				.setAdapter(new EquipmentArrayAdapter(getActivity(), equipments));
 
 		return view;
 	}
@@ -73,36 +69,4 @@ public class EquipmentMenu extends Fragment {
 		super.onSaveInstanceState(outState);
 	}
 
-	private class eqArrayAdapter extends ArrayAdapter<Equipment> {
-
-		private TextView eqktx, equnr;
-
-		public eqArrayAdapter(Context context, Equipment[] objects) {
-			super(context, R.layout.equipment_item, R.id.eqktx, objects);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = LayoutInflater.from(getContext());
-			// View view = inflater
-			// .inflate(R.layout.equipment_item, parent, false);
-
-			View view = inflater.inflate(android.R.layout.simple_list_item_2,
-					parent, false);
-
-			// eqktx = (TextView) view.findViewById(R.id.eqktx);
-			// equnr = (TextView) view.findViewById(R.id.equnr);
-
-			eqktx = (TextView) view.findViewById(android.R.id.text1);
-			equnr = (TextView) view.findViewById(android.R.id.text2);
-
-			Equipment equipment = getItem(position);
-
-			equnr.setText(equipment.getEQUNR());
-			eqktx.setText(equipment.getEQKTX());
-
-			return view;
-		}
-
-	}
 }

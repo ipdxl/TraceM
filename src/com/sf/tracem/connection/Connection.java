@@ -18,7 +18,6 @@ import android.content.Context;
 
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.db.TraceMOpenHelper;
-import com.tracem.connection.MeasurementPoint;
 
 public class Connection extends Activity {
 
@@ -58,6 +57,10 @@ public class Connection extends Activity {
 	private static final String ITEM = "item";
 	private static final String Z_PM_AP_GET_MEASURE_POINT = "Z_PM_AP_GET_MEASURE_POINT";
 	private static final String P_EQUIPMENT = "P_EQUIPMENT";
+	private static final String DESCRIPTION = "DESCRIPTION";
+	private static final String POINT = "POINT";
+	private static final String ZREAD = "ZREAD";
+	private static final String IT_READ_POINTS = "IT_READ_POINTS";
 	private Context context;
 	private DBManager dbManager;
 
@@ -421,6 +424,8 @@ public class Connection extends Activity {
 			getOrderDetails(order.getAUFNR());
 		}
 
+		zOrders = dbManager.getOrders();
+
 		List<Schedule> schedules = getScheduleList(users[0]);
 		for (Schedule schedule : schedules) {
 			getScheduleDetail(users[0], schedule.getID_PROGRAM());
@@ -714,20 +719,20 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param order
+	 * @param aufnr
 	 *            Order number
 	 * @return Order details
 	 * @throws XmlPullParserException
 	 * @throw IOException
 	 * @throw HttpResponseException
 	 */
-	public OrderDetails getOrderDetails(String order)
+	public OrderDetails getOrderDetails(String aufnr)
 			throws HttpResponseException, IOException, XmlPullParserException {
 
 		// Create request
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_ORDER_DETAIL);
 
-		request.addProperty(P_ORDER_NUMBER, order);
+		request.addProperty(P_ORDER_NUMBER, aufnr);
 		// Create envelope
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
@@ -764,11 +769,11 @@ public class Connection extends Activity {
 
 		SoapObject headerSoap = response.get(1);
 
-		zOrder.setHeader(getHeader(order, headerSoap));
+		zOrder.setHeader(getHeader(aufnr, headerSoap));
 
 		SoapObject equipmentSoap = response.get(2);
 
-		zOrder.setEquipments(getEquipments(equipmentSoap));
+		zOrder.setEquipments(getEquipments(aufnr, equipmentSoap));
 
 		SoapObject soapOperations = response.get(3);
 
@@ -778,16 +783,16 @@ public class Connection extends Activity {
 		zOrder.setPartners(getPartners(parnersSoap));
 
 		dbManager.insertHeader(zOrder.getHeader());
-		dbManager.insertEquipment(order, zOrder.getEquipments());
+		dbManager.insertEquipment(aufnr, zOrder.getEquipments());
 		try {
 			for (Equipment eq : zOrder.getEquipments()) {
-				getMeasurePoints(eq.getEQUNR());
+				getMeasurePoints(aufnr, eq.getEQUNR());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		dbManager.insertOperations(order, zOrder.getOperations());
-		dbManager.insertComponents(order, zOrder.getComponents());
+		dbManager.insertOperations(aufnr, zOrder.getOperations());
+		dbManager.insertComponents(aufnr, zOrder.getComponents());
 
 		return zOrder;
 
@@ -856,17 +861,19 @@ public class Connection extends Activity {
 	}
 
 	/**
-	 * 
+	 * @param aufnr
 	 * @param equipmentSoap
 	 * @return
 	 */
-	private List<Equipment> getEquipments(SoapObject equipmentSoap) {
+	private List<Equipment> getEquipments(String aufnr, SoapObject equipmentSoap) {
 		int count = equipmentSoap.getPropertyCount();
 		List<Equipment> equipments = new ArrayList<Equipment>();
 
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) equipmentSoap.getProperty(i);
 			Equipment equipment = new Equipment();
+
+			equipment.setAufnr(aufnr);
 			equipment
 					.setEQKTX(parseResult(item.getProperty("EQKTX").toString()));
 			equipment
@@ -1169,12 +1176,13 @@ public class Connection extends Activity {
 	 * 
 	 * @param equnr
 	 *            {@link Equipment#EQUNR}
+	 * @param aufnr
 	 * @return A List with Measurement points
 	 * @throws HttpResponseException
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	public List<MeasurementPoint> getMeasurePoints(String equnr)
+	public List<MeasurementPoint> getMeasurePoints(String aufnr, String equnr)
 			throws HttpResponseException, IOException, XmlPullParserException {
 
 		SoapObject request = new SoapObject(NAMESPACE,
@@ -1206,6 +1214,7 @@ public class Connection extends Activity {
 
 			MeasurementPoint point = new MeasurementPoint();
 
+			point.setAufnr(aufnr);
 			point.setEqunr(equnr);
 			point.setDescription(parseResult(item
 					.getPropertyAsString(MeasurementPoint.DESCRIPTION)));
@@ -1217,8 +1226,48 @@ public class Connection extends Activity {
 			points.add(point);
 		}
 
-		dbManager.insertMeasurementPoints(equnr, points);
+		dbManager.insertMeasurementPoints(points);
 
 		return points;
+	}
+
+	public List<Message> saveMeasureDoc(String userName,
+			List<MeasurementPoint> points) throws HttpResponseException,
+			IOException, XmlPullParserException {
+
+		SoapObject request = new SoapObject(NAMESPACE,
+				Z_PM_AP_GET_MEASURE_POINT);
+
+		SoapObject soapPoints = new SoapObject();
+
+		for (MeasurementPoint point : points) {
+			SoapObject item = new SoapObject();
+
+			item.addProperty(DESCRIPTION, point.getNotes() == null ? "" : point
+					.getNotes().substring(0, 40));
+			item.addProperty(POINT, point.getPoint());
+			item.addProperty(ZREAD, "" + point.getRead());
+
+			soapPoints.addProperty(ITEM, item);
+		}
+
+		request.addProperty(IT_READ_POINTS, soapPoints);
+		request.addProperty(P_USER, userName);
+
+		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
+				SAP_USER, SAP_PASSWORD);
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+				SoapSerializationEnvelope.VER11);
+
+		envelope.setOutputSoapObject(request);
+
+		transport.call(SOAP_ACTION, envelope);
+
+		SoapObject response = (SoapObject) envelope.getResponse();
+
+		List<Message> messages = getMessageList(response);
+
+		return messages;
 	}
 }

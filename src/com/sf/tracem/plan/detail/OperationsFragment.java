@@ -69,13 +69,13 @@ public class OperationsFragment extends Fragment {
 		private CheckBox opStatus;
 
 		public opsArrayAdapter(Context context, Operation[] objects) {
-			super(context, R.layout.operation_detail, R.id.eqktx, objects);
+			super(context, R.layout.operation_item, R.id.eqktx, objects);
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = LayoutInflater.from(getContext());
-			View view = inflater.inflate(R.layout.operation_detail, parent,
+			View view = inflater.inflate(R.layout.operation_item, parent,
 					false);
 
 			activity = (TextView) view.findViewById(R.id.activity);

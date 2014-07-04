@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical"
     tools:ignore="HardcodedText" >
 
@@ -11,7 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Number" />
+        android:text="Number"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/eqktx"
@@ -19,6 +22,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Description"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <CheckBox
+        android:id="@+id/complete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/complete"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>

@@ -94,5 +94,6 @@
     <string name="complete">Complete</string>
     <string name="hours">Hours</string>
     <string name="components">Components</string>
+    <string name="automatic">Automatic</string>
 
 </resources>
