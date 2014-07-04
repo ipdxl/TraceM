@@ -22,7 +22,7 @@
     <string name="address">Address</string>
 
     <color name="blue_sf">#779FF7</color>
-    <color name="Obscure_bg">#8D8C8B</color>
+    <color name="obscure_bg">#8D8C8B</color>
 
     <string-array name="my_job_items">
         <item>Plans</item>
@@ -85,6 +85,7 @@
     <string name="logout_error">Logout connection error</string>
 
     <color name="light_gray">#D8D8D8</color>
+
     <string name="loading">Loading</string>
     <string name="delete">Delete</string>
     <string name="update_program_error">Error updating schedule</string>
@@ -95,5 +96,7 @@
     <string name="hours">Hours</string>
     <string name="components">Components</string>
     <string name="automatic">Automatic</string>
+    <string name="fini">Start date</string>
+    <string name="hini">Start time</string>
 
 </resources>

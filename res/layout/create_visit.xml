@@ -1,28 +1,39 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:divider="@android:drawable/divider_horizontal_dark"
+    android:orientation="vertical"
+    android:showDividers="middle" >
 
-    <PreferenceCategory
-        android:key="pref_key_storage_settings"
-        android:title="Delete storage" >
+    <TextView
+        android:id="@+id/schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/my_schedule"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="pref_key_auto_delete"
-            android:summary="Delete"
-            android:title="Auto delete" />
+    <CheckBox
+        android:id="@+id/tini"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:checked="true"
+        android:text="@string/automatic" />
 
-        <Preference
-            android:dependency="pref_key_auto_delete"
-            android:key="pref_key_sms_delete_limit"
-            android:summary="Delete"
-            android:title="Delete SMS" />
+    <Spinner
+        android:id="@+id/fini"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:hint="@string/fini"
+        android:inputType="time" />
 
-        <Preference
-            android:dependency="pref_key_auto_delete"
-            android:key="pref_key_mms_delete_limit"
-            android:summary="Delete"
-            android:title="Delete MMS" />
-    </PreferenceCategory>
+    <Spinner
+        android:id="@+id/hini"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:hint="@string/hini"
+        android:inputType="date" />
 
-</PreferenceScreen>
+</LinearLayout>

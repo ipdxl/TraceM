@@ -21,7 +21,7 @@
     <string name="address">"Dirección"</string>
 
     <color name="blue_sf">#850024B0</color>
-    <color name="Obscure_bg">#8D8C8B</color>
+    <color name="obscure_bg">#8D8C8B</color>
 
     <string-array name="my_job_items">
         <item>"Proyecto"</item>

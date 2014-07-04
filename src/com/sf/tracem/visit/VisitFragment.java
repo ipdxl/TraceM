@@ -10,20 +10,30 @@ import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
@@ -184,11 +194,53 @@ public class VisitFragment extends Fragment {
 	private void createVisit() {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		View view = inflater.inflate(R.layout.create_visit, null);
-		CreateVisitDialog cvd = new CreateVisitDialog(getActivity());
-		cvd.setView(view);
-		cvd.setTitle(R.string.create_visit);
+
+		Spinner fini = (Spinner) view.findViewById(R.id.fini);
+
+		fini.setAdapter(new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_list_item_1, android.R.id.text1,
+				new String[] { "2014-07-04" }));
+
+		final OnDateSetListener finiDateSt = new OnDateSetListener() {
+
+			@Override
+			public void onDateSet(DatePicker view, int year, int monthOfYear,
+					int dayOfMonth) {
+
+			}
+		};
+
+		fini.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				DatePickerDialog dpd = new DatePickerDialog(getActivity(),
+						finiDateSt, 2014, 7, 4);
+				dpd.show();
+				return true;
+			}
+		});
+		//
+		// @Override
+		// public void onClick(View v) {
+		// DatePickerDialog dpd = new DatePickerDialog(getActivity(),
+		// null, 2014, 7, 4);
+		// dpd.show();
+		// }
+		// });
+
+		Spinner hini = (Spinner) view.findViewById(R.id.hini);
+
+		hini.setAdapter(new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_list_item_1, android.R.id.text1,
+				new String[] { "10:00:00 AM" }));
+
+		AlertDialog cvd = new AlertDialog.Builder(getActivity()).setView(view)
+				.setTitle(R.string.create_visit)
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setPositiveButton(android.R.string.ok, null)
+				.setNegativeButton(android.R.string.cancel, null).create();
 		cvd.show();
 
 	}
-
 }

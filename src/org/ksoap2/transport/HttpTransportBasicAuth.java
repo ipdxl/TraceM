@@ -37,40 +37,42 @@ import org.ksoap2.transport.ServiceConnectionSE;
  * <i>Thanks to Paul Spencer</i>
  */
 public class HttpTransportBasicAuth extends HttpTransportSE {
-    private String username;
-    private String password;
-    /**
-     * Constructor with username and password
-     * 
-     * @param url
-     *            The url address of the webservice endpoint
-     * @param username
-     *            Username for the Basic Authentication challenge RFC 2617 
-     * @param password
-     *            Password for the Basic Authentication challenge RFC 2617
-     */
-    public HttpTransportBasicAuth(String url, String username, String password) {
-        super(url);
-        this.username = username;
-        this.password = password;
-    }
+	private String username;
+	private String password;
 
-    public ServiceConnection getServiceConnection() throws IOException {
-        ServiceConnectionSE midpConnection = new ServiceConnectionSE(url);
-        addBasicAuthentication(midpConnection);
-        return midpConnection;
-    }
+	/**
+	 * Constructor with username and password
+	 * 
+	 * @param url
+	 *            The url address of the webservice endpoint
+	 * @param username
+	 *            Username for the Basic Authentication challenge RFC 2617
+	 * @param password
+	 *            Password for the Basic Authentication challenge RFC 2617
+	 */
+	public HttpTransportBasicAuth(String url, String username, String password) {
+		super(url);
+		this.username = username;
+		this.password = password;
+	}
 
-    protected void addBasicAuthentication(ServiceConnection midpConnection) throws IOException {
-        if (username != null && password != null) {
-            StringBuffer buf = new StringBuffer(username);
-            buf.append(':').append(password);
-            byte[] raw = buf.toString().getBytes();
-            buf.setLength(0);
-            buf.append("Basic ");
-            org.kobjects.base64.Base64.encode(raw, 0, raw.length, buf);
-            midpConnection.setRequestProperty("Authorization", buf.toString());
-        }
-    }
+	public ServiceConnection getServiceConnection() throws IOException {
+		ServiceConnectionSE midpConnection = new ServiceConnectionSE(url);
+		addBasicAuthentication(midpConnection);
+		return midpConnection;
+	}
+
+	protected void addBasicAuthentication(ServiceConnection midpConnection)
+			throws IOException {
+		if (username != null && password != null) {
+			StringBuffer buf = new StringBuffer(username);
+			buf.append(':').append(password);
+			byte[] raw = buf.toString().getBytes();
+			buf.setLength(0);
+			buf.append("Basic ");
+			org.kobjects.base64.Base64.encode(raw, 0, raw.length, buf);
+			midpConnection.setRequestProperty("Authorization", buf.toString());
+		}
+	}
 
 }
