@@ -4,12 +4,7 @@
 package com.sf.tracem.visit;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
@@ -23,30 +18,23 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -62,7 +50,7 @@ import com.sf.tracem.plan.MyJobNavigation;
  * @author José Guadalupe Mandujano Serrano
  * 
  */
-public class VisitFragment extends Fragment {
+public class VisitListFragment extends Fragment {
 
 	public static final String TAG = "VISIT_FRAGMENT";
 	private ListView list;
@@ -147,20 +135,8 @@ public class VisitFragment extends Fragment {
 					e.printStackTrace();
 				}
 
-				Connection conn = new Connection(getActivity());
-				try {
-					vl = conn.getVisitList(loginPreferences.getString(
-							CurrentConfig.USERNAME, null), year, week);
-				} catch (HttpResponseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (XmlPullParserException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				DBManager dbManager = new DBManager(getActivity());
+				vl = dbManager.getVisits();
 
 				return vl;
 			}
@@ -273,7 +249,7 @@ public class VisitFragment extends Fragment {
 			}
 		});
 
-		CheckBox tini = (CheckBox) view.findViewById(R.id.tini);
+		final CheckBox tini = (CheckBox) view.findViewById(R.id.tini);
 		tini.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
@@ -291,8 +267,64 @@ public class VisitFragment extends Fragment {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Toast.makeText(getActivity(), "Visit created",
-						Toast.LENGTH_LONG).show();
+
+				AsyncTask<String, Integer, String> createVisitTask = new AsyncTask<String, Integer, String>() {
+
+					private Visit visit;
+					DBManager dbManager;
+
+					@Override
+					protected void onPreExecute() {
+						dbManager = new DBManager(getActivity());
+						visit = new Visit();
+						visit.setFINI(fini.getText().toString());
+						visit.setHINI(hini.getText().toString());
+						visit.setTINI((byte) (tini.isChecked() ? 1 : 0));
+						visit.setID_PROGRAM(dbManager.getActiveSchedule());
+						visit.setUSER(loginPreferences.getString(
+								CurrentConfig.USERNAME, null));
+					}
+
+					@Override
+					protected String doInBackground(String... params) {
+						try {
+							Looper.prepare();
+						} catch (Exception e) {
+
+						}
+						Connection connection = new Connection(getActivity());
+						String visitID = null;
+						try {
+							visitID = connection.createVisit(visit);
+						} catch (HttpResponseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (XmlPullParserException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						return visitID;
+					}
+
+					@Override
+					protected void onPostExecute(String result) {
+						if (result != null) {
+							Toast.makeText(getActivity(),
+									"Visit " + result + " created",
+									Toast.LENGTH_LONG).show();
+						} else {
+
+							Toast.makeText(getActivity(), "Visit not created",
+									Toast.LENGTH_LONG).show();
+						}
+
+					}
+				};
+
+				createVisitTask.execute();
 			}
 		};
 

@@ -27,6 +27,7 @@ import com.sf.tracem.connection.OrderSchedule;
 import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.connection.TraceMFormater;
+import com.sf.tracem.connection.Visit;
 
 /**
  * 
@@ -560,7 +561,7 @@ public class DBManager {
 		values.put(MeasurementPoint.UNIT, point.getUnit());
 		values.put(MeasurementPoint.DESCRIPTION, point.getDescription());
 		values.put(MeasurementPoint.NOTES, point.getNotes());
-		return null;
+		return values;
 	}
 
 	public void updateMeasurementPoints(List<MeasurementPoint> points) {
@@ -614,4 +615,69 @@ public class DBManager {
 		return points;
 	}
 
+	public void insertVisits(List<Visit> visitList) {
+		traceMwdb = toh.getWritableDatabase();
+
+		for (Visit visit : visitList) {
+
+			ContentValues values = getVisitValues(visit);
+
+			traceMwdb.insert(Visit.TABLE_NAME, null, values);
+		}
+
+	}
+
+	private ContentValues getVisitValues(Visit visit) {
+
+		ContentValues values = new ContentValues();
+		values.put(Visit.FFIN, visit.getFFIN());
+		values.put(Visit.FINI, visit.getFINI());
+		values.put(Visit.HFIN, visit.getHFIN());
+		values.put(Visit.HINI, visit.getHINI());
+		values.put(Visit.ID_PROGRAM, visit.getID_PROGRAM());
+		values.put(Visit.ID_VISIT, visit.getID_VISIT());
+		values.put(Visit.STATUS, visit.getSTATUS());
+		values.put(Visit.TFIN, visit.getTFIN());
+		values.put(Visit.TINI, visit.getTINI());
+
+		return values;
+	}
+
+	public List<Visit> getVisits() {
+		List<Visit> visitList;
+		traceMrdb = toh.getReadableDatabase();
+
+		Cursor cursor = traceMrdb.query(Visit.TABLE_NAME, Visit.COLUMN_NAMES,
+				null, null, null, null, null);
+
+		visitList = getVisitsFromCursor(cursor);
+
+		return visitList;
+	}
+
+	private List<Visit> getVisitsFromCursor(Cursor cursor) {
+		List<Visit> visitList = new ArrayList<Visit>();
+
+		if (cursor.moveToFirst()) {
+			Map<String, Integer> map = getColumnMap(cursor, Visit.COLUMN_NAMES);
+			do {
+				Visit visit = new Visit();
+
+				visit.setCOMENTARIO(cursor.getString(map.get(Visit.COMENTARIO)));
+				visit.setFFIN(cursor.getString(map.get(Visit.FFIN)));
+				visit.setFINI(cursor.getString(map.get(Visit.FINI)));
+				visit.setHFIN(cursor.getString(map.get(Visit.HFIN)));
+				visit.setHINI(cursor.getString(map.get(Visit.HINI)));
+				visit.setID_PROGRAM(cursor.getString(map.get(Visit.ID_PROGRAM)));
+				visit.setID_VISIT(cursor.getInt(map.get(Visit.ID_VISIT)));
+				visit.setSTATUS((byte) cursor.getInt(map.get(Visit.STATUS)));
+				visit.setTFIN((byte) cursor.getInt(map.get(Visit.TFIN)));
+				visit.setTINI((byte) cursor.getInt(map.get(Visit.TINI)));
+
+				visitList.add(visit);
+			} while (cursor.moveToNext());
+		}
+
+		return visitList;
+	}
 }

@@ -21,6 +21,6 @@ public interface MyJobNavigation {
 
 	void onViewMyVisit();
 
-	void onCreateVisit();
+	void onVisitDetail();
 
 }

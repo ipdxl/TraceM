@@ -61,6 +61,8 @@ public class Connection extends Activity {
 	private static final String POINT = "POINT";
 	private static final String ZREAD = "ZREAD";
 	private static final String IT_READ_POINTS = "IT_READ_POINTS";
+	private static final String ID_VISIT = "ID_VISIT";
+	private static final String Z_PM_AP_CREATE_VISIT = "Z_PM_AP_CREATE_VISIT";
 	private Context context;
 	private DBManager dbManager;
 
@@ -428,7 +430,9 @@ public class Connection extends Activity {
 
 		List<Schedule> schedules = getScheduleList(users[0]);
 		for (Schedule schedule : schedules) {
-			getScheduleDetail(users[0], schedule.getID_PROGRAM());
+			String id = schedule.getID_PROGRAM();
+			getScheduleDetail(users[0], id);
+			getVisitList(users[0], id);
 		}
 
 		return zOrders;
@@ -956,9 +960,8 @@ public class Connection extends Activity {
 	 * @throws HttpResponseException
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Visit> getVisitList(String UserName, int year, int week)
+	public List<Visit> getVisitList(String UserName, String id)
 			throws HttpResponseException, IOException, XmlPullParserException {
-		String id = getIDProgram(year, week);
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_VISIT_LIST);
 
 		request.addProperty(P_PROGRAM, id);
@@ -979,6 +982,10 @@ public class Connection extends Activity {
 
 		List<Visit> visitList = getVisits(response.get(1));
 
+		dbManager.insertVisits(visitList);
+
+		visitList = dbManager.getVisits();
+
 		return visitList;
 	}
 
@@ -996,22 +1003,22 @@ public class Connection extends Activity {
 			SoapObject item = (SoapObject) soapObject.getProperty(i);
 			Visit visit = new Visit();
 			visit.setID_VISIT((long) parseNumericResult(item
-					.getPropertyAsString("ID_VISIT")));
+					.getPropertyAsString(Visit.ID_VISIT)));
 			visit.setID_PROGRAM(parseResult(item
-					.getPropertyAsString(Schedule.ID_PROGRAM)));
-			visit.setZUSER(parseResult(item.getPropertyAsString("ZUSER")));
-			visit.setFINI(parseResult(item.getPropertyAsString("FINI")));
-			visit.setHINI(parseResult(item.getPropertyAsString("HINI")));
-			visit.setTINI(parseBitResult(item.getPropertyAsString("TINI")));
-			visit.setFFIN(parseResult(item.getPropertyAsString("FFIN")));
-			visit.setHFIN(parseResult(item.getPropertyAsString("HFIN")));
-			visit.setTFIN(parseBitResult(item.getPropertyAsString("TFIN")));
+					.getPropertyAsString(Visit.ID_PROGRAM)));
+			visit.setUSER(parseResult(item.getPropertyAsString("ZUSER")));
+			visit.setFINI(parseResult(item.getPropertyAsString(Visit.FINI)));
+			visit.setHINI(parseResult(item.getPropertyAsString(Visit.HINI)));
+			visit.setTINI(parseBitResult(item.getPropertyAsString(Visit.TINI)));
+			visit.setFFIN(parseResult(item.getPropertyAsString(Visit.FFIN)));
+			visit.setHFIN(parseResult(item.getPropertyAsString(Visit.HFIN)));
+			visit.setTFIN(parseBitResult(item.getPropertyAsString(Visit.TFIN)));
 			visit.setSTATUS(parseBitResult(item
-					.getPropertyAsString(Schedule.STATUS)));
+					.getPropertyAsString(Visit.STATUS)));
 			visit.setCOMENTARIO(parseResult(item
-					.getPropertyAsString("COMENTARIO")));
+					.getPropertyAsString(Visit.COMENTARIO)));
 			visit.setID_JUSTIFICATION(parseResult(item
-					.getPropertyAsString("ID_JUSTIFICATION")));
+					.getPropertyAsString(Visit.ID_JUSTIFICATION)));
 
 			visits.add(visit);
 		}
@@ -1030,13 +1037,13 @@ public class Connection extends Activity {
 	public String createVisit(Visit visit) throws HttpResponseException,
 			IOException, XmlPullParserException {
 
-		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_VISIT_LIST);
+		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_CREATE_VISIT);
 
 		request.addProperty(FINI, visit.getFINI());
 		request.addProperty(HINI, visit.getHINI());
-		request.addProperty(TINI, visit.getTINI() == 1 ? "X" : "");
 		request.addProperty(P_PROGRAM, visit.getID_PROGRAM());
 		request.addProperty(P_USER, visit.getZUSER());
+		request.addProperty(TINI, visit.getTINI() == 1 ? "X" : "");
 
 		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
 				SAP_USER, SAP_PASSWORD);
@@ -1052,21 +1059,11 @@ public class Connection extends Activity {
 		Vector<Object> response = (Vector<Object>) envelope.getResponse();
 
 		@SuppressWarnings("unused")
-		List<Message> messageList = getMessageList((SoapObject) response.get(0));
+		List<Message> messageList = getMessageList((SoapObject) response.get(1));
 
-		String idVisit = parseResult(response.get(1).toString());
+		String idVisit = parseResult(response.get(0).toString());
 
 		return idVisit;
-	}
-
-	/**
-	 * 
-	 * @param year
-	 * @param week
-	 * @return a {@link String} formatted as yyyymm
-	 */
-	private String getIDProgram(int year, int week) {
-		return "" + year + (week < 10 ? "0" : "") + week;
 	}
 
 	public List<Message> Confirmation(List<Confirmation> confirmations,

@@ -106,4 +106,8 @@ public class TraceMFormater {
 		return time;
 	}
 
+	public static String getID_Program(int year, int week) {
+		return "" + year + (week < 10 ? "0" : "") + week;
+	}
+
 }

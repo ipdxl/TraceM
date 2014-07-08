@@ -24,7 +24,7 @@ import com.sf.tracem.plan.detail.OrderDetailFragment;
 import com.sf.tracem.plan.menu.MyJobMenuFragment;
 import com.sf.tracem.schedule.MySchedulesFragment;
 import com.sf.tracem.schedule.ScheduleDetailFragment;
-import com.sf.tracem.visit.VisitFragment;
+import com.sf.tracem.visit.VisitListFragment;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -275,20 +275,20 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 	@Override
 	public void onViewMyVisit() {
 		ft = fm.beginTransaction();
-		VisitFragment visitFragment = (VisitFragment) fm
-				.findFragmentByTag(VisitFragment.TAG);
+		VisitListFragment visitFragment = (VisitListFragment) fm
+				.findFragmentByTag(VisitListFragment.TAG);
 
 		if (visitFragment == null) {
-			visitFragment = new VisitFragment();
+			visitFragment = new VisitListFragment();
 		}
 
-		ft.replace(R.id.content_frame, visitFragment, VisitFragment.TAG);
+		ft.replace(R.id.content_frame, visitFragment, VisitListFragment.TAG);
 		ft.commit();
 
 	}
 
 	@Override
-	public void onCreateVisit() {
+	public void onVisitDetail() {
 		// TODO Auto-generated method stub
 
 	}

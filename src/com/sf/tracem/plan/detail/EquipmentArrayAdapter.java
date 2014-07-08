@@ -6,7 +6,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -47,7 +46,7 @@ public class EquipmentArrayAdapter extends BaseExpandableListAdapter {
 		View view = inflater.inflate(R.layout.measurement_item, parent, false);
 
 		TextView point = (TextView) view.findViewById(R.id.point);
-		TextView description = (TextView) view.findViewById(R.id.description);
+		TextView description = (TextView) view.findViewById(R.id.comment);
 		TextView read = (TextView) view.findViewById(R.id.read);
 		TextView unit = (TextView) view.findViewById(R.id.unit);
 		TextView notes = (TextView) view.findViewById(R.id.notes);

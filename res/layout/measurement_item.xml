@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:showDividers="none" >
 
     <TextView
         android:id="@+id/point"
@@ -11,7 +12,7 @@
         android:text="@string/point" />
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/description"
@@ -19,17 +20,24 @@
 
     <View style="@style/horizontal_divider" />
 
-    <TextView
-        android:id="@+id/read"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/read" />
+        android:dividerPadding="10dp" >
 
-    <TextView
-        android:id="@+id/unit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/unit" />
+        <TextView
+            android:id="@+id/read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:text="@string/read" />
+
+        <TextView
+            android:id="@+id/unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/unit" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/notes"
