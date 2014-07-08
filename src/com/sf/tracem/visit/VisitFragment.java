@@ -4,7 +4,12 @@
 package com.sf.tracem.visit;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
@@ -13,13 +18,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,13 +39,20 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
+import com.sf.tracem.connection.TraceMFormater;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.login.CurrentConfig;
@@ -195,29 +211,31 @@ public class VisitFragment extends Fragment {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		View view = inflater.inflate(R.layout.create_visit, null);
 
-		Spinner fini = (Spinner) view.findViewById(R.id.fini);
+		final Button fini = (Button) view.findViewById(R.id.fini);
 
-		fini.setAdapter(new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1, android.R.id.text1,
-				new String[] { "2014-07-04" }));
+		fini.setText(TraceMFormater.getDate());
 
-		final OnDateSetListener finiDateSt = new OnDateSetListener() {
+		final OnDateSetListener finiDateSet = new OnDateSetListener() {
 
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear,
 					int dayOfMonth) {
-
+				String sDate = TraceMFormater.getDate(year, monthOfYear,
+						dayOfMonth);
+				fini.setText(sDate);
 			}
 		};
 
-		fini.setOnTouchListener(new OnTouchListener() {
+		fini.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
+			public void onClick(View v) {
+				String date = fini.getText().toString();
 				DatePickerDialog dpd = new DatePickerDialog(getActivity(),
-						finiDateSt, 2014, 7, 4);
+						finiDateSet, TraceMFormater.getYear(date),
+						TraceMFormater.getMonth(date), TraceMFormater
+								.getDay(date));
 				dpd.show();
-				return true;
 			}
 		});
 		//
@@ -229,16 +247,60 @@ public class VisitFragment extends Fragment {
 		// }
 		// });
 
-		Spinner hini = (Spinner) view.findViewById(R.id.hini);
+		final Button hini = (Button) view.findViewById(R.id.hini);
 
-		hini.setAdapter(new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1, android.R.id.text1,
-				new String[] { "10:00:00 AM" }));
+		hini.setText(TraceMFormater.getTime());
 
-		AlertDialog cvd = new AlertDialog.Builder(getActivity()).setView(view)
+		final OnTimeSetListener onTimeSetListener = new OnTimeSetListener() {
+
+			@Override
+			public void onTimeSet(TimePicker view, int hour, int minute) {
+				hini.setText(TraceMFormater.getTime(hour, minute, 0));
+			}
+		};
+
+		hini.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				String time = hini.getText().toString();
+				TimePickerDialog tpd = new TimePickerDialog(getActivity(),
+						onTimeSetListener, TraceMFormater.getHour(time),
+						TraceMFormater.getMinute(time), true);
+				tpd.show();
+
+			}
+		});
+
+		CheckBox tini = (CheckBox) view.findViewById(R.id.tini);
+		tini.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton button, boolean active) {
+				fini.setEnabled(!active);
+				hini.setEnabled(!active);
+				if (active) {
+					fini.setText(TraceMFormater.getDate());
+					hini.setText(TraceMFormater.getTime());
+				}
+			}
+		});
+
+		android.content.DialogInterface.OnClickListener createVisitConfirmation = new android.content.DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Toast.makeText(getActivity(), "Visit created",
+						Toast.LENGTH_LONG).show();
+			}
+		};
+
+		AlertDialog cvd = new AlertDialog.Builder(getActivity())
+				.setView(view)
 				.setTitle(R.string.create_visit)
 				.setIcon(android.R.drawable.ic_dialog_info)
-				.setPositiveButton(android.R.string.ok, null)
+				.setPositiveButton(android.R.string.ok, createVisitConfirmation)
 				.setNegativeButton(android.R.string.cancel, null).create();
 		cvd.show();
 

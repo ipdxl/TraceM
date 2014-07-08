@@ -98,5 +98,10 @@
     <string name="automatic">Automatic</string>
     <string name="fini">Start date</string>
     <string name="hini">Start time</string>
+    <string name="point">Point</string>
+    <string name="description">Description</string>
+    <string name="read">Read</string>
+    <string name="unit">Unit</string>
+    <string name="notes">notes</string>
 
 </resources>

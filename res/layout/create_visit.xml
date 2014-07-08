@@ -1,16 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:divider="@android:drawable/divider_horizontal_dark"
+    android:divider="@android:drawable/divider_horizontal_bright"
     android:orientation="vertical"
     android:showDividers="middle" >
-
-    <TextView
-        android:id="@+id/schedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/my_schedule"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <CheckBox
         android:id="@+id/tini"
@@ -20,20 +13,22 @@
         android:checked="true"
         android:text="@string/automatic" />
 
-    <Spinner
+    <Button
         android:id="@+id/fini"
-        android:layout_width="200dp"
+        style="?android:attr/spinnerStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:hint="@string/fini"
-        android:inputType="time" />
+        android:enabled="false"
+        android:text="@string/fini" />
 
-    <Spinner
+    <Button
         android:id="@+id/hini"
-        android:layout_width="200dp"
+        style="?android:attr/spinnerStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:hint="@string/hini"
-        android:inputType="date" />
+        android:enabled="false"
+        android:text="@string/hini" />
 
 </LinearLayout>

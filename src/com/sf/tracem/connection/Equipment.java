@@ -1,6 +1,7 @@
 package com.sf.tracem.connection;
 
 import java.io.Serializable;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class Equipment implements Serializable {
@@ -9,6 +10,7 @@ public class Equipment implements Serializable {
 	private String equnr;
 	private String eqktxt;
 	private int complete;
+	private List<MeasurementPoint> measures;
 
 	/**
 	 * Equipment number
@@ -90,5 +92,20 @@ public class Equipment implements Serializable {
 	 */
 	public void setComplete(int complete) {
 		this.complete = complete;
+	}
+
+	/**
+	 * @return the measures
+	 */
+	public List<MeasurementPoint> getMeasures() {
+		return measures;
+	}
+
+	/**
+	 * @param measures
+	 *            the measures to set
+	 */
+	public void setMeasures(List<MeasurementPoint> measures) {
+		this.measures = measures;
 	}
 }

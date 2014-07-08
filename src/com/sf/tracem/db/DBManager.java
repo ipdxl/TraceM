@@ -481,6 +481,12 @@ public class DBManager {
 
 				equipments.add(equipment);
 			} while (cursor.moveToNext());
+
+			for (Equipment equipment : equipments) {
+				equipment.setMeasures(getMeasurementPoints(aufnr,
+						equipment.getEQUNR()));
+			}
+
 		}
 		return equipments;
 	}

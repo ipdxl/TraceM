@@ -4,6 +4,7 @@
 package com.sf.tracem.plan.detail;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.os.AsyncTask;
@@ -62,8 +63,7 @@ public class OrderDetailFragment extends Fragment {
 		while (orderDetails == null)
 			;
 
-		View view = inflater.inflate(R.layout.order_detail, container,
-				false);
+		View view = inflater.inflate(R.layout.order_detail, container, false);
 
 		// of = (OperationsFragment) fm.findFragmentByTag(OPERATIONS_FRAGMENT);
 		// em = (EquipmentMenu) fm.findFragmentByTag(EQUIPMENT_MENU);
@@ -71,10 +71,8 @@ public class OrderDetailFragment extends Fragment {
 		// if (em == null) {
 		em = new EquipmentMenu();
 		Bundle eqArgs = new Bundle();
-		Equipment[] equipmentsArray = new Equipment[orderDetails
-				.getEquipments().size()];
-		orderDetails.getEquipments().toArray(equipmentsArray);
-		eqArgs.putSerializable("equipments", equipmentsArray);
+		List<Equipment> equipments = orderDetails.getEquipments();
+		eqArgs.putSerializable(EquipmentMenu.EQUIPMENTS, (ArrayList<Equipment>) equipments);
 		em.setArguments(eqArgs);
 		// } else {
 		// em.getArguments().putString("aufnr",

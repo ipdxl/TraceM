@@ -47,5 +47,10 @@
     <style name="total_hours_text" parent="@android:style/TextAppearance.DeviceDefault.Large">
         <item name="android:layout_margin">10dp</item>
     </style>
+    <style name="horizontal_divider">
+        <item name="android:background">@android:drawable/divider_horizontal_bright</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
 
 </resources>
