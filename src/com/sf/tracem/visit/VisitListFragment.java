@@ -9,6 +9,7 @@ import java.util.List;
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -29,12 +30,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -87,6 +91,8 @@ public class VisitListFragment extends Fragment {
 				false);
 
 		list = (ListView) view.findViewById(android.R.id.list);
+
+		list.setOnItemClickListener(new OnVisitClickListener());
 
 		// emptyText = (TextView) view.findViewById(android.R.id.empty);
 		return view;
@@ -160,7 +166,6 @@ public class VisitListFragment extends Fragment {
 		// } else {
 		visitAdapter = new VisitListAdapter(getActivity(), visistList);
 		list.setAdapter(visitAdapter);
-		// }
 	}
 
 	@Override
@@ -183,6 +188,7 @@ public class VisitListFragment extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 
+	@SuppressLint("InflateParams")
 	private void createVisit() {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		View view = inflater.inflate(R.layout.create_visit, null);
@@ -268,7 +274,7 @@ public class VisitListFragment extends Fragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 
-				AsyncTask<String, Integer, String> createVisitTask = new AsyncTask<String, Integer, String>() {
+				AsyncTask<String, Integer, Integer> createVisitTask = new AsyncTask<String, Integer, Integer>() {
 
 					private Visit visit;
 					DBManager dbManager;
@@ -286,41 +292,45 @@ public class VisitListFragment extends Fragment {
 					}
 
 					@Override
-					protected String doInBackground(String... params) {
+					protected Integer doInBackground(String... params) {
 						try {
 							Looper.prepare();
 						} catch (Exception e) {
 
 						}
 						Connection connection = new Connection(getActivity());
-						String visitID = null;
+						int visitID = 0;
 						try {
 							visitID = connection.createVisit(visit);
 						} catch (HttpResponseException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (XmlPullParserException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						return visitID;
 					}
 
 					@Override
-					protected void onPostExecute(String result) {
-						if (result != null) {
-							Toast.makeText(getActivity(),
-									"Visit " + result + " created",
-									Toast.LENGTH_LONG).show();
+					protected void onPostExecute(Integer result) {
+						if (result != 0) {
+							visit.setID_VISIT(result);
+							visit.setSTATUS((byte) 1);
+
+							Toast.makeText(
+									getActivity(),
+									getResources().getString(
+											R.string.visit_created)
+											+ visit, Toast.LENGTH_LONG).show();
 						} else {
 
-							Toast.makeText(getActivity(), "Visit not created",
+							Toast.makeText(
+									getActivity(),
+									getResources().getString(
+											R.string.create_visit_error),
 									Toast.LENGTH_LONG).show();
 						}
-
 					}
 				};
 
@@ -336,5 +346,19 @@ public class VisitListFragment extends Fragment {
 				.setNegativeButton(android.R.string.cancel, null).create();
 		cvd.show();
 
+	}
+
+	private class OnVisitClickListener implements OnItemClickListener {
+
+		private RadioButton status;
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			status = (RadioButton) view.findViewById(R.id.status);
+			if (status.isChecked()) {
+				navigation.onVisitDetail();
+			}
+		}
 	}
 }

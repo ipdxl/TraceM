@@ -24,6 +24,7 @@ import com.sf.tracem.plan.detail.OrderDetailFragment;
 import com.sf.tracem.plan.menu.MyJobMenuFragment;
 import com.sf.tracem.schedule.MySchedulesFragment;
 import com.sf.tracem.schedule.ScheduleDetailFragment;
+import com.sf.tracem.visit.VisitDetailFragment;
 import com.sf.tracem.visit.VisitListFragment;
 
 /**
@@ -163,7 +164,7 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 	}
 
 	@Override
-	public void onShowOrderDetail(String orderNumber, String name) {
+	public void onShowOrderDetail(String aufnr, String name) {
 		// OrderDetail od = (OrderDetail) fm.findFragmentByTag(ORDER_DETAIL);
 		// if (od != null) {
 		// ft.remove(od);
@@ -173,15 +174,15 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		// if (od == null) {
 		od = new OrderDetailFragment();
 		Bundle args = new Bundle();
-		args.putString("aufnr", orderNumber);
-		args.putString("name", name);
+		args.putString(OrderDetailFragment.AUFNR, aufnr);
+		args.putString(OrderDetailFragment.NAME, name);
 		od.setArguments(args);
 		// } else {
 		// od.getArguments().putString("aufnr", orderNumber);
 		// }
 		ft = fm.beginTransaction();
-		ft.replace(R.id.content_frame, od, OrderDetailFragment.TAG).addToBackStack(
-				OrderDetailFragment.TAG);
+		ft.replace(R.id.content_frame, od, OrderDetailFragment.TAG)
+				.addToBackStack(OrderDetailFragment.TAG);
 		ft.commit();
 	}
 
@@ -289,7 +290,22 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 
 	@Override
 	public void onVisitDetail() {
-		// TODO Auto-generated method stub
+		ft = fm.beginTransaction();
+		VisitDetailFragment vdf = new VisitDetailFragment();
+		ft.replace(R.id.content_frame, vdf);
+		ft.commit();
+	}
+	
+	@Override
+	public void OnVisitOrderSelected(String aufnr) {
+		FragmentTransaction ft = fm.beginTransaction();
 
+		OrderDetailFragment odf = new OrderDetailFragment();
+		Bundle args = new Bundle();
+		args.putString(OrderDetailFragment.AUFNR, aufnr);
+		args.putString(OrderDetailFragment.NAME, "");
+		odf.setArguments(args);
+		ft.replace(R.id.order_detail_frame, odf);
+		ft.commit();
 	}
 }

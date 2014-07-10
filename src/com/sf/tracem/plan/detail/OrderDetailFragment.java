@@ -38,6 +38,8 @@ public class OrderDetailFragment extends Fragment {
 	private static final String ORDER_DETAILS = "ORDER_DETAILS";
 	private static final String OPERATIONS_FRAGMENT = "OPERATIONS_FRAGMENT";
 	public static final String TAG = "ORDER_DETAIL";
+	public static final String AUFNR = "AUFNR";
+	public static final String NAME = "NAME";
 	private String aufnr;
 	private OrderDetails orderDetails;
 	private EquipmentMenu em;
@@ -72,11 +74,12 @@ public class OrderDetailFragment extends Fragment {
 		em = new EquipmentMenu();
 		Bundle eqArgs = new Bundle();
 		List<Equipment> equipments = orderDetails.getEquipments();
-		eqArgs.putSerializable(EquipmentMenu.EQUIPMENTS, (ArrayList<Equipment>) equipments);
+		eqArgs.putSerializable(EquipmentMenu.EQUIPMENTS,
+				(ArrayList<Equipment>) equipments);
 		em.setArguments(eqArgs);
 		// } else {
-		// em.getArguments().putString("aufnr",
-		// getArguments().getString("aufnr"));
+		// em.getArguments().putString(AUFNR,
+		// getArguments().getString(AUFNR));
 		// }
 
 		// if (of == null) {
@@ -107,7 +110,7 @@ public class OrderDetailFragment extends Fragment {
 		if (savedInstanceState != null) {
 			orderDetails = (OrderDetails) savedInstanceState
 					.getSerializable(ORDER_DETAILS);
-			aufnr = savedInstanceState.getString("aufnr");
+			aufnr = savedInstanceState.getString(AUFNR);
 		} else {
 			FragmentManager fm = getFragmentManager();
 			FragmentTransaction ft = fm.beginTransaction();
@@ -126,7 +129,7 @@ public class OrderDetailFragment extends Fragment {
 			}
 			ft.commit();
 
-			aufnr = getArguments().getString("aufnr");
+			aufnr = getArguments().getString(AUFNR);
 			if (orderDetails == null) {
 				OrderDetailsTask task = new OrderDetailsTask();
 				task.execute();
@@ -145,7 +148,7 @@ public class OrderDetailFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putSerializable(ORDER_DETAILS, orderDetails);
-		outState.putString("aufnr", aufnr);
+		outState.putString(AUFNR, aufnr);
 	}
 
 	@Override
@@ -162,7 +165,7 @@ public class OrderDetailFragment extends Fragment {
 		TextView descriptionText = (TextView) view
 				.findViewById(android.R.id.text1);
 		descriptionText.setText(String.format("%s : %s", getArguments()
-				.getString("aufnr"), getArguments().getString("name")));
+				.getString(AUFNR), getArguments().getString(NAME)));
 
 		super.onCreateOptionsMenu(menu, inflater);
 	}

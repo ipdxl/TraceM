@@ -1034,7 +1034,7 @@ public class Connection extends Activity {
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	public String createVisit(Visit visit) throws HttpResponseException,
+	public int createVisit(Visit visit) throws HttpResponseException,
 			IOException, XmlPullParserException {
 
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_CREATE_VISIT);
@@ -1061,7 +1061,13 @@ public class Connection extends Activity {
 		@SuppressWarnings("unused")
 		List<Message> messageList = getMessageList((SoapObject) response.get(1));
 
-		String idVisit = parseResult(response.get(0).toString());
+		int idVisit = (int) parseNumericResult(response.get(0).toString());
+
+		if (idVisit != 0) {
+			visit.setID_VISIT(idVisit);
+			visit.setSTATUS((byte) 1);
+			dbManager.insertVisit(visit);
+		}
 
 		return idVisit;
 	}

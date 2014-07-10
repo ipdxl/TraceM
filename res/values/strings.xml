@@ -103,5 +103,8 @@
     <string name="read">Read</string>
     <string name="unit">Unit</string>
     <string name="notes">notes</string>
+    <string name="create_visit_error">Visit not created</string>
+    <string name="visit_created">Visit created with number </string>
+    <string name="close_visit">Close visit</string>
 
 </resources>

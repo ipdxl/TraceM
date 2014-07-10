@@ -23,4 +23,6 @@ public interface MyJobNavigation {
 
 	void onVisitDetail();
 
+	void OnVisitOrderSelected(String aufnr);
+
 }

@@ -64,7 +64,13 @@ public class DBManager {
 		String query =
 		// String
 		// .format(Locale.US,
-		"SELECT ORDERS.* FROM ORDERS WHERE AUFNR NOT IN (SELECT AUFNR FROM ORDERS_SCHEDULE)";
+		"SELECT " + Order.TABLE_NAME
+				+ ".* FROM ORDERS WHERE AUFNR NOT IN (SELECT AUFNR FROM "
+				+ OrderSchedule.TABLE_NAME + " INNER JOIN "
+				+ Schedule.TABLE_NAME
+				+ " ON ORDERS_SCHEDULE.ID_PROGRAM = SCHEDULE.ID_PROGRAM"
+				+ " WHERE SCHEDULE.STATUS <> '003') AND " + Order.ORDER_STATUS
+				+ " <> 1";
 		// "SELECT O.* FROM %S AS O INNER JOIN %S AS OS ON O.%S = OS.%S WHERE OS.%S = ?",
 		// OrdersTable.TABLE_NAME, OrderScheduleTable.TABLE_NAME,
 		// OrdersTable.AUFNR, OrderScheduleTable.AUFNR,
@@ -254,6 +260,22 @@ public class DBManager {
 
 		updateSchedule(orders, iDProgram);
 
+	}
+
+	public List<Order> getScheduleDetail(String id) {
+
+		int year = getYeat(id);
+		int week = getWeek(id);
+
+		return getScheduleDetail(year, week);
+	}
+
+	private int getWeek(String id) {
+		return Integer.parseInt(id.substring(4));
+	}
+
+	private int getYeat(String id) {
+		return Integer.parseInt(id.substring(0, 4));
 	}
 
 	public List<Order> getScheduleDetail(int year, int week) {
@@ -616,13 +638,9 @@ public class DBManager {
 	}
 
 	public void insertVisits(List<Visit> visitList) {
-		traceMwdb = toh.getWritableDatabase();
 
 		for (Visit visit : visitList) {
-
-			ContentValues values = getVisitValues(visit);
-
-			traceMwdb.insert(Visit.TABLE_NAME, null, values);
+			insertVisit(visit);
 		}
 
 	}
@@ -648,7 +666,7 @@ public class DBManager {
 		traceMrdb = toh.getReadableDatabase();
 
 		Cursor cursor = traceMrdb.query(Visit.TABLE_NAME, Visit.COLUMN_NAMES,
-				null, null, null, null, null);
+				null, null, null, null, Visit.STATUS + " desc");
 
 		visitList = getVisitsFromCursor(cursor);
 
@@ -679,5 +697,48 @@ public class DBManager {
 		}
 
 		return visitList;
+	}
+
+	public void insertVisit(Visit visit) {
+		traceMwdb = toh.getWritableDatabase();
+		ContentValues values = getVisitValues(visit);
+
+		traceMwdb.insert(Visit.TABLE_NAME, null, values);
+	}
+
+	/**
+	 * 
+	 * @return Current active visit or null if there is not an active visit
+	 */
+	public Visit getActiveVisit() {
+		List<Visit> visits;
+
+		traceMrdb = toh.getReadableDatabase();
+
+		Cursor cursor = traceMrdb.query(Visit.TABLE_NAME, Visit.COLUMN_NAMES,
+				Visit.STATUS + " = ?", new String[] { "1" }, null, null, null);
+
+		visits = getVisitsFromCursor(cursor);
+		if (visits.size() == 0) {
+			return null;
+		} else {
+			return visits.get(0);
+		}
+	}
+
+	public List<Order> getUncompleteOrders() {
+		List<Order> orders = null;
+		List<Order> uncompleteorders = new ArrayList<Order>();
+
+		String activeID = getActiveSchedule();
+
+		orders = getScheduleDetail(activeID);
+
+		for (Order order : orders) {
+			if (order.getORDER_STATUS() != 1)
+				uncompleteorders.add(order);
+		}
+
+		return uncompleteorders;
 	}
 }

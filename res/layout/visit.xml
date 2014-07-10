@@ -6,11 +6,13 @@
     android:orientation="horizontal" >
 
     <FrameLayout
+        android:id="@+id/orders_frame"
         android:layout_width="250dp"
         android:layout_height="match_parent" >
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/order_detail_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </FrameLayout>
