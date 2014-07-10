@@ -7,6 +7,8 @@ public class Operation implements Serializable {
 
 	private String activity, work_cntr, description, conf_no, plant,
 			duration_normal, duration_normal_unit;
+	private int commited;
+
 	private int complete;
 	/**
 	 * Operation table name
@@ -49,17 +51,21 @@ public class Operation implements Serializable {
 	/**
 	 * Create operation table statement
 	 */
+	public final static String COMMITED = "COMMITED";
+
 	public final static String CREATE_TABLE = "CREATE TABLE OPERATION ("
 			+ "ACTIVITY		INTEGER"
 			+ ", AUFNR 		TEXT REFERENCES ORDERS (AUFNR) ON DELETE CASCADE ON UPDATE CASCADE"
-			+ ", WORK_CNTR 	INTEGER" + ", DESCRIPTION 	TEXT"
+			+ ", WORK_CNTR 	INTEGER"
+			+ ", DESCRIPTION 	TEXT"
 			// +", CONF_NO 		TEXT"
-			+ ", PLANT 		INTEGER" + ", DURATION_NORMAL 			REAL"
+			+ ", PLANT 		INTEGER"
+			+ ", DURATION_NORMAL 			REAL"
 			+ ", DURATION_NORMAL_UNIT 		TEXT"
 			// +", DURATION_NORMAL_UNIT_ISO 	TEXT"
 			+ ", COMPLETE 					INTEGER"
-			+ ", PRIMARY KEY (ACTIVITY,AUFNR)"
-			+ ");";
+			+ ", COMMITED INTEGER NOT NULL DEFAULT 0 CHECK (COMMITED = 1 OR COMMITED = 0)"
+			+ ", PRIMARY KEY (ACTIVITY,AUFNR)" + ");";
 
 	public final static String TRIGGERS = "CREATE TRIGGER update_order_status"
 			+ " AFTER UPDATE OF COMPLETE ON OPERATION"
@@ -72,7 +78,7 @@ public class Operation implements Serializable {
 
 	public static final String[] COLUMN_NAMES = new String[] { ACTIVITY, AUFNR,
 			COMPLETE, DESCRIPTION, DURATION_NORMAL, DURATION_NORMAL_UNIT,
-			PLANT, WORK_CNTR };
+			PLANT, WORK_CNTR, COMMITED };
 
 	public Operation() {
 	}
@@ -152,5 +158,20 @@ public class Operation implements Serializable {
 
 	public void setCOMPLETE(int COMPLETE) {
 		this.complete = COMPLETE;
+	}
+
+	/**
+	 * @return the commited
+	 */
+	public int getCommited() {
+		return commited;
+	}
+
+	/**
+	 * @param commited
+	 *            the commited to set
+	 */
+	public void setCommited(int commited) {
+		this.commited = commited;
 	}
 }

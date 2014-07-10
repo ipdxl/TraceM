@@ -63,6 +63,8 @@ public class Connection extends Activity {
 	private static final String IT_READ_POINTS = "IT_READ_POINTS";
 	private static final String ID_VISIT = "ID_VISIT";
 	private static final String Z_PM_AP_CREATE_VISIT = "Z_PM_AP_CREATE_VISIT";
+	private static final String Z_PM_AP_CLOSE_VISIT = "Z_PM_AP_CLOSE_VISIT";
+	private static final String P_VISIT = "P_VISIT";
 	private Context context;
 	private DBManager dbManager;
 
@@ -1042,7 +1044,7 @@ public class Connection extends Activity {
 		request.addProperty(FINI, visit.getFINI());
 		request.addProperty(HINI, visit.getHINI());
 		request.addProperty(P_PROGRAM, visit.getID_PROGRAM());
-		request.addProperty(P_USER, visit.getZUSER());
+		request.addProperty(P_USER, visit.getUSER());
 		request.addProperty(TINI, visit.getTINI() == 1 ? "X" : "");
 
 		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
@@ -1070,6 +1072,45 @@ public class Connection extends Activity {
 		}
 
 		return idVisit;
+	}
+
+	public boolean closeVisit(Visit visit) throws HttpResponseException,
+			IOException, XmlPullParserException {
+
+		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_CLOSE_VISIT);
+
+		request.addProperty(Visit.FFIN, visit.getFFIN());
+		request.addProperty(Visit.HFIN, visit.getHFIN());
+		request.addProperty(P_PROGRAM, visit.getID_PROGRAM());
+		request.addProperty(P_USER, visit.getUSER());
+		request.addProperty(P_VISIT, visit.getUSER());
+		request.addProperty(Visit.TFIN, visit.getTFIN() == 1 ? "X" : "");
+
+		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
+				SAP_USER, SAP_PASSWORD);
+
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+				SoapEnvelope.VER11);
+
+		envelope.setOutputSoapObject(request);
+
+		transport.call(SOAP_ACTION, envelope);
+
+		@SuppressWarnings("unchecked")
+		Vector<Object> response = (Vector<Object>) envelope.getResponse();
+
+		@SuppressWarnings("unused")
+		List<Message> messageList = getMessageList((SoapObject) response.get(0));
+
+		for (Message m : messageList) {
+			if ("E".equalsIgnoreCase("" + m.getType())) {
+				return false;
+			}
+		}
+
+		dbManager.updateViisit(visit);
+
+		return true;
 	}
 
 	public List<Message> Confirmation(List<Confirmation> confirmations,

@@ -22,25 +22,21 @@ public class MeasurementPoint implements Serializable {
 	public final static String UNIT = "UNIT";
 	public final static String DESCRIPTION = "DESCRIPTION";
 	public final static String NOTES = "NOTES";
-	public final static String[] COLUMN_NAMES = new String[] { 
-		AUFNR
-		, EQUNR
-		, POINT
-		, READ
-		, UNIT
-		, DESCRIPTION
-		, NOTES };
+	public final static String COMMITED = "COMMITED";
+
+	public final static String[] COLUMN_NAMES = new String[] { AUFNR, EQUNR,
+			POINT, READ, UNIT, DESCRIPTION, NOTES, COMMITED };
 
 	public final static String CREATE_TABLE = "CREATE TABLE MEASUREMENT_POINT("
 			+ "AUFNR TEXT REFERENCES EQUIPMENT(AUFNR) ON UPDATE CASCADE ON DELETE CASCADE"
 			+ ", EQUNR TEXT REFERENCES EQUIPMENT(EQUNR) ON UPDATE CASCADE ON DELETE CASCADE"
-			+ ", POINT TEXT" 
-			+ ", READ REAL" 
+			+ ", POINT TEXT"
+			+ ", READ REAL"
 			+ ", UNIT TEXT"
-			+ ", DESCRIPTION TEXT" 
+			+ ", DESCRIPTION TEXT"
 			+ ", NOTES TEXT"
-			+ ", PRIMARY KEY (AUFNR,EQUNR,POINT)" 
-			+ ");";
+			+ ", COMMITED INTEGER NOT NULL DEFAULT 0 CHECK (COMMITED = 1 OR COMMITED = 0)"
+			+ ", PRIMARY KEY (AUFNR,EQUNR,POINT)" + ");";
 
 	private String equnr;
 	private String point;
@@ -49,6 +45,7 @@ public class MeasurementPoint implements Serializable {
 	private String notes;
 	private double read;
 	private String aufnr;
+	private int commited;
 
 	/**
 	 * @return the equnr
@@ -143,9 +140,23 @@ public class MeasurementPoint implements Serializable {
 	public void setAufnr(String aufnr) {
 		this.aufnr = aufnr;
 	}
-	
-	public String getAufnr(){
+
+	public String getAufnr() {
 		return aufnr;
+	}
+
+	/**
+	 * @return the commited
+	 */
+	public int getCommited() {
+		return commited;
+	}
+
+	/**
+	 * @param commited the commited to set
+	 */
+	public void setCommited(int commited) {
+		this.commited = commited;
 	}
 
 }

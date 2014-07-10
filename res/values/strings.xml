@@ -106,5 +106,7 @@
     <string name="create_visit_error">Visit not created</string>
     <string name="visit_created">Visit created with number </string>
     <string name="close_visit">Close visit</string>
+    <string name="visit_closed">Visit closed</string>
+    <string name="visit_closed_error">Visit could not be closed</string>
 
 </resources>

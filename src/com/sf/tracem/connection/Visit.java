@@ -86,7 +86,7 @@ public class Visit {
 	/**
 	 * @return the zUSER
 	 */
-	public String getZUSER() {
+	public String getUSER() {
 		return user;
 	}
 

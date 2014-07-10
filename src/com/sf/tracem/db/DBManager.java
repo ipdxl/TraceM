@@ -398,20 +398,36 @@ public class DBManager {
 	public void insertOperations(String order, List<Operation> operations) {
 		traceMwdb = toh.getWritableDatabase();
 		for (Operation op : operations) {
-			ContentValues values = new ContentValues();
-
-			values.put(Operation.AUFNR, order);
-			values.put(Operation.ACTIVITY, op.getACTIVITY());
-			values.put(Operation.COMPLETE, op.getCOMPLETE());
-			values.put(Operation.DESCRIPTION, op.getDESCRIPTION());
-			values.put(Operation.DURATION_NORMAL, op.getDURATION_NORMAL());
-			values.put(Operation.DURATION_NORMAL_UNIT,
-					op.getDURATION_NORMAL_UNIT());
-			values.put(Operation.PLANT, op.getPLANT());
-			values.put(Operation.WORK_CNTR, op.getWORK_CNTR());
+			ContentValues values = getOperationValues(order, op);
 
 			traceMwdb.insert(Operation.TABLE_NAME, null, values);
 		}
+	}
+
+	public void updateOperations(String aufnr, List<Operation> operations) {
+		traceMwdb = toh.getWritableDatabase();
+		for (Operation op : operations) {
+			ContentValues values = getOperationValues(aufnr, op);
+
+			traceMwdb.update(Operation.TABLE_NAME, values, String.format(
+					"%S = '? AND %S = ?", Operation.AUFNR, Operation.ACTIVITY),
+					new String[] { aufnr, op.getACTIVITY() });
+		}
+	}
+
+	private ContentValues getOperationValues(String order, Operation op) {
+		ContentValues values = new ContentValues();
+
+		values.put(Operation.AUFNR, order);
+		values.put(Operation.ACTIVITY, op.getACTIVITY());
+		values.put(Operation.COMPLETE, op.getCOMPLETE());
+		values.put(Operation.DESCRIPTION, op.getDESCRIPTION());
+		values.put(Operation.DURATION_NORMAL, op.getDURATION_NORMAL());
+		values.put(Operation.DURATION_NORMAL_UNIT, op.getDURATION_NORMAL_UNIT());
+		values.put(Operation.PLANT, op.getPLANT());
+		values.put(Operation.WORK_CNTR, op.getWORK_CNTR());
+		values.put(Operation.COMMITED, op.getCommited());
+		return values;
 	}
 
 	public void insertComponents(String order, List<Component> components) {
@@ -521,6 +537,12 @@ public class DBManager {
 				Operation.COLUMN_NAMES, Operation.AUFNR + " = ?",
 				new String[] { aufnr }, null, null, null);
 
+		List<Operation> operations;
+		operations = getOperationsFrom(cursor);
+		return operations;
+	}
+
+	private List<Operation> getOperationsFrom(Cursor cursor) {
 		List<Operation> operations = new ArrayList<Operation>();
 
 		if (cursor.moveToFirst()) {
@@ -544,10 +566,10 @@ public class DBManager {
 						.get(Operation.PLANT)));
 				operation.setWORK_CNTR(cursor.getString(columnMap
 						.get(Operation.WORK_CNTR)));
-
 				operations.add(operation);
 			} while (cursor.moveToNext());
 		}
+
 		return operations;
 	}
 
@@ -583,6 +605,7 @@ public class DBManager {
 		values.put(MeasurementPoint.UNIT, point.getUnit());
 		values.put(MeasurementPoint.DESCRIPTION, point.getDescription());
 		values.put(MeasurementPoint.NOTES, point.getNotes());
+		values.put(MeasurementPoint.COMMITED, point.getCommited());
 		return values;
 	}
 
@@ -740,5 +763,31 @@ public class DBManager {
 		}
 
 		return uncompleteorders;
+	}
+
+	public void updateViisit(Visit visit) {
+		traceMwdb = toh.getWritableDatabase();
+		ContentValues values = getVisitValues(visit);
+		traceMwdb
+				.update(Visit.TABLE_NAME, values, Visit.ID_PROGRAM
+						+ " = ? AND " + Visit.ID_VISIT + " = ?", new String[] {
+						visit.getID_PROGRAM(), "" + visit.getID_VISIT() });
+	}
+
+	public void getUncommitedChanges() {
+		List<Operation> ops = getUncommitedOperations();
+	}
+
+	private List<Operation> getUncommitedOperations() {
+		List<Operation> ops;
+		traceMrdb = toh.getReadableDatabase();
+
+		Cursor cursor = traceMrdb.query(Operation.TABLE_NAME,
+				Operation.COLUMN_NAMES, Operation.COMMITED + " = ?",
+				new String[] { "0" }, null, null, null);
+
+		ops = getOperationsFrom(cursor);
+
+		return ops;
 	}
 }

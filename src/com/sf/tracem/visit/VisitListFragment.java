@@ -4,6 +4,7 @@
 package com.sf.tracem.visit;
 
 import java.io.IOException;
+import java.util.Currency;
 import java.util.List;
 
 import org.ksoap2.transport.HttpResponseException;
@@ -12,10 +13,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.TimePickerDialog;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -28,23 +25,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
-import com.sf.tracem.connection.TraceMFormater;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.login.CurrentConfig;
@@ -61,11 +50,11 @@ public class VisitListFragment extends Fragment {
 	private List<Visit> visistList;
 	private SharedPreferences loginPreferences;
 	private VisitListAdapter visitAdapter;
-	protected String activeID;
+	protected String activeIDProgram;
 	protected int year;
 	protected int week;
-	@SuppressWarnings("unused")
 	private MyJobNavigation navigation;
+	private Visit visit;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -121,10 +110,10 @@ public class VisitListFragment extends Fragment {
 
 			@Override
 			protected void onPreExecute() {
-				activeID = getActiveSchedule();
-				if (activeID != null) {
-					year = Integer.parseInt(activeID.substring(0, 4));
-					week = Integer.parseInt(activeID.substring(4));
+				activeIDProgram = getActiveSchedule();
+				if (activeIDProgram != null) {
+					year = Integer.parseInt(activeIDProgram.substring(0, 4));
+					week = Integer.parseInt(activeIDProgram.substring(4));
 				} else {
 					year = 0;
 					week = 0;
@@ -160,10 +149,6 @@ public class VisitListFragment extends Fragment {
 
 	protected void populateView(List<Visit> result) {
 		visistList = result;
-
-		// if (visistList.size() == 0) {
-		// emptyText.setText("No data");
-		// } else {
 		visitAdapter = new VisitListAdapter(getActivity(), visistList);
 		list.setAdapter(visitAdapter);
 	}
@@ -190,106 +175,23 @@ public class VisitListFragment extends Fragment {
 
 	@SuppressLint("InflateParams")
 	private void createVisit() {
-		LayoutInflater inflater = LayoutInflater.from(getActivity());
-		View view = inflater.inflate(R.layout.create_visit, null);
+		visit = new Visit();
+		visit.setID_PROGRAM(activeIDProgram);
 
-		final Button fini = (Button) view.findViewById(R.id.fini);
-
-		fini.setText(TraceMFormater.getDate());
-
-		final OnDateSetListener finiDateSet = new OnDateSetListener() {
-
-			@Override
-			public void onDateSet(DatePicker view, int year, int monthOfYear,
-					int dayOfMonth) {
-				String sDate = TraceMFormater.getDate(year, monthOfYear,
-						dayOfMonth);
-				fini.setText(sDate);
-			}
-		};
-
-		fini.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				String date = fini.getText().toString();
-				DatePickerDialog dpd = new DatePickerDialog(getActivity(),
-						finiDateSet, TraceMFormater.getYear(date),
-						TraceMFormater.getMonth(date), TraceMFormater
-								.getDay(date));
-				dpd.show();
-			}
-		});
-		//
-		// @Override
-		// public void onClick(View v) {
-		// DatePickerDialog dpd = new DatePickerDialog(getActivity(),
-		// null, 2014, 7, 4);
-		// dpd.show();
-		// }
-		// });
-
-		final Button hini = (Button) view.findViewById(R.id.hini);
-
-		hini.setText(TraceMFormater.getTime());
-
-		final OnTimeSetListener onTimeSetListener = new OnTimeSetListener() {
-
-			@Override
-			public void onTimeSet(TimePicker view, int hour, int minute) {
-				hini.setText(TraceMFormater.getTime(hour, minute, 0));
-			}
-		};
-
-		hini.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				String time = hini.getText().toString();
-				TimePickerDialog tpd = new TimePickerDialog(getActivity(),
-						onTimeSetListener, TraceMFormater.getHour(time),
-						TraceMFormater.getMinute(time), true);
-				tpd.show();
-
-			}
-		});
-
-		final CheckBox tini = (CheckBox) view.findViewById(R.id.tini);
-		tini.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton button, boolean active) {
-				fini.setEnabled(!active);
-				hini.setEnabled(!active);
-				if (active) {
-					fini.setText(TraceMFormater.getDate());
-					hini.setText(TraceMFormater.getTime());
-				}
-			}
-		});
+		final VisitDialogView view = new VisitDialogView(getActivity());
 
 		android.content.DialogInterface.OnClickListener createVisitConfirmation = new android.content.DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 
+				visit.setFINI(view.getFini().getText().toString());
+				visit.setHINI(view.getHini().getText().toString());
+				visit.setTINI((byte) (view.getTini().isChecked() ? 1 : 0));
+				visit.setUSER(loginPreferences.getString(
+						CurrentConfig.USERNAME, null));
+
 				AsyncTask<String, Integer, Integer> createVisitTask = new AsyncTask<String, Integer, Integer>() {
-
-					private Visit visit;
-					DBManager dbManager;
-
-					@Override
-					protected void onPreExecute() {
-						dbManager = new DBManager(getActivity());
-						visit = new Visit();
-						visit.setFINI(fini.getText().toString());
-						visit.setHINI(hini.getText().toString());
-						visit.setTINI((byte) (tini.isChecked() ? 1 : 0));
-						visit.setID_PROGRAM(dbManager.getActiveSchedule());
-						visit.setUSER(loginPreferences.getString(
-								CurrentConfig.USERNAME, null));
-					}
 
 					@Override
 					protected Integer doInBackground(String... params) {
