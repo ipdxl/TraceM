@@ -178,16 +178,17 @@ public class VisitListFragment extends Fragment {
 		visit = new Visit();
 		visit.setID_PROGRAM(activeIDProgram);
 
-		final VisitDialogView view = new VisitDialogView(getActivity());
+		final VisitDialogView vdv = new VisitDialogView(getActivity());
+		View view = vdv.getView();
 
 		android.content.DialogInterface.OnClickListener createVisitConfirmation = new android.content.DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 
-				visit.setFINI(view.getFini().getText().toString());
-				visit.setHINI(view.getHini().getText().toString());
-				visit.setTINI((byte) (view.getTini().isChecked() ? 1 : 0));
+				visit.setFINI(vdv.getFini().getText().toString());
+				visit.setHINI(vdv.getHini().getText().toString());
+				visit.setTINI((byte) (vdv.getTini().isChecked() ? 1 : 0));
 				visit.setUSER(loginPreferences.getString(
 						CurrentConfig.USERNAME, null));
 

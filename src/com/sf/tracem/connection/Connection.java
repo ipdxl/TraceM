@@ -1083,7 +1083,7 @@ public class Connection extends Activity {
 		request.addProperty(Visit.HFIN, visit.getHFIN());
 		request.addProperty(P_PROGRAM, visit.getID_PROGRAM());
 		request.addProperty(P_USER, visit.getUSER());
-		request.addProperty(P_VISIT, visit.getUSER());
+		request.addProperty(P_VISIT, visit.getID_VISIT());
 		request.addProperty(Visit.TFIN, visit.getTFIN() == 1 ? "X" : "");
 
 		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
@@ -1097,10 +1097,10 @@ public class Connection extends Activity {
 		transport.call(SOAP_ACTION, envelope);
 
 		@SuppressWarnings("unchecked")
-		Vector<Object> response = (Vector<Object>) envelope.getResponse();
+		SoapObject response = (SoapObject) envelope.getResponse();
 
 		@SuppressWarnings("unused")
-		List<Message> messageList = getMessageList((SoapObject) response.get(0));
+		List<Message> messageList = getMessageList(response);
 
 		for (Message m : messageList) {
 			if ("E".equalsIgnoreCase("" + m.getType())) {

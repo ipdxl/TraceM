@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -16,15 +17,15 @@ import android.widget.TimePicker;
 import com.sf.tracem.R;
 import com.sf.tracem.connection.TraceMFormater;
 
-public class VisitDialogView extends View {
+public class VisitDialogView {
 
 	private Button fini;
 	private Button hini;
 	private CheckBox tini;
+	private Context context;
 
 	public VisitDialogView(Context context) {
-		super(context);
-		createView();
+		setContext(context);
 	}
 
 	public Button getFini() {
@@ -39,8 +40,8 @@ public class VisitDialogView extends View {
 		return tini;
 	}
 
-	private void createView() {
-		View view = this;
+	public View getView() {
+		View view = View.inflate(getContext(), R.layout.create_visit, null);
 
 		fini = (Button) view.findViewById(R.id.fini);
 
@@ -110,5 +111,21 @@ public class VisitDialogView extends View {
 			}
 		});
 
+		return view;
+	}
+
+	/**
+	 * @return the context
+	 */
+	public Context getContext() {
+		return context;
+	}
+
+	/**
+	 * @param context
+	 *            the context to set
+	 */
+	public void setContext(Context context) {
+		this.context = context;
 	}
 }

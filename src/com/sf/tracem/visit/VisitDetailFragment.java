@@ -173,17 +173,17 @@ public class VisitDetailFragment extends Fragment {
 
 	private void closeVisit() {
 		visit.setID_PROGRAM(visit.getID_PROGRAM());
-
-		final VisitDialogView view = new VisitDialogView(getActivity());
+		final VisitDialogView vdv = new VisitDialogView(getActivity());
+		View view = vdv.getView();
 
 		android.content.DialogInterface.OnClickListener createVisitConfirmation = new android.content.DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 
-				visit.setFFIN(view.getFini().getText().toString());
-				visit.setHFIN(view.getHini().getText().toString());
-				visit.setTFIN((byte) (view.getTini().isChecked() ? 1 : 0));
+				visit.setFFIN(vdv.getFini().getText().toString());
+				visit.setHFIN(vdv.getHini().getText().toString());
+				visit.setTFIN((byte) (vdv.getTini().isChecked() ? 1 : 0));
 				visit.setUSER(loginPreferences.getString(
 						CurrentConfig.USERNAME, null));
 
