@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class Operation implements Serializable {
 
 	private String activity, work_cntr, description, conf_no, plant,
-			duration_normal, duration_normal_unit;
+			duration_normal, duration_normal_unit, aufnr;
 	private int commited;
 
 	private int complete;
@@ -54,27 +54,36 @@ public class Operation implements Serializable {
 	public final static String COMMITED = "COMMITED";
 
 	public final static String CREATE_TABLE = "CREATE TABLE OPERATION ("
-			+ "ACTIVITY		INTEGER"
-			+ ", AUFNR 		TEXT REFERENCES ORDERS (AUFNR) ON DELETE CASCADE ON UPDATE CASCADE"
-			+ ", WORK_CNTR 	INTEGER"
-			+ ", DESCRIPTION 	TEXT"
+			+ " ACTIVITY		INTEGER"
+			+ " , AUFNR 		TEXT REFERENCES ORDERS (AUFNR) ON DELETE CASCADE ON UPDATE CASCADE"
+			+ " , WORK_CNTR 	INTEGER"
+			+ " , DESCRIPTION 	TEXT"
 			// +", CONF_NO 		TEXT"
-			+ ", PLANT 		INTEGER"
-			+ ", DURATION_NORMAL 			REAL"
-			+ ", DURATION_NORMAL_UNIT 		TEXT"
+			+ " , PLANT 		INTEGER"
+			+ " , DURATION_NORMAL 			REAL"
+			+ " , DURATION_NORMAL_UNIT 		TEXT"
 			// +", DURATION_NORMAL_UNIT_ISO 	TEXT"
-			+ ", COMPLETE 					INTEGER"
-			+ ", COMMITED INTEGER NOT NULL DEFAULT 0 CHECK (COMMITED = 1 OR COMMITED = 0)"
-			+ ", PRIMARY KEY (ACTIVITY,AUFNR)" + ");";
+			+ " , COMPLETE 					INTEGER"
+			+ " , COMMITED INTEGER NOT NULL DEFAULT 0 CHECK (COMMITED = 1 OR COMMITED = 0)"
+			+ " , PRIMARY KEY (ACTIVITY,AUFNR)" + " );";
 
-	public final static String TRIGGERS = "CREATE TRIGGER update_order_status"
-			+ " AFTER UPDATE OF COMPLETE ON OPERATION"
-			+ " FOR EACH ROW WHEN COMPLETE = 1"
-			+ " BEGIN"
-			+ "	UPDATE ORDERS SET COMPLETE = 1"
-			+ "		WHERE AUFNR = NEW.AUFNR"
-			+ "		AND 0 NOT IN (SELECT COMPLETE FROM OPERATION WHERE AUFNR = NEW.AUFNR);"
-			+ " END";
+	public final static String[] TRIGGERS = new String[] {
+			"CREATE TRIGGER update_order_status"
+					+ " AFTER UPDATE OF COMPLETE ON OPERATION"
+					+ " BEGIN	"
+					+ " 	UPDATE ORDERS SET ORDER_STATUS = 1"
+					+ " 		WHERE AUFNR = NEW.AUFNR"
+					+ " 		AND 0 NOT IN (SELECT COMPLETE FROM OPERATION WHERE AUFNR = NEW.AUFNR);"
+					+ " 	UPDATE ORDERS SET ORDER_STATUS = 2"
+					+ " 		WHERE AUFNR = NEW.AUFNR"
+					+ " 		AND 0  IN (SELECT COMPLETE FROM OPERATION WHERE AUFNR = NEW.AUFNR)"
+					+ " 		AND 1  IN (SELECT COMPLETE FROM OPERATION WHERE AUFNR = NEW.AUFNR);"
+					+ " END",
+			"CREATE TRIGGER insert_operation"
+					+ " AFTER INSERT ON OPERATION"
+					+ " BEGIN"
+					+ " UPDATE OPERATION SET COMMITED = 1 WHERE AUFNR = NEW.AUFNR AND ACTIVITY = NEW.ACTIVITY AND COMPLETE = 1;"
+					+ " END" };
 
 	public static final String[] COLUMN_NAMES = new String[] { ACTIVITY, AUFNR,
 			COMPLETE, DESCRIPTION, DURATION_NORMAL, DURATION_NORMAL_UNIT,
@@ -173,5 +182,20 @@ public class Operation implements Serializable {
 	 */
 	public void setCommited(int commited) {
 		this.commited = commited;
+	}
+
+	/**
+	 * @return the aufnr
+	 */
+	public String getAufnr() {
+		return aufnr;
+	}
+
+	/**
+	 * @param aufnr
+	 *            the aufnr to set
+	 */
+	public void setAufnr(String aufnr) {
+		this.aufnr = aufnr;
 	}
 }

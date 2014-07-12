@@ -28,15 +28,28 @@ public class MeasurementPoint implements Serializable {
 			POINT, READ, UNIT, DESCRIPTION, NOTES, COMMITED };
 
 	public final static String CREATE_TABLE = "CREATE TABLE MEASUREMENT_POINT("
-			+ "AUFNR TEXT REFERENCES EQUIPMENT(AUFNR) ON UPDATE CASCADE ON DELETE CASCADE"
-			+ ", EQUNR TEXT REFERENCES EQUIPMENT(EQUNR) ON UPDATE CASCADE ON DELETE CASCADE"
-			+ ", POINT TEXT"
-			+ ", READ REAL"
-			+ ", UNIT TEXT"
-			+ ", DESCRIPTION TEXT"
-			+ ", NOTES TEXT"
-			+ ", COMMITED INTEGER NOT NULL DEFAULT 0 CHECK (COMMITED = 1 OR COMMITED = 0)"
-			+ ", PRIMARY KEY (AUFNR,EQUNR,POINT)" + ");";
+			+ " AUFNR TEXT REFERENCES EQUIPMENT(AUFNR) ON UPDATE CASCADE ON DELETE CASCADE"
+			+ " , EQUNR TEXT REFERENCES EQUIPMENT(EQUNR) ON UPDATE CASCADE ON DELETE CASCADE"
+			+ " , POINT TEXT"
+			+ " , READ REAL"
+			+ " , UNIT TEXT"
+			+ " , DESCRIPTION TEXT"
+			+ " , NOTES TEXT"
+			+ " , COMMITED INTEGER NOT NULL DEFAULT 0 CHECK (COMMITED = 1 OR COMMITED = 0)"
+			+ " , PRIMARY KEY (AUFNR,EQUNR,POINT)" + " );";
+	public static final String[] TRIGGERS = new String[] { "CREATE TRIGGER update_measure_point"
+			+ " AFTER UPDATE ON MEASUREMENT_POINT"
+			+ " BEGIN"
+			+ " 	UPDATE EQUIPMENT SET COMPLETE = 1"
+			+ " 		WHERE AUFNR = NEW.AUFNR"
+			+ " 		AND EQUNR = NEW.EQUNR"
+			+ " 		AND 0 NOT IN (SELECT COMPLETE FROM MEASUREMENT_POINT WHERE AUFNR = NEW.AUFNR AND EQUNR = NEW.EQUNR);"
+			+ " 	UPDATE EQUIPMENT SET COMPLETE = 2"
+			+ " 		WHERE AUFNR = NEW.AUFNR"
+			+ " 		AND EQUNR = NEW.EQUNR"
+			+ " 		AND 0  IN (SELECT COMPLETE FROM MEASUREMENT_POINT WHERE AUFNR = NEW.AUFNR AND EQUNR = NEW.EQUNR)"
+			+ " 		AND 1  IN (SELECT COMPLETE FROM MEASUREMENT_POINT WHERE AUFNR = NEW.AUFNR AND EQUNR = NEW.EQUNR);"
+			+ " END" };
 
 	private String equnr;
 	private String point;
@@ -153,7 +166,8 @@ public class MeasurementPoint implements Serializable {
 	}
 
 	/**
-	 * @param commited the commited to set
+	 * @param commited
+	 *            the commited to set
 	 */
 	public void setCommited(int commited) {
 		this.commited = commited;

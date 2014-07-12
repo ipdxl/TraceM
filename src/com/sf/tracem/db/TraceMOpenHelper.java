@@ -58,7 +58,17 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 		db.execSQL(MeasurementPoint.CREATE_TABLE);
 		db.execSQL(Visit.CREATE_TABLE);
 
-		db.execSQL(Operation.TRIGGERS);
+		for (String trigger : Operation.TRIGGERS) {
+			db.execSQL(trigger);
+		}
+		for (String trigger : Visit.TRIGGERS) {
+			db.execSQL(trigger);
+		}
+		for (String trigger : MeasurementPoint.TRIGGERS) {
+			db.execSQL(trigger);
+		}
+		
+		
 	}
 
 	/*

@@ -395,30 +395,31 @@ public class DBManager {
 		}
 	}
 
-	public void insertOperations(String order, List<Operation> operations) {
+	public void insertOperations(List<Operation> operations) {
 		traceMwdb = toh.getWritableDatabase();
 		for (Operation op : operations) {
-			ContentValues values = getOperationValues(order, op);
+
+			ContentValues values = getOperationValues(op);
 
 			traceMwdb.insert(Operation.TABLE_NAME, null, values);
 		}
 	}
 
-	public void updateOperations(String aufnr, List<Operation> operations) {
+	public void updateOperations(List<Operation> operations) {
 		traceMwdb = toh.getWritableDatabase();
 		for (Operation op : operations) {
-			ContentValues values = getOperationValues(aufnr, op);
+			ContentValues values = getOperationValues(op);
 
 			traceMwdb.update(Operation.TABLE_NAME, values, String.format(
 					"%S = '? AND %S = ?", Operation.AUFNR, Operation.ACTIVITY),
-					new String[] { aufnr, op.getACTIVITY() });
+					new String[] { op.getAufnr(), op.getACTIVITY() });
 		}
 	}
 
-	private ContentValues getOperationValues(String order, Operation op) {
+	private ContentValues getOperationValues(Operation op) {
 		ContentValues values = new ContentValues();
 
-		values.put(Operation.AUFNR, order);
+		values.put(Operation.AUFNR, op.getAufnr());
 		values.put(Operation.ACTIVITY, op.getACTIVITY());
 		values.put(Operation.COMPLETE, op.getCOMPLETE());
 		values.put(Operation.DESCRIPTION, op.getDESCRIPTION());
@@ -552,6 +553,8 @@ public class DBManager {
 			do {
 				Operation operation = new Operation();
 
+				operation.setAufnr(cursor.getString(columnMap
+						.get(Operation.AUFNR)));
 				operation.setACTIVITY(cursor.getString(columnMap
 						.get(Operation.ACTIVITY)));
 				operation.setCOMPLETE(cursor.getInt(columnMap
@@ -566,6 +569,9 @@ public class DBManager {
 						.get(Operation.PLANT)));
 				operation.setWORK_CNTR(cursor.getString(columnMap
 						.get(Operation.WORK_CNTR)));
+				operations.add(operation);
+				operation.setCommited(cursor.getInt(columnMap
+						.get(Operation.COMMITED)));
 				operations.add(operation);
 			} while (cursor.moveToNext());
 		}
@@ -634,6 +640,13 @@ public class DBManager {
 						+ " = ? AND " + MeasurementPoint.AUFNR + " = ?",
 				new String[] { equnr, aufnr }, null, null, null);
 
+		List<MeasurementPoint> points = getMeasurementPoitsFrom(cursor);
+
+		return points;
+	}
+
+	private List<MeasurementPoint> getMeasurementPoitsFrom(Cursor cursor) {
+
 		List<MeasurementPoint> points = new ArrayList<MeasurementPoint>();
 
 		if (cursor.moveToFirst()) {
@@ -643,20 +656,21 @@ public class DBManager {
 			do {
 				MeasurementPoint point = new MeasurementPoint();
 
-				point.setAufnr(aufnr);
-				point.setEqunr(equnr);
+				point.setAufnr(cursor.getString(map.get(MeasurementPoint.AUFNR)));
+				point.setEqunr(cursor.getString(map.get(MeasurementPoint.EQUNR)));
 				point.setPoint(cursor.getString(map.get(MeasurementPoint.POINT)));
 				point.setRead(cursor.getDouble(map.get(MeasurementPoint.READ)));
 				point.setUnit(cursor.getString(map.get(MeasurementPoint.UNIT)));
 				point.setDescription(cursor.getString(map
 						.get(MeasurementPoint.DESCRIPTION)));
 				point.setNotes(cursor.getString(map.get(MeasurementPoint.NOTES)));
+				point.setCommited(cursor.getInt(map
+						.get(MeasurementPoint.COMMITED)));
 
 				points.add(point);
 
 			} while (cursor.moveToNext());
 		}
-
 		return points;
 	}
 
@@ -774,17 +788,45 @@ public class DBManager {
 						visit.getID_PROGRAM(), "" + visit.getID_VISIT() });
 	}
 
-	public void getUncommitedChanges() {
+	public UncommitedChanges getUncommitedChanges() {
 		List<Operation> ops = getUncommitedOperations();
+		traceMrdb = toh.getReadableDatabase();
+		List<MeasurementPoint> mps = getUncommitedMeasures();
+
+		UncommitedChanges uc = new UncommitedChanges();
+		uc.setOperatios(ops);
+		uc.setMeasures(mps);
+
+		return uc;
 	}
 
+	private List<MeasurementPoint> getUncommitedMeasures() {
+		List<MeasurementPoint> mps;
+		traceMrdb = toh.getReadableDatabase();
+
+		Cursor cursor = traceMrdb.query(MeasurementPoint.TABLE_NAME,
+				MeasurementPoint.COLUMN_NAMES, String.format(
+						"%S = ? AND %S <> ?", MeasurementPoint.COMMITED,
+						MeasurementPoint.READ), new String[] { "0", "0" },
+				null, null, null);
+
+		mps = getMeasurementPoitsFrom(cursor);
+
+		return mps;
+	}
+
+	/**
+	 * 
+	 * @return Operations completed and not commited
+	 */
 	private List<Operation> getUncommitedOperations() {
 		List<Operation> ops;
 		traceMrdb = toh.getReadableDatabase();
 
 		Cursor cursor = traceMrdb.query(Operation.TABLE_NAME,
-				Operation.COLUMN_NAMES, Operation.COMMITED + " = ?",
-				new String[] { "0" }, null, null, null);
+				Operation.COLUMN_NAMES, String.format("%S = ? AND %S = ?",
+						Operation.COMMITED, Operation.COMPLETE), new String[] {
+						"0", "1" }, null, null, null);
 
 		ops = getOperationsFrom(cursor);
 

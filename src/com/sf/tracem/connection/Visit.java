@@ -24,19 +24,17 @@ public class Visit {
 	public final static String TABLE_NAME = "VISIT";
 
 	public final static String CREATE_TABLE = "CREATE TABLE VISIT("
-			+ "ID_VISIT TEXT"
-			+ ", ID_PROGRAM INTEGER NOT NULL REFERENCES SCHEDULE(ID_PROGRAM) ON UPDATE CASCADE ON DELETE CASCADE"
-			+ ", FINI TEXT DEFAULT '0000-00-00'"
-			+ ", HINI TEXT DEFAULT '00:00:00'"
-			+ ", TINI INTEGER NOT NULL CHECK (TINI = 1 OR TINI = 0)"
-			+ ", FFIN TEXT DEFAULT '0000-00-00'"
-			+ ", HFIN TEXT DEFAULT '00:00:00'"
-			+ ", TFIN INTEGER NOT NULL CHECK (TFIN = 1 OR TFIN = 0)"
-			+ ", STATUS INTEGER NOT NULL DEFAULT 0" 
-			+ ", COMENTARIO TEXT"
-			+ ", CHECK (STATUS = 1 OR STATUS = 0)"
-			+ ", PRIMARY KEY (ID_VISIT,ID_PROGRAM)" 
-			+ ");";
+			+ " ID_VISIT TEXT"
+			+ " , ID_PROGRAM INTEGER NOT NULL REFERENCES SCHEDULE(ID_PROGRAM) ON UPDATE CASCADE ON DELETE CASCADE"
+			+ " , FINI TEXT DEFAULT '0000-00-00'"
+			+ " , HINI TEXT DEFAULT '00:00:00'"
+			+ " , TINI INTEGER NOT NULL CHECK (TINI = 1 OR TINI = 0)"
+			+ " , FFIN TEXT DEFAULT '0000-00-00'"
+			+ " , HFIN TEXT DEFAULT '00:00:00'"
+			+ " , TFIN INTEGER NOT NULL CHECK (TFIN = 1 OR TFIN = 0)"
+			+ " , STATUS INTEGER NOT NULL DEFAULT 0" + " , COMENTARIO TEXT"
+			+ " , CHECK (STATUS = 1 OR STATUS = 0)"
+			+ " , PRIMARY KEY (ID_VISIT,ID_PROGRAM)" + " );";
 
 	public final static String ID_VISIT = "ID_VISIT";
 	public final static String COMENTARIO = "COMENTARIO";
@@ -52,6 +50,12 @@ public class Visit {
 
 	public final static String[] COLUMN_NAMES = new String[] { ID_VISIT,
 			ID_PROGRAM, COMENTARIO, FINI, HINI, FFIN, HFIN, TINI, TFIN, STATUS };
+
+	public static final String[] TRIGGERS = new String[] { "CREATE TRIGGER update_visit_status"
+			+ " AFTER INSERT ON VISIT"
+			+ " BEGIN"
+			+ " 	UPDATE VISIT SET STATUS = 0"
+			+ " 	WHERE ID_VISIT <> NEW.ID_VISIT;" + " END;" };
 
 	/**
 	 * @return the iD_VISIT

@@ -18,6 +18,7 @@ import android.content.Context;
 
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.db.TraceMOpenHelper;
+import com.sf.tracem.db.UncommitedChanges;
 
 public class Connection extends Activity {
 
@@ -783,7 +784,7 @@ public class Connection extends Activity {
 
 		SoapObject soapOperations = response.get(3);
 
-		zOrder.setOperations(getOperations(soapOperations));
+		zOrder.setOperations(getOperations(aufnr, soapOperations));
 
 		SoapObject parnersSoap = response.get(4);
 		zOrder.setPartners(getPartners(parnersSoap));
@@ -797,7 +798,7 @@ public class Connection extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		dbManager.insertOperations(aufnr, zOrder.getOperations());
+		dbManager.insertOperations(zOrder.getOperations());
 		dbManager.insertComponents(aufnr, zOrder.getComponents());
 
 		return zOrder;
@@ -836,10 +837,12 @@ public class Connection extends Activity {
 
 	/**
 	 * 
+	 * @param aufnr
 	 * @param soapOperations
 	 * @return
 	 */
-	private List<Operation> getOperations(SoapObject soapOperations) {
+	private List<Operation> getOperations(String aufnr,
+			SoapObject soapOperations) {
 		int count = soapOperations.getPropertyCount();
 		List<Operation> operations = new ArrayList<Operation>();
 
@@ -859,6 +862,8 @@ public class Connection extends Activity {
 					Operation.WORK_CNTR).toString()));
 			operation.setCOMPLETE(parseBitResult(item.getProperty(
 					Operation.COMPLETE).toString()));
+
+			operation.setAufnr(aufnr);
 
 			operations.add(operation);
 		}
@@ -1077,6 +1082,10 @@ public class Connection extends Activity {
 	public boolean closeVisit(Visit visit) throws HttpResponseException,
 			IOException, XmlPullParserException {
 
+		UncommitedChanges uc = dbManager.getUncommitedChanges();
+		Confirmation(visit, uc.getOperations());
+		saveMeasureDoc(visit.getUSER(), uc.getMeasures());
+
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_CLOSE_VISIT);
 
 		request.addProperty(Visit.FFIN, visit.getFFIN());
@@ -1096,10 +1105,8 @@ public class Connection extends Activity {
 
 		transport.call(SOAP_ACTION, envelope);
 
-		@SuppressWarnings("unchecked")
 		SoapObject response = (SoapObject) envelope.getResponse();
 
-		@SuppressWarnings("unused")
 		List<Message> messageList = getMessageList(response);
 
 		for (Message m : messageList) {
@@ -1107,14 +1114,58 @@ public class Connection extends Activity {
 				return false;
 			}
 		}
-
+		visit.setSTATUS((byte) 0);
 		dbManager.updateViisit(visit);
 
 		return true;
 	}
 
-	public List<Message> Confirmation(List<Confirmation> confirmations,
-			String aufnr) throws Exception {
+	public List<Message> Confirmation(Visit visit, List<Operation> ops)
+			throws HttpResponseException, IOException, XmlPullParserException {
+		@SuppressWarnings("unchecked")
+		List<String> orders = new ArrayList<String>();
+
+		List<Message> messages = new ArrayList<Message>();
+
+		for (Operation op : ops) {
+			if (!orders.contains(op.getAufnr())) {
+				orders.add(op.getAufnr());
+			}
+		}
+
+		for (String order : orders) {
+			List<Confirmation> confirmations = new ArrayList<Confirmation>();
+
+			for (Operation op : ops) {
+				if (order.equals(op.getAufnr())) {
+					Confirmation conf = new Confirmation();
+
+					conf.setACTIVITY(op.getACTIVITY());
+					conf.setCOMPLETE(op.getCOMPLETE());
+					conf.setACTUAL_DUR(op.getDURATION_NORMAL());
+					conf.setCONF_TEXT("");
+					conf.setEXEC_FIN_DATE(visit.getFFIN());
+					conf.setEXEC_FIN_TIME(visit.getHFIN());
+					conf.setEXEC_START_DATE(visit.getFINI());
+					conf.setEXEC_START_TIME(visit.getHINI());
+					conf.setUN_ACT_DUR(op.getDURATION_NORMAL_UNIT());
+					confirmations.add(conf);
+				}
+			}
+			messages.addAll(Confirmation(order, confirmations));
+		}
+
+		for (Operation op : ops) {
+			op.setCommited(1);
+		}
+		dbManager.updateOperations(ops);
+
+		return messages;
+	}
+
+	public List<Message> Confirmation(String aufnr,
+			List<Confirmation> confirmations) throws HttpResponseException,
+			IOException, XmlPullParserException {
 
 		SoapObject itConfirmation = new SoapObject();
 
@@ -1279,6 +1330,10 @@ public class Connection extends Activity {
 			List<MeasurementPoint> points) throws HttpResponseException,
 			IOException, XmlPullParserException {
 
+		if (points == null || points.size() == 0) {
+			return new ArrayList<Message>();
+		}
+
 		SoapObject request = new SoapObject(NAMESPACE,
 				Z_PM_AP_GET_MEASURE_POINT);
 
@@ -1309,8 +1364,12 @@ public class Connection extends Activity {
 		transport.call(SOAP_ACTION, envelope);
 
 		SoapObject response = (SoapObject) envelope.getResponse();
-
 		List<Message> messages = getMessageList(response);
+
+		for (MeasurementPoint point : points) {
+			point.setCommited(1);
+		}
+		dbManager.updateMeasurementPoints(points);
 
 		return messages;
 	}
