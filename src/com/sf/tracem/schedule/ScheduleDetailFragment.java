@@ -7,11 +7,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -39,7 +42,7 @@ import com.sf.tracem.connection.Message;
 import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.login.CurrentConfig;
+import com.sf.tracem.login.LoginSharedPreferences;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -113,7 +116,7 @@ public class ScheduleDetailFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		loginPreferences = activity.getSharedPreferences(
-				CurrentConfig.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
+				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
 		super.onAttach(activity);
 	}
 
@@ -168,7 +171,7 @@ public class ScheduleDetailFragment extends Fragment {
 		Connection connection = new Connection(getActivity());
 
 		id = connection.getNetxSchedule(loginPreferences.getString(
-				CurrentConfig.USERNAME, null));
+				LoginSharedPreferences.USERNAME, null));
 
 		if (id != null) {
 			year = Integer.parseInt(id.substring(0, 4));
@@ -179,8 +182,8 @@ public class ScheduleDetailFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.create_schedule,
-				container, false);
+		View view = inflater
+				.inflate(R.layout.create_schedule, container, false);
 
 		ordersList = (ListView) view.findViewById(R.id.orderList);
 		ordersList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -365,8 +368,8 @@ public class ScheduleDetailFragment extends Fragment {
 				List<Message> message = null;
 				try {
 					message = connection.deleteSchedule(loginPreferences
-							.getString(CurrentConfig.USERNAME, null), year,
-							week);
+							.getString(LoginSharedPreferences.USERNAME, null),
+							year, week);
 				} catch (HttpResponseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -408,6 +411,22 @@ public class ScheduleDetailFragment extends Fragment {
 
 	private void saveSchedule() {
 
+		if (scheduleHours < 40) {
+			WarningScheduleDialog wsd = new WarningScheduleDialog(getActivity());
+			try {
+				if (!wsd.show()) {
+					return;
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
 		AsyncTask<String, Integer, List<Message>> modifySchedule = new AsyncTask<String, Integer, List<Message>>() {
 
 			@Override
@@ -427,13 +446,13 @@ public class ScheduleDetailFragment extends Fragment {
 
 						newSchedule = connection.createSchedule(
 								loginPreferences.getString(
-										CurrentConfig.USERNAME, null), year,
-								week, schedule);
+										LoginSharedPreferences.USERNAME, null),
+								year, week, schedule);
 						break;
 					case UPDATE:
 						messages = connection.updateSchedule(loginPreferences
-								.getString(CurrentConfig.USERNAME, null), year,
-								week, schedule);
+								.getString(LoginSharedPreferences.USERNAME,
+										null), year, week, schedule);
 						break;
 					default:
 					}

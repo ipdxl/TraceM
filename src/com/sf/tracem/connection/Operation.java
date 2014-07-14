@@ -6,7 +6,8 @@ import java.io.Serializable;
 public class Operation implements Serializable {
 
 	private String activity, work_cntr, description, conf_no, plant,
-			duration_normal, duration_normal_unit, aufnr;
+			duration_normal_unit, aufnr;
+	double duration_normal;
 	private int commited;
 
 	private int complete;
@@ -92,17 +93,17 @@ public class Operation implements Serializable {
 	public Operation() {
 	}
 
-	public Operation(String ACTIVITY, String WORK_CNTR, String DESCRIPTION,
-			String CONF_NO, String PLANT, String DURATION_NORMAL,
-			String DURATION_NORMAL_UNIT, int COMPLETE) {
-		this.activity = ACTIVITY;
-		this.work_cntr = WORK_CNTR;
-		this.description = DESCRIPTION;
-		this.conf_no = CONF_NO;
-		this.plant = PLANT;
-		this.duration_normal = DURATION_NORMAL;
-		this.duration_normal_unit = DURATION_NORMAL_UNIT;
-		this.complete = COMPLETE;
+	public Operation(String activity, String work_cntr, String description,
+			String conf_no, String plant, double duration_normal,
+			String duration_normal_unit, int complete) {
+		this.activity = activity;
+		this.work_cntr = work_cntr;
+		this.description = description;
+		this.conf_no = conf_no;
+		this.plant = plant;
+		this.duration_normal = duration_normal;
+		this.duration_normal_unit = duration_normal_unit;
+		this.complete = complete;
 	}
 
 	public String getACTIVITY() {
@@ -145,11 +146,11 @@ public class Operation implements Serializable {
 		this.plant = PLANT;
 	}
 
-	public String getDURATION_NORMAL() {
+	public double getDURATION_NORMAL() {
 		return duration_normal;
 	}
 
-	public void setDURATION_NORMAL(String DURATION_NORMAL) {
+	public void setDURATION_NORMAL(double DURATION_NORMAL) {
 		this.duration_normal = DURATION_NORMAL;
 	}
 

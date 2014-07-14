@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutionException;
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -32,16 +31,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.KeyEvent.DispatcherState;
 import android.widget.Toast;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Order;
-import com.sf.tracem.connection.OrderDetails;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.login.CurrentConfig;
+import com.sf.tracem.login.LoginSharedPreferences;
 import com.sf.tracem.plan.MyJobNavigation;
 
 /**
@@ -49,6 +46,8 @@ import com.sf.tracem.plan.MyJobNavigation;
  * 
  */
 public class VisitDetailFragment extends Fragment {
+
+	public static final String TAG = "VISIT_DETAIL_FRAGMENT";
 
 	DBManager dbManager;
 
@@ -65,7 +64,7 @@ public class VisitDetailFragment extends Fragment {
 		super.onAttach(activity);
 		navigation = (MyJobNavigation) activity;
 		loginPreferences = activity.getSharedPreferences(
-				CurrentConfig.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
+				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
 	}
 
 	@Override
@@ -176,7 +175,7 @@ public class VisitDetailFragment extends Fragment {
 		final VisitDialogView vdv = new VisitDialogView(getActivity());
 		View view = vdv.getView();
 
-		android.content.DialogInterface.OnClickListener createVisitConfirmation = new android.content.DialogInterface.OnClickListener() {
+		android.content.DialogInterface.OnClickListener closeVisitConfirmation = new android.content.DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -185,7 +184,7 @@ public class VisitDetailFragment extends Fragment {
 				visit.setHFIN(vdv.getHini().getText().toString());
 				visit.setTFIN((byte) (vdv.getTini().isChecked() ? 1 : 0));
 				visit.setUSER(loginPreferences.getString(
-						CurrentConfig.USERNAME, null));
+						LoginSharedPreferences.USERNAME, null));
 
 				AsyncTask<String, Integer, Boolean> createVisitTask = new AsyncTask<String, Integer, Boolean>() {
 
@@ -238,11 +237,10 @@ public class VisitDetailFragment extends Fragment {
 			}
 		};
 
-		AlertDialog cvd = new AlertDialog.Builder(getActivity())
-				.setView(view)
-				.setTitle(R.string.create_visit)
-				.setIcon(android.R.drawable.ic_dialog_info)
-				.setPositiveButton(android.R.string.ok, createVisitConfirmation)
+		AlertDialog cvd = new AlertDialog.Builder(getActivity()).setView(view)
+				.setTitle(R.string.close_visit)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setPositiveButton(android.R.string.ok, closeVisitConfirmation)
 				.setNegativeButton(android.R.string.cancel, null).create();
 		cvd.show();
 

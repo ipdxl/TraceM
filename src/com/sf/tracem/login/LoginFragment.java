@@ -105,10 +105,10 @@ public class LoginFragment extends Fragment {
 		}
 
 		editor = getActivity().getSharedPreferences(
-				CurrentConfig.LOGIN_PREFERENCES, Context.MODE_PRIVATE).edit();
+				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE).edit();
 
-		editor.putString(CurrentConfig.USERNAME, user.getText().toString());
-		editor.putString(CurrentConfig.PASSWORD, pass.getText().toString());
+		editor.putString(LoginSharedPreferences.USERNAME, user.getText().toString());
+		editor.putString(LoginSharedPreferences.PASSWORD, pass.getText().toString());
 
 		List<Menu> menuList = response.getMenuList();
 

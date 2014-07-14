@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@android:color/holo_purple" android:state_activated="true"/>
-    <item android:drawable="@android:color/transparent"/>
+    <item android:drawable="@color/blue_sf" android:state_activated="true"/>
+    <item android:drawable="@android:color/holo_blue_bright" android:state_focused="true"></item>
 
 </selector>

@@ -36,7 +36,7 @@ import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.login.CurrentConfig;
+import com.sf.tracem.login.LoginSharedPreferences;
 import com.sf.tracem.plan.MyJobNavigation;
 
 /**
@@ -68,7 +68,7 @@ public class VisitListFragment extends Fragment {
 
 		setHasOptionsMenu(true);
 		loginPreferences = getActivity().getSharedPreferences(
-				CurrentConfig.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
+				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
 
 	}
 
@@ -190,7 +190,7 @@ public class VisitListFragment extends Fragment {
 				visit.setHINI(vdv.getHini().getText().toString());
 				visit.setTINI((byte) (vdv.getTini().isChecked() ? 1 : 0));
 				visit.setUSER(loginPreferences.getString(
-						CurrentConfig.USERNAME, null));
+						LoginSharedPreferences.USERNAME, null));
 
 				AsyncTask<String, Integer, Integer> createVisitTask = new AsyncTask<String, Integer, Integer>() {
 

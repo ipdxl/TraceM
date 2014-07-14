@@ -18,11 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.sf.tracem.R;
-import com.sf.tracem.login.CurrentConfig;
+import com.sf.tracem.login.LoginSharedPreferences;
 import com.sf.tracem.path.MyPathFragment;
 import com.sf.tracem.plan.detail.OrderDetailFragment;
 import com.sf.tracem.plan.menu.MyJobMenuFragment;
-import com.sf.tracem.schedule.MySchedulesFragment;
+import com.sf.tracem.schedule.SchedulesFragment;
 import com.sf.tracem.schedule.ScheduleDetailFragment;
 import com.sf.tracem.visit.VisitDetailFragment;
 import com.sf.tracem.visit.VisitListFragment;
@@ -52,15 +52,15 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		setContentView(R.layout.activity_main);
 
 		loginPreferences = getSharedPreferences(
-				CurrentConfig.LOGIN_PREFERENCES, MODE_PRIVATE);
+				LoginSharedPreferences.LOGIN_PREFERENCES, MODE_PRIVATE);
 
 		fm = getSupportFragmentManager();
 		ft = fm.beginTransaction();
 
 		sharedPreferences = getSharedPreferences(
-				CurrentConfig.LOGIN_PREFERENCES, MODE_PRIVATE);
+				LoginSharedPreferences.LOGIN_PREFERENCES, MODE_PRIVATE);
 
-		loginName = sharedPreferences.getString(CurrentConfig.USERNAME, null);
+		loginName = sharedPreferences.getString(LoginSharedPreferences.USERNAME, null);
 
 		if (loginName != null) {
 			mjmf = new MyJobMenuFragment();
@@ -208,13 +208,13 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 	@Override
 	public void onViewPlans() {
 		ft = fm.beginTransaction();
-		MySchedulesFragment mpf = new MySchedulesFragment();
+		SchedulesFragment mpf = new SchedulesFragment();
 		ft.replace(R.id.content_frame, mpf).addToBackStack(
-				MySchedulesFragment.TAG);
+				SchedulesFragment.TAG);
 
 		Bundle args = new Bundle();
 		args.putString("USER",
-				loginPreferences.getString(CurrentConfig.USERNAME, null));
+				loginPreferences.getString(LoginSharedPreferences.USERNAME, null));
 		mpf.setArguments(args);
 
 		ft.commit();
@@ -286,16 +286,17 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		ft.replace(R.id.content_frame, visitFragment, VisitListFragment.TAG);
 		ft.commit();
 
+		mDrawerLayout.closeDrawers();
 	}
 
 	@Override
 	public void onVisitDetail() {
 		ft = fm.beginTransaction();
 		VisitDetailFragment vdf = new VisitDetailFragment();
-		ft.replace(R.id.content_frame, vdf);
+		ft.replace(R.id.content_frame, vdf).addToBackStack(VisitDetailFragment.TAG);
 		ft.commit();
 	}
-	
+
 	@Override
 	public void OnVisitOrderSelected(String aufnr) {
 		FragmentTransaction ft = fm.beginTransaction();
@@ -304,6 +305,7 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		Bundle args = new Bundle();
 		args.putString(OrderDetailFragment.AUFNR, aufnr);
 		args.putString(OrderDetailFragment.NAME, "");
+		args.putString(OrderDetailFragment.MODE, OrderDetailFragment.EDIT_MODE);
 		odf.setArguments(args);
 		ft.replace(R.id.order_detail_frame, odf);
 		ft.commit();

@@ -5,8 +5,9 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Confirmation implements Serializable {
 
-	private String activity, actual_dur, un_act_dur, exec_start_date,
-			exec_fin_date, exec_start_time, exec_fin_time, conf_text;
+	private String activity, un_act_dur, exec_start_date, exec_fin_date,
+			exec_start_time, exec_fin_time, conf_text;
+	double actual_dur;
 	private int complete;
 
 	public final static String ACTIVITY = "ACTIVITY";
@@ -30,11 +31,11 @@ public class Confirmation implements Serializable {
 		this.activity = ACTIVITY;
 	}
 
-	public String getACTUAL_DUR() {
+	public double getACTUAL_DUR() {
 		return actual_dur;
 	}
 
-	public void setACTUAL_DUR(String ACTUAL_DUR) {
+	public void setACTUAL_DUR(double ACTUAL_DUR) {
 		this.actual_dur = ACTUAL_DUR;
 	}
 

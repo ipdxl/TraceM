@@ -28,6 +28,8 @@ public class VisitOrdersFragment extends Fragment {
 	private MyJobNavigation navigation;
 	private int lastItemChecked = -1;
 
+	private OrderListAdapter adapter;
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -51,8 +53,15 @@ public class VisitOrdersFragment extends Fragment {
 		list = (ListView) view.findViewById(android.R.id.list);
 		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-		OrderListAdapter adapter = new OrderListAdapter(getActivity(),
-				R.layout.order_item, R.id.aufnr, orders);
+		adapter = new OrderListAdapter(getActivity(), R.layout.order_item,
+				R.id.aufnr, orders);
+
+		return view;
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(new OnItemClickListener() {
 
@@ -69,14 +78,6 @@ public class VisitOrdersFragment extends Fragment {
 				}
 			}
 		});
-
-		return view;
-	}
-
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-
-		super.onViewCreated(view, savedInstanceState);
 	}
 
 }

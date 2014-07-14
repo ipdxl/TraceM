@@ -33,7 +33,7 @@ import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Order;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.login.CurrentConfig;
+import com.sf.tracem.login.LoginSharedPreferences;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -66,7 +66,7 @@ public class MyPlanFragment extends Fragment {
 		super.onAttach(activity);
 		navigation = (MyJobNavigation) activity;
 		loginPreferences = activity.getSharedPreferences(
-				CurrentConfig.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
+				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
 	}
 
 	@Override
@@ -187,7 +187,7 @@ public class MyPlanFragment extends Fragment {
 
 					Connection connection = new Connection(getActivity());
 					orders = connection.getPlan(loginPreferences.getString(
-							CurrentConfig.USERNAME, null));
+							LoginSharedPreferences.USERNAME, null));
 					if (orders != null) {
 						return orders;
 					}

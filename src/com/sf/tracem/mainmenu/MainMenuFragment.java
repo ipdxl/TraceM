@@ -28,7 +28,7 @@ import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Menu;
 import com.sf.tracem.connection.Message;
 import com.sf.tracem.db.TraceMOpenHelper;
-import com.sf.tracem.login.CurrentConfig;
+import com.sf.tracem.login.LoginSharedPreferences;
 import com.sf.tracem.plan.MyJobActivity;
 
 public class MainMenuFragment extends Fragment {
@@ -58,7 +58,7 @@ public class MainMenuFragment extends Fragment {
 		View view = inflater.inflate(R.layout.mainmenu_options, container,
 				false);
 
-		getActivity().getSharedPreferences(CurrentConfig.LOGIN_PREFERENCES,
+		getActivity().getSharedPreferences(LoginSharedPreferences.LOGIN_PREFERENCES,
 				Context.MODE_PRIVATE);
 
 		TraceMOpenHelper toh = new TraceMOpenHelper(getActivity());
@@ -143,9 +143,9 @@ public class MainMenuFragment extends Fragment {
 					Connection connection = new Connection(getActivity());
 					errorsList = connection.logout(getActivity()
 							.getSharedPreferences(
-									CurrentConfig.LOGIN_PREFERENCES,
+									LoginSharedPreferences.LOGIN_PREFERENCES,
 									Context.MODE_PRIVATE).getString(
-									CurrentConfig.USERNAME, null));
+									LoginSharedPreferences.USERNAME, null));
 				} catch (Exception e) {
 					Toast.makeText(
 							getActivity(),
@@ -166,7 +166,7 @@ public class MainMenuFragment extends Fragment {
 				toh = new TraceMOpenHelper(getActivity());
 				toh.clear();
 				loginPreferences = getActivity().getSharedPreferences(
-						CurrentConfig.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
+						LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
 
 				// clear LOGIN_PREFERENCES
 				loginPreferences.edit().clear().commit();

@@ -34,7 +34,7 @@ import com.sf.tracem.plan.MyJobNavigation;
  * @author José Guadalupe Mandujano Serrano
  * 
  */
-public class MySchedulesFragment extends Fragment {
+public class SchedulesFragment extends Fragment {
 	private static final String SCHEDULE = "SCHEDULE";
 	public static final String TAG = "SCHEDULES_FRAGMENT";
 	private ScheduleAdapter scheduleAdapter;

@@ -35,7 +35,7 @@ import com.sf.tracem.connection.Path;
 import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.Partner;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.login.CurrentConfig;
+import com.sf.tracem.login.LoginSharedPreferences;
 
 public class MyPathFragment extends Fragment implements PathNavigation {
 
@@ -55,7 +55,7 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 	@Override
 	public void onAttach(Activity activity) {
 		loginPreferences = activity.getSharedPreferences(
-				CurrentConfig.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
+				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
 		super.onAttach(activity);
 	}
 
@@ -74,7 +74,7 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 					.getSerializable(PATH_LIST);
 		} else {
 			pathList = getPath(
-					loginPreferences.getString(CurrentConfig.USERNAME, null),
+					loginPreferences.getString(LoginSharedPreferences.USERNAME, null),
 					"28.04.2014");
 		}
 	}

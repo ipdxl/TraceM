@@ -2,8 +2,6 @@ package com.sf.tracem.db;
 
 import java.util.List;
 
-import android.view.View.MeasureSpec;
-
 import com.sf.tracem.connection.MeasurementPoint;
 import com.sf.tracem.connection.Operation;
 

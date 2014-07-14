@@ -406,14 +406,22 @@ public class DBManager {
 	}
 
 	public void updateOperations(List<Operation> operations) {
-		traceMwdb = toh.getWritableDatabase();
 		for (Operation op : operations) {
-			ContentValues values = getOperationValues(op);
-
-			traceMwdb.update(Operation.TABLE_NAME, values, String.format(
-					"%S = '? AND %S = ?", Operation.AUFNR, Operation.ACTIVITY),
-					new String[] { op.getAufnr(), op.getACTIVITY() });
+			updateOperation(op);
 		}
+	}
+
+	public void updateOperation(Operation op) {
+		traceMwdb = toh.getWritableDatabase();
+		ContentValues values = getOperationValues(op);
+
+		String query = String.format("%S = ? AND %S = ?", Operation.AUFNR,
+				Operation.ACTIVITY);
+
+		traceMwdb.update(Operation.TABLE_NAME, values, query,
+				new String[] { op.getAufnr(), op.getACTIVITY() });
+		traceMwdb.close();
+
 	}
 
 	private ContentValues getOperationValues(Operation op) {
@@ -561,7 +569,7 @@ public class DBManager {
 						.get(Operation.COMPLETE)));
 				operation.setDESCRIPTION(cursor.getString(columnMap
 						.get(Operation.DESCRIPTION)));
-				operation.setDURATION_NORMAL(cursor.getString(columnMap
+				operation.setDURATION_NORMAL(cursor.getDouble(columnMap
 						.get(Operation.DURATION_NORMAL)));
 				operation.setDURATION_NORMAL_UNIT(cursor.getString(columnMap
 						.get(Operation.DURATION_NORMAL_UNIT)));
@@ -569,7 +577,6 @@ public class DBManager {
 						.get(Operation.PLANT)));
 				operation.setWORK_CNTR(cursor.getString(columnMap
 						.get(Operation.WORK_CNTR)));
-				operations.add(operation);
 				operation.setCommited(cursor.getInt(columnMap
 						.get(Operation.COMMITED)));
 				operations.add(operation);
@@ -620,14 +627,7 @@ public class DBManager {
 		traceMrdb = toh.getReadableDatabase();
 
 		for (MeasurementPoint point : points) {
-			ContentValues values = getMeasurementPointsValues(point);
-
-			int result = traceMrdb.update(MeasurementPoint.TABLE_NAME, values,
-					MeasurementPoint.EQUNR + " = ? AND "
-							+ MeasurementPoint.AUFNR + " = ?", new String[] {
-							point.getEqunr(), point.getAufnr() });
-
-			Log.i("Update Measurement point", "" + result);
+			updateMeasurementPoint(point);
 		}
 	}
 
@@ -821,7 +821,6 @@ public class DBManager {
 	 */
 	private List<Operation> getUncommitedOperations() {
 		List<Operation> ops;
-		traceMrdb = toh.getReadableDatabase();
 
 		Cursor cursor = traceMrdb.query(Operation.TABLE_NAME,
 				Operation.COLUMN_NAMES, String.format("%S = ? AND %S = ?",
@@ -831,5 +830,20 @@ public class DBManager {
 		ops = getOperationsFrom(cursor);
 
 		return ops;
+	}
+
+	public void updateMeasurementPoint(MeasurementPoint mp) {
+		ContentValues values = getMeasurementPointsValues(mp);
+		traceMwdb = toh.getWritableDatabase();
+
+		int result = traceMwdb
+				.update(MeasurementPoint.TABLE_NAME, values,
+						MeasurementPoint.EQUNR + " = ? AND "
+								+ MeasurementPoint.AUFNR + " = ?",
+						new String[] { mp.getEqunr(), mp.getAufnr() });
+
+		Log.i("Update Measurement point", "" + result);
+		traceMwdb.close();
+
 	}
 }

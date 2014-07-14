@@ -35,7 +35,7 @@ public class Connection extends Activity {
 	private final static String Z_PM_AP_GET_SCHEDULE_DETAIL = "Z_PM_AP_GET_SCHEDULE_DETAIL";
 	private final static String Z_PM_AP_GET_ORDER_DETAIL = "Z_PM_AP_GET_ORDER_DETAIL";
 	// private final static String Z_PM_LOG = "Z_PM_LOG";
-	private static final String Z_PM_AP_CONFIRMATION = "Z_PM_ORDER_CONFIRMATION";
+	private static final String Z_PM_AP_CONFIRMATION = "Z_PM_AP_CONFIRMATION";
 	/*
 	 * Web Service 2
 	 */
@@ -66,6 +66,7 @@ public class Connection extends Activity {
 	private static final String Z_PM_AP_CREATE_VISIT = "Z_PM_AP_CREATE_VISIT";
 	private static final String Z_PM_AP_CLOSE_VISIT = "Z_PM_AP_CLOSE_VISIT";
 	private static final String P_VISIT = "P_VISIT";
+	private static final String IT_CONFIRMATION = "IT_CONFIRMATION";
 	private Context context;
 	private DBManager dbManager;
 
@@ -854,7 +855,7 @@ public class Connection extends Activity {
 					Operation.ACTIVITY).toString()));
 			operation.setDESCRIPTION(parseResult(item.getProperty(
 					Operation.DESCRIPTION).toString()));
-			operation.setDURATION_NORMAL(parseResult(item.getProperty(
+			operation.setDURATION_NORMAL(parseNumericResult(item.getProperty(
 					Operation.DURATION_NORMAL).toString()));
 			operation.setDURATION_NORMAL_UNIT(parseResult(item.getProperty(
 					Operation.DURATION_NORMAL_UNIT).toString()));
@@ -1122,7 +1123,6 @@ public class Connection extends Activity {
 
 	public List<Message> Confirmation(Visit visit, List<Operation> ops)
 			throws HttpResponseException, IOException, XmlPullParserException {
-		@SuppressWarnings("unchecked")
 		List<String> orders = new ArrayList<String>();
 
 		List<Message> messages = new ArrayList<Message>();
@@ -1155,9 +1155,16 @@ public class Connection extends Activity {
 			messages.addAll(Confirmation(order, confirmations));
 		}
 
+		for (Message m : messages) {
+			if (m.getType() == 'E') {
+				return messages;
+			}
+		}
+
 		for (Operation op : ops) {
 			op.setCommited(1);
 		}
+
 		dbManager.updateOperations(ops);
 
 		return messages;
@@ -1174,7 +1181,7 @@ public class Connection extends Activity {
 
 			confObject.addProperty(Confirmation.ACTIVITY, item.getACTIVITY());
 			confObject.addProperty(Confirmation.ACTUAL_DUR,
-					item.getACTUAL_DUR());
+					String.format("%.1f", item.getACTUAL_DUR()));
 			confObject.addProperty(Confirmation.UN_ACT_DUR,
 					item.getUN_ACT_DUR());
 			confObject.addProperty(Confirmation.EXEC_START_DATE,
@@ -1185,7 +1192,12 @@ public class Connection extends Activity {
 					item.getEXEC_START_TIME());
 			confObject.addProperty(Confirmation.EXEC_FIN_TIME,
 					item.getEXEC_FIN_TIME());
-			confObject.addProperty(Confirmation.CONF_TEXT, item.getCONF_TEXT());
+			confObject
+					.addProperty(
+							Confirmation.CONF_TEXT,
+							item.getCONF_TEXT() == null
+									|| "".equalsIgnoreCase(item.getCONF_TEXT()) ? "COMPLETE"
+									: item.getCONF_TEXT());
 			confObject.addProperty(Confirmation.COMPLETE,
 					TraceMFormater.getBool(item.getCOMPLETE()));
 
@@ -1194,7 +1206,7 @@ public class Connection extends Activity {
 
 		// Create request
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_CONFIRMATION);
-		request.addProperty("IT_CONFIRMATION", itConfirmation);
+		request.addProperty(IT_CONFIRMATION, itConfirmation);
 		request.addProperty(P_ORDER_NUMBER, aufnr);
 
 		// Create envelope
@@ -1205,7 +1217,7 @@ public class Connection extends Activity {
 		envelope.setOutputSoapObject(request);
 
 		// Create HTTP call object
-		HttpTransportBasicAuth httpTransport = new HttpTransportBasicAuth(URL,
+		HttpTransportBasicAuth httpTransport = new HttpTransportBasicAuth(URL2,
 				SAP_USER, SAP_PASSWORD);
 
 		httpTransport.debug = true;

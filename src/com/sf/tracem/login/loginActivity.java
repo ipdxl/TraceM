@@ -46,9 +46,9 @@ public class loginActivity extends FragmentActivity {
 				.beginTransaction();
 
 		sharedPreferences = getSharedPreferences(
-				CurrentConfig.LOGIN_PREFERENCES, MODE_PRIVATE);
+				LoginSharedPreferences.LOGIN_PREFERENCES, MODE_PRIVATE);
 
-		loginName = sharedPreferences.getString(CurrentConfig.USERNAME, null);
+		loginName = sharedPreferences.getString(LoginSharedPreferences.USERNAME, null);
 
 		if (loginName == null) {
 			mmf = null;

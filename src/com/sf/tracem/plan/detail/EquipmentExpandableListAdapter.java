@@ -14,14 +14,15 @@ import com.sf.tracem.R;
 import com.sf.tracem.connection.Equipment;
 import com.sf.tracem.connection.MeasurementPoint;
 
-public class EquipmentArrayAdapter extends BaseExpandableListAdapter {
+public class EquipmentExpandableListAdapter extends BaseExpandableListAdapter {
 
 	private TextView eqktx, equnr;
 	private CheckBox complete;
 	private List<Equipment> equipmets;
 	private Context context;
 
-	public EquipmentArrayAdapter(Context context, List<Equipment> equipments) {
+	public EquipmentExpandableListAdapter(Context context,
+			List<Equipment> equipments) {
 		this.context = context;
 		this.equipmets = equipments;
 	}

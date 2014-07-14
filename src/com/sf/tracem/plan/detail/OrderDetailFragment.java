@@ -40,6 +40,13 @@ public class OrderDetailFragment extends Fragment {
 	public static final String TAG = "ORDER_DETAIL";
 	public static final String AUFNR = "AUFNR";
 	public static final String NAME = "NAME";
+
+	public static final String EDIT_MODE = "EDIT_MODE";
+	public static final String VIEW_MODE = "VIEW_MODE";
+	public static final String MODE = "MODE";
+
+	private String mode;
+
 	private String aufnr;
 	private OrderDetails orderDetails;
 	private EquipmentMenu em;
@@ -53,6 +60,9 @@ public class OrderDetailFragment extends Fragment {
 		onRestoreSavedInstanceState(savedInstanceState);
 		setHasOptionsMenu(true);
 		fm = getFragmentManager();
+
+		mode = getArguments().getString(MODE, VIEW_MODE);
+
 		super.onCreate(savedInstanceState);
 	}
 
@@ -76,6 +86,7 @@ public class OrderDetailFragment extends Fragment {
 		List<Equipment> equipments = orderDetails.getEquipments();
 		eqArgs.putSerializable(EquipmentMenu.EQUIPMENTS,
 				(ArrayList<Equipment>) equipments);
+		eqArgs.putString(OrderDetailFragment.MODE, mode);
 		em.setArguments(eqArgs);
 		// } else {
 		// em.getArguments().putString(AUFNR,
@@ -86,10 +97,9 @@ public class OrderDetailFragment extends Fragment {
 		of = new OperationsFragment();
 		Bundle ofArgs = new Bundle();
 
-		Operation[] operationsArray = new Operation[orderDetails
-				.getOperations().size()];
-		orderDetails.getOperations().toArray(operationsArray);
-		ofArgs.putSerializable("operations", operationsArray);
+		ofArgs.putSerializable(OperationsFragment.OPERATIONS,
+				(ArrayList<Operation>) orderDetails.getOperations());
+		ofArgs.putString(OrderDetailFragment.MODE, mode);
 
 		of.setArguments(ofArgs);
 		// } else {
