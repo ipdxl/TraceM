@@ -12,10 +12,12 @@ import java.util.concurrent.ExecutionException;
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -409,23 +411,39 @@ public class ScheduleDetailFragment extends Fragment {
 		setMenuVisibility(false);
 	}
 
-	private void saveSchedule() {
-
+	@SuppressLint("InflateParams")
+	private synchronized void saveSchedule() {
 		if (scheduleHours < 40) {
-			WarningScheduleDialog wsd = new WarningScheduleDialog(getActivity());
-			try {
-				if (!wsd.show()) {
-					return;
-				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			LayoutInflater inflater = LayoutInflater.from(getActivity());
+			View view = inflater.inflate(android.R.layout.simple_list_item_1,
+					null);
 
+			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+			text1.setText(R.string.save_schedule_alert);
+
+			android.content.DialogInterface.OnClickListener okListener = new android.content.DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					save();
+				}
+
+			};
+
+			new AlertDialog.Builder(getActivity())
+					.setTitle(android.R.string.dialog_alert_title)
+					.setView(view)
+					.setPositiveButton(android.R.string.ok, okListener)
+					.setNegativeButton(android.R.string.cancel, null)
+					.create()
+					.show();
+
+		} else {
+			save();
 		}
+	}
+
+	private void save() {
 
 		AsyncTask<String, Integer, List<Message>> modifySchedule = new AsyncTask<String, Integer, List<Message>>() {
 

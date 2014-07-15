@@ -72,8 +72,6 @@ public class OrderDetailFragment extends Fragment {
 
 		onRestoreSavedInstanceState(savedInstanceState);
 
-		while (orderDetails == null)
-			;
 
 		View view = inflater.inflate(R.layout.order_detail, container, false);
 

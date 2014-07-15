@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -81,7 +82,7 @@ public class OperationsFragment extends Fragment {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 
-					CheckBox opStatus = (CheckBox) view
+					CheckedTextView opStatus = (CheckedTextView) view
 							.findViewById(R.id.operarion_status);
 					if (opStatus.isEnabled()) {
 						opStatus.setChecked(!opStatus.isChecked());
@@ -102,7 +103,7 @@ public class OperationsFragment extends Fragment {
 	private class opsArrayAdapter extends ArrayAdapter<Operation> {
 
 		private TextView activity, description, time;
-		private CheckBox opStatus;
+		private CheckedTextView opStatus;
 
 		public opsArrayAdapter(Context context, List<Operation> operations) {
 			super(context, R.layout.operation_item, R.id.eqktx, operations);
@@ -118,7 +119,8 @@ public class OperationsFragment extends Fragment {
 			activity = (TextView) view.findViewById(R.id.activity);
 			description = (TextView) view.findViewById(R.id.eqktx);
 			time = (TextView) view.findViewById(R.id.time);
-			opStatus = (CheckBox) view.findViewById(R.id.operarion_status);
+			opStatus = (CheckedTextView) view
+					.findViewById(R.id.operarion_status);
 
 			Operation operation = getItem(position);
 

@@ -67,6 +67,7 @@ public class Connection extends Activity {
 	private static final String Z_PM_AP_CLOSE_VISIT = "Z_PM_AP_CLOSE_VISIT";
 	private static final String P_VISIT = "P_VISIT";
 	private static final String IT_CONFIRMATION = "IT_CONFIRMATION";
+	private static final String Z_PM_AP_SAVE_MEASURE_DOCUEMNT = "Z_PM_AP_SAVE_MEASURE_DOCUEMNT";
 	private Context context;
 	private DBManager dbManager;
 
@@ -1082,10 +1083,22 @@ public class Connection extends Activity {
 
 	public boolean closeVisit(Visit visit) throws HttpResponseException,
 			IOException, XmlPullParserException {
+		List<Message> messageList = new ArrayList<Message>();
 
 		UncommitedChanges uc = dbManager.getUncommitedChanges();
-		Confirmation(visit, uc.getOperations());
-		saveMeasureDoc(visit.getUSER(), uc.getMeasures());
+		messageList.addAll(Confirmation(visit, uc.getOperations()));
+		for (Message m : messageList) {
+			if ("E".equalsIgnoreCase("" + m.getType())) {
+				return false;
+			}
+		}
+		messageList.addAll(saveMeasureDoc(visit.getUSER(), uc.getMeasures()));
+
+		for (Message m : messageList) {
+			if ("E".equalsIgnoreCase("" + m.getType())) {
+				return false;
+			}
+		}
 
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_CLOSE_VISIT);
 
@@ -1108,7 +1121,7 @@ public class Connection extends Activity {
 
 		SoapObject response = (SoapObject) envelope.getResponse();
 
-		List<Message> messageList = getMessageList(response);
+		messageList.addAll(getMessageList(response));
 
 		for (Message m : messageList) {
 			if ("E".equalsIgnoreCase("" + m.getType())) {
@@ -1347,15 +1360,15 @@ public class Connection extends Activity {
 		}
 
 		SoapObject request = new SoapObject(NAMESPACE,
-				Z_PM_AP_GET_MEASURE_POINT);
+				Z_PM_AP_SAVE_MEASURE_DOCUEMNT);
 
 		SoapObject soapPoints = new SoapObject();
 
 		for (MeasurementPoint point : points) {
 			SoapObject item = new SoapObject();
 
-			item.addProperty(DESCRIPTION, point.getNotes() == null ? "" : point
-					.getNotes().substring(0, 40));
+			item.addProperty(DESCRIPTION,
+					point.getNotes() == null ? "" : point.getNotes());
 			item.addProperty(POINT, point.getPoint());
 			item.addProperty(ZREAD, "" + point.getRead());
 
@@ -1377,6 +1390,12 @@ public class Connection extends Activity {
 
 		SoapObject response = (SoapObject) envelope.getResponse();
 		List<Message> messages = getMessageList(response);
+
+		for (Message m : messages) {
+			if (m.getType() == 'E') {
+				return messages;
+			}
+		}
 
 		for (MeasurementPoint point : points) {
 			point.setCommited(1);

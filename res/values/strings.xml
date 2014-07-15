@@ -109,5 +109,6 @@
     <string name="visit_closed">Visit closed</string>
     <string name="visit_closed_error">Visit could not be closed</string>
     <string name="edit">Edit</string>
+    <string name="save_schedule_alert">Your schedule does not have 40 hrs or more</string>
 
 </resources>

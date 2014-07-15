@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="?android:attr/textAppearanceSmall"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     tools:ignore="HardcodedText" >
 
     <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/activity"
+        android:layout_alignBottom="@+id/activity"
+        android:layout_toRightOf="@+id/activity"
+        android:text="Time" />
+
+    <TextView
         android:id="@+id/eqktx"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/activity"
         android:layout_below="@+id/activity"
-        android:layout_marginLeft="15dp"
-        android:layout_toLeftOf="@+id/operarion_status"
         android:hint="Description"
         android:maxLines="5"
         android:text="Description"
@@ -23,31 +31,18 @@
         android:id="@+id/activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/eqktx"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_margin="3dp"
         android:hint="Activity"
         android:text="Activity" />
 
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/activity"
-        android:layout_alignBottom="@+id/activity"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="14dp"
-        android:text="Time" />
-
-    <CheckBox
+    <CheckedTextView
         android:id="@+id/operarion_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/time"
-        android:layout_below="@+id/activity"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text="@string/complete" />
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/time"
+        android:checkMark="?android:attr/textCheckMark" />
 
 </RelativeLayout>

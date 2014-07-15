@@ -386,7 +386,7 @@ public class DBManager {
 		for (Equipment equipment : equipments) {
 			ContentValues values = new ContentValues();
 
-			values.put(Equipment.AUFNR, order);
+			values.put(Equipment.AUFNR, equipment.getAufnr());
 			values.put(Equipment.EQTXT, equipment.getEQKTX());
 			values.put(Equipment.EQUNR, equipment.getEQUNR());
 			values.put(Equipment.COMPLETE, equipment.getComplete());
@@ -633,6 +633,10 @@ public class DBManager {
 
 	public List<MeasurementPoint> getMeasurementPoints(String aufnr,
 			String equnr) {
+
+		if (aufnr == null || equnr == null) {
+			return new ArrayList<MeasurementPoint>();
+		}
 		traceMrdb = toh.getReadableDatabase();
 
 		Cursor cursor = traceMrdb.query(MeasurementPoint.TABLE_NAME,
@@ -641,7 +645,7 @@ public class DBManager {
 				new String[] { equnr, aufnr }, null, null, null);
 
 		List<MeasurementPoint> points = getMeasurementPoitsFrom(cursor);
-
+		traceMrdb.close();
 		return points;
 	}
 
@@ -790,7 +794,6 @@ public class DBManager {
 
 	public UncommitedChanges getUncommitedChanges() {
 		List<Operation> ops = getUncommitedOperations();
-		traceMrdb = toh.getReadableDatabase();
 		List<MeasurementPoint> mps = getUncommitedMeasures();
 
 		UncommitedChanges uc = new UncommitedChanges();
@@ -811,7 +814,7 @@ public class DBManager {
 				null, null, null);
 
 		mps = getMeasurementPoitsFrom(cursor);
-
+		traceMrdb.close();
 		return mps;
 	}
 
@@ -821,6 +824,7 @@ public class DBManager {
 	 */
 	private List<Operation> getUncommitedOperations() {
 		List<Operation> ops;
+		traceMrdb = toh.getReadableDatabase();
 
 		Cursor cursor = traceMrdb.query(Operation.TABLE_NAME,
 				Operation.COLUMN_NAMES, String.format("%S = ? AND %S = ?",
@@ -828,6 +832,8 @@ public class DBManager {
 						"0", "1" }, null, null, null);
 
 		ops = getOperationsFrom(cursor);
+
+		traceMrdb.close();
 
 		return ops;
 	}
