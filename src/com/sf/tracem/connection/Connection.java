@@ -3,6 +3,7 @@ package com.sf.tracem.connection;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import org.ksoap2.SoapEnvelope;
@@ -23,9 +24,6 @@ import com.sf.tracem.db.UncommitedChanges;
 public class Connection extends Activity {
 
 	private final static String NAMESPACE = "urn:sap-com:document:sap:rfc:functions";
-	// private final static String URL =
-	// "http://192.168.100.1:8004/sap/bc/srt/rfc/sap/ZWS_PM_ORDERS_2?sap-client=800";
-	private final static String URL = "http://25.111.9.178:8004/sap/bc/srt/rfc/sap/ZWS_PM_ORDERS_2?sap-client=800";
 	private final static String URL2 = "http://25.111.9.178:8004/sap/bc/srt/rfc/sap/ZPM_AP_WS?sap-client=800";
 	private final static String SAP_USER = "sapuser";
 	private final static String SAP_PASSWORD = "password3";
@@ -62,12 +60,12 @@ public class Connection extends Activity {
 	private static final String POINT = "POINT";
 	private static final String ZREAD = "ZREAD";
 	private static final String IT_READ_POINTS = "IT_READ_POINTS";
-	private static final String ID_VISIT = "ID_VISIT";
 	private static final String Z_PM_AP_CREATE_VISIT = "Z_PM_AP_CREATE_VISIT";
 	private static final String Z_PM_AP_CLOSE_VISIT = "Z_PM_AP_CLOSE_VISIT";
 	private static final String P_VISIT = "P_VISIT";
 	private static final String IT_CONFIRMATION = "IT_CONFIRMATION";
 	private static final String Z_PM_AP_SAVE_MEASURE_DOCUEMNT = "Z_PM_AP_SAVE_MEASURE_DOCUEMNT";
+	private static final String Z_PM_AP_GET_VISIT_DETAIL = "Z_PM_AP_GET_VISIT_DETAIL";
 	private Context context;
 	private DBManager dbManager;
 
@@ -96,23 +94,7 @@ public class Connection extends Activity {
 		request.addProperty(P_PASSWORD, password);
 		request.addProperty(P_USER, userName);
 
-		// Create envelope
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-
-		// envelope.dotNet = true;
-		// Set output SOAP object
-		envelope.setOutputSoapObject(request);
-
-		// Create HTTP call object
-		HttpTransportBasicAuth httpTrandport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-
-		httpTrandport.debug = true;
-
-		// Involve web service
-		httpTrandport.call(SOAP_ACTION, envelope);
-
+		SoapSerializationEnvelope envelope = call(request);
 		// Get the response
 		@SuppressWarnings("unchecked")
 		Vector<Object> response = (Vector<Object>) envelope.getResponse();
@@ -144,22 +126,7 @@ public class Connection extends Activity {
 
 		request.addProperty(P_USER, userName);
 
-		// Create envelope
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-
-		// envelope.dotNet = true;
-		// Set output SOAP object
-		envelope.setOutputSoapObject(request);
-
-		// Create HTTP call object
-		HttpTransportBasicAuth httpTrandport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-
-		httpTrandport.debug = true;
-
-		// Involve web service
-		httpTrandport.call(SOAP_ACTION, envelope);
+		SoapSerializationEnvelope envelope = call(request);
 
 		// Get the response
 		SoapObject response = (SoapObject) envelope.getResponse();
@@ -210,15 +177,7 @@ public class Connection extends Activity {
 
 		request.addProperty(P_USER, userName);
 
-		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-
-		envelope.setOutputSoapObject(request);
-
-		transport.call(SOAP_ACTION, envelope);
+		SoapSerializationEnvelope envelope = call(request);
 
 		Vector<Object> response = (Vector<Object>) envelope.getResponse();
 
@@ -271,21 +230,10 @@ public class Connection extends Activity {
 		request.addProperty(P_USER, user);
 		// Create envelope
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		// envelope.dotNet = true;
-		// Set output SOAP object
-		envelope.setOutputSoapObject(request);
-		// Create HTTP call object
-		HttpTransportBasicAuth httpTransport = new HttpTransportBasicAuth(URL,
-				SAP_USER, SAP_PASSWORD);
-
-		httpTransport.debug = true;
-
 		ZEMYEFFORT zEffort = new ZEMYEFFORT();
 		// Involve web service
 
-		httpTransport.call(SOAP_ACTION, envelope);
+		SoapSerializationEnvelope envelope = call(request);
 		// Get the response
 		@SuppressWarnings("unchecked")
 		Vector<SoapObject> response2 = (Vector<SoapObject>) envelope
@@ -402,22 +350,13 @@ public class Connection extends Activity {
 		}
 		request.addProperty("IT_USERS", userslist);
 
-		// Create envelope
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		// envelope.dotNet = true;
-		// Set output SOAP object
-		envelope.setOutputSoapObject(request);
-		// Create HTTP call object
-		HttpTransportBasicAuth httpTrandport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
+		SoapSerializationEnvelope envelope = call(request);
 
 		// httpTrandport.debug = true;
 		Vector<SoapObject> response = null;
 		List<Order> zOrders = null;
 		// Involve web service
 
-		httpTrandport.call(SOAP_ACTION, envelope);
 		response = (Vector<SoapObject>) envelope.getResponse();
 		SoapObject soapOrder = (SoapObject) response.get(0);
 		zOrders = getListOrders(soapOrder);
@@ -552,20 +491,8 @@ public class Connection extends Activity {
 		request.addProperty(P_PROGRAM, idProgram);
 		request.addProperty(P_USER, userName);
 
-		// Create envelope
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		// envelope.dotNet = true;
-		// Set output SOAP object
-		envelope.setOutputSoapObject(request);
-		// Create HTTP call object
-		HttpTransportBasicAuth httpTrandport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
+		SoapSerializationEnvelope envelope = call(request);
 
-		// httpTrandport.debug = true;
-		// Involve web service
-
-		httpTrandport.call(SOAP_ACTION, envelope);
 		Object response = envelope.getResponse();
 		return response;
 	}
@@ -593,20 +520,10 @@ public class Connection extends Activity {
 		request.addProperty(P_PROGRAM, idProgram);
 		request.addProperty(P_USER, userName);
 
-		// Create envelope
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		// envelope.dotNet = true;
-		// Set output SOAP object
-		envelope.setOutputSoapObject(request);
-		// Create HTTP call object
-		HttpTransportBasicAuth httpTransport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-		httpTransport.debug = true;
+		SoapSerializationEnvelope envelope = call(request);
 
 		List<Order> orders = new ArrayList<Order>();
 		// Involve web service
-		httpTransport.call(SOAP_ACTION, envelope);
 		// Get the response
 		@SuppressWarnings("unchecked")
 		Vector<SoapObject> response = (Vector<SoapObject>) envelope
@@ -664,22 +581,9 @@ public class Connection extends Activity {
 
 		request.addProperty(P_USER, userName);
 
-		// Create envelope
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		// envelope.dotNet = true;
-		// Set output SOAP object
-		envelope.setOutputSoapObject(request);
-		// Create HTTP call object
-		HttpTransportBasicAuth httpTransport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-		httpTransport.debug = true;
+		SoapSerializationEnvelope envelope = call(request);
 
 		List<Schedule> scheduleList = new ArrayList<Schedule>();
-
-		// Involve web service
-
-		httpTransport.call(SOAP_ACTION, envelope);
 
 		// Get the response
 		@SuppressWarnings("unchecked")
@@ -742,22 +646,11 @@ public class Connection extends Activity {
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_ORDER_DETAIL);
 
 		request.addProperty(P_ORDER_NUMBER, aufnr);
-		// Create envelope
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		// envelope.dotNet = true;
-		// Set output SOAP object
-		envelope.setOutputSoapObject(request);
-		// Create HTTP call object
-		HttpTransportBasicAuth httpTransport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-
-		httpTransport.debug = true;
+		SoapSerializationEnvelope envelope = call(request);
 
 		OrderDetails zOrder = new OrderDetails();
-		// Involve web service
-		httpTransport.call(SOAP_ACTION, envelope);
+
 		// Get the response
 		@SuppressWarnings("unchecked")
 		Vector<SoapObject> response = (Vector<SoapObject>) envelope
@@ -957,7 +850,7 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param UserName
+	 * @param userName
 	 *            User name
 	 * @param year
 	 *            Year Program
@@ -969,22 +862,14 @@ public class Connection extends Activity {
 	 * @throws HttpResponseException
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Visit> getVisitList(String UserName, String id)
+	public List<Visit> getVisitList(String userName, String id)
 			throws HttpResponseException, IOException, XmlPullParserException {
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_VISIT_LIST);
 
 		request.addProperty(P_PROGRAM, id);
-		request.addProperty(P_USER, UserName);
+		request.addProperty(P_USER, userName);
 
-		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-
-		envelope.setOutputSoapObject(request);
-
-		transport.call(SOAP_ACTION, envelope);
+		SoapSerializationEnvelope envelope = call(request);
 
 		Vector<SoapObject> response = (Vector<SoapObject>) envelope
 				.getResponse();
@@ -994,6 +879,11 @@ public class Connection extends Activity {
 		dbManager.insertVisits(visitList);
 
 		visitList = dbManager.getVisits();
+
+		for (Visit visit : visitList) {
+			visit.setUSER(userName);
+			getVisitDetail(visit);
+		}
 
 		return visitList;
 	}
@@ -1054,15 +944,7 @@ public class Connection extends Activity {
 		request.addProperty(P_USER, visit.getUSER());
 		request.addProperty(TINI, visit.getTINI() == 1 ? "X" : "");
 
-		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-
-		envelope.setOutputSoapObject(request);
-
-		transport.call(SOAP_ACTION, envelope);
+		SoapSerializationEnvelope envelope = call(request);
 
 		@SuppressWarnings("unchecked")
 		Vector<Object> response = (Vector<Object>) envelope.getResponse();
@@ -1109,15 +991,7 @@ public class Connection extends Activity {
 		request.addProperty(P_VISIT, visit.getID_VISIT());
 		request.addProperty(Visit.TFIN, visit.getTFIN() == 1 ? "X" : "");
 
-		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-
-		envelope.setOutputSoapObject(request);
-
-		transport.call(SOAP_ACTION, envelope);
+		SoapSerializationEnvelope envelope = call(request);
 
 		SoapObject response = (SoapObject) envelope.getResponse();
 
@@ -1194,7 +1068,7 @@ public class Connection extends Activity {
 
 			confObject.addProperty(Confirmation.ACTIVITY, item.getACTIVITY());
 			confObject.addProperty(Confirmation.ACTUAL_DUR,
-					String.format("%.1f", item.getACTUAL_DUR()));
+					String.format(Locale.US, "%.1f", item.getACTUAL_DUR()));
 			confObject.addProperty(Confirmation.UN_ACT_DUR,
 					item.getUN_ACT_DUR());
 			confObject.addProperty(Confirmation.EXEC_START_DATE,
@@ -1222,22 +1096,9 @@ public class Connection extends Activity {
 		request.addProperty(IT_CONFIRMATION, itConfirmation);
 		request.addProperty(P_ORDER_NUMBER, aufnr);
 
-		// Create envelope
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
-		// envelope.dotNet = true;
-		// Set output SOAP object
-		envelope.setOutputSoapObject(request);
+		SoapSerializationEnvelope envelope = call(request);
 
-		// Create HTTP call object
-		HttpTransportBasicAuth httpTransport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-
-		httpTransport.debug = true;
-
-		httpTransport.call(SOAP_ACTION, envelope);
 		// Get the response
-
 		SoapObject response = (SoapObject) envelope.getResponse();
 		List<Message> errors = getMessageList(response);
 
@@ -1270,16 +1131,10 @@ public class Connection extends Activity {
 		request.addProperty(P_PROGRAM, idProgram);
 		request.addProperty(P_USER, userName);
 
-		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
+		SoapSerializationEnvelope envelope = call(request);
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapSerializationEnvelope.VER11);
-
-		envelope.setOutputSoapObject(request);
 		List<Message> messages = null;
 
-		transport.call(SOAP_ACTION, envelope);
 		SoapObject response = (SoapObject) envelope.getResponse();
 
 		messages = getMessageList(response);
@@ -1310,15 +1165,7 @@ public class Connection extends Activity {
 
 		request.addProperty(P_EQUIPMENT, equnr);
 
-		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapSerializationEnvelope.VER11);
-
-		envelope.setOutputSoapObject(request);
-
-		transport.call(SOAP_ACTION, envelope);
+		SoapSerializationEnvelope envelope = call(request);
 
 		@SuppressWarnings("unchecked")
 		Vector<SoapObject> response = (Vector<SoapObject>) envelope
@@ -1370,7 +1217,8 @@ public class Connection extends Activity {
 			item.addProperty(DESCRIPTION,
 					point.getNotes() == null ? "" : point.getNotes());
 			item.addProperty(POINT, point.getPoint());
-			item.addProperty(ZREAD, "" + point.getRead());
+			item.addProperty(ZREAD,
+					String.format(Locale.US, "%.1f", point.getRead()));
 
 			soapPoints.addProperty(ITEM, item);
 		}
@@ -1378,15 +1226,7 @@ public class Connection extends Activity {
 		request.addProperty(IT_READ_POINTS, soapPoints);
 		request.addProperty(P_USER, userName);
 
-		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
-				SAP_USER, SAP_PASSWORD);
-
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapSerializationEnvelope.VER11);
-
-		envelope.setOutputSoapObject(request);
-
-		transport.call(SOAP_ACTION, envelope);
+		SoapSerializationEnvelope envelope = call(request);
 
 		SoapObject response = (SoapObject) envelope.getResponse();
 		List<Message> messages = getMessageList(response);
@@ -1403,5 +1243,62 @@ public class Connection extends Activity {
 		dbManager.updateMeasurementPoints(points);
 
 		return messages;
+	}
+
+	private SoapSerializationEnvelope call(SoapObject request)
+			throws HttpResponseException, IOException, XmlPullParserException {
+
+		// Create envelope
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+				SoapEnvelope.VER11);
+		envelope.setOutputSoapObject(request);
+		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
+				SAP_USER, SAP_PASSWORD);
+
+		transport.call(SOAP_ACTION, envelope);
+
+		return envelope;
+	}
+
+	public List<VisitLog> getVisitDetail(Visit visit)
+			throws HttpResponseException, IOException, XmlPullParserException {
+
+		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_VISIT_DETAIL);
+
+		request.addProperty(P_PROGRAM, visit.getID_PROGRAM());
+		request.addProperty(P_USER, visit.getUSER());
+		request.addProperty(P_VISIT, visit.getID_VISIT());
+
+		SoapSerializationEnvelope envelope = call(request);
+
+		List<VisitLog> visitLog = new ArrayList<VisitLog>();
+
+		@SuppressWarnings("unchecked")
+		Vector<SoapObject> response = (Vector<SoapObject>) envelope
+				.getResponse();
+
+		SoapObject soapVisitLog = response.get(0);
+
+		int count = soapVisitLog.getPropertyCount();
+
+		for (int i = 0; i < count; i++) {
+			SoapObject item = (SoapObject) soapVisitLog.getProperty(i);
+
+			VisitLog vl = new VisitLog();
+
+			vl.setDate(parseResult(item.getPropertyAsString(VisitLog.DATE)));
+			vl.setHour(parseResult(item.getPropertyAsString(VisitLog.HOUR)));
+			vl.setId_event((long) parseNumericResult(item
+					.getPropertyAsString(VisitLog.ID_EVENT)));
+			vl.setId_visit(visit.getID_VISIT());
+			vl.setText_event(parseResult(item
+					.getPropertyAsString(VisitLog.TEXT_EVENT)));
+
+			visitLog.add(vl);
+		}
+
+		dbManager.insertVisitLog(visitLog);
+
+		return visitLog;
 	}
 }

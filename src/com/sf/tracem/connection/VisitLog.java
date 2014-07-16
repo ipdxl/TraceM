@@ -5,14 +5,14 @@ public class VisitLog {
 	public static final String TABLE_NAME = "VISIT_LOG";
 
 	public static final String CREATE_TABLE = 
-			"CREATE TABLE VISIT_LOG("
-			+ "	ID_VISIT TEXT" 
-			+ "	, ID DATETIME DEFAULT CURRENT_TIMESTAMP"
-			+ "	, ZDATE TEXT" 
-			+ "	, ZHOUR TEXT" 
-			+ "	, ID_EVENT INTEGER"
-			+ "	, TEXT_EVENT" 
-			+ "	, PRIMARY KEY (ID_VISIT,ID)" + ")";
+			"CREATE TABLE VISIT_LOG(" 
+			+ "	ID INTEGER PRIMARY KEY AUTOINCREMENT"
+			+ "	, ID_VISIT TEXT NOT NULL REFERENCES VISIT(ID_VISIT)"
+			+ "	, ZDATE TEXT NOT NULL" 
+			+ "	, ZHOUR TEXT NOT NULL" 
+			+ "	, ID_EVENT INTEGER NOT NULL"
+			+ "	, TEXT_EVENT TEXT"
+			+ ")";
 
 	public static final String ID_VISIT = Visit.ID_VISIT;
 	public static final String DATE = "ZDATE";

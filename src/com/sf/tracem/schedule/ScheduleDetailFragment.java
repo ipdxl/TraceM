@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
@@ -15,7 +14,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -388,7 +386,8 @@ public class ScheduleDetailFragment extends Fragment {
 
 			@Override
 			protected void onPostExecute(List<Message> result) {
-				if (result.size() > 0 && result.get(0).getType() == 'S') {
+				if (result != null && result.size() > 0
+						&& result.get(0).getType() == 'S') {
 					Toast.makeText(
 							getActivity(),
 							getResources().getString(
@@ -434,8 +433,7 @@ public class ScheduleDetailFragment extends Fragment {
 					.setTitle(android.R.string.dialog_alert_title)
 					.setView(view)
 					.setPositiveButton(android.R.string.ok, okListener)
-					.setNegativeButton(android.R.string.cancel, null)
-					.create()
+					.setNegativeButton(android.R.string.cancel, null).create()
 					.show();
 
 		} else {

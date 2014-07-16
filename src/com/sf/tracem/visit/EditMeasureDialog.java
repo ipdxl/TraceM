@@ -3,20 +3,17 @@
  */
 package com.sf.tracem.visit;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sf.tracem.R;
@@ -26,6 +23,7 @@ import com.sf.tracem.connection.MeasurementPoint;
  * @author USER-7
  * 
  */
+@SuppressLint("InflateParams")
 public class EditMeasureDialog extends DialogFragment {
 
 	public static final String TAG = "EDIT_MEASURE_DIALOG";

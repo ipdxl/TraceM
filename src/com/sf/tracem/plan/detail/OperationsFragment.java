@@ -3,6 +3,7 @@ package com.sf.tracem.plan.detail;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -109,6 +109,7 @@ public class OperationsFragment extends Fragment {
 			super(context, R.layout.operation_item, R.id.eqktx, operations);
 		}
 
+		@SuppressLint("ViewHolder")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 

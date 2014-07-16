@@ -39,7 +39,6 @@ import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.login.LoginSharedPreferences;
-import com.sf.tracem.plan.MyJobNavigation;
 
 /**
  * @author USER-7
@@ -51,7 +50,6 @@ public class VisitDetailFragment extends Fragment {
 
 	DBManager dbManager;
 
-	private MyJobNavigation navigation;
 	private Visit visit;
 	private List<Order> orders;
 
@@ -62,7 +60,6 @@ public class VisitDetailFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		navigation = (MyJobNavigation) activity;
 		loginPreferences = activity.getSharedPreferences(
 				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
 	}

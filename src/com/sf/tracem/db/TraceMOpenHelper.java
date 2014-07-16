@@ -18,6 +18,7 @@ import com.sf.tracem.connection.OrderSchedule;
 import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.connection.Visit;
+import com.sf.tracem.connection.VisitLog;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -57,6 +58,7 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 		db.execSQL(Equipment.CREATE_TABLE);
 		db.execSQL(MeasurementPoint.CREATE_TABLE);
 		db.execSQL(Visit.CREATE_TABLE);
+		db.execSQL(VisitLog.CREATE_TABLE);
 
 		for (String trigger : Operation.TRIGGERS) {
 			db.execSQL(trigger);
@@ -67,8 +69,7 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 		for (String trigger : MeasurementPoint.TRIGGERS) {
 			db.execSQL(trigger);
 		}
-		
-		
+
 	}
 
 	/*
@@ -87,23 +88,22 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 	public void clear() {
 		SQLiteDatabase db = getWritableDatabase();
 		db.delete(Menu.TABLE_NAME, null, null);
-		db.delete(Partner.TABLE_NAME, null, null);
-		db.delete(Order.TABLE_NAME, null, null);
-		db.delete(Equipment.TABLE_NAME, null, null);
-		db.delete(Operation.TABLE_NAME, null, null);
-		db.delete(Component.TABLE_NAME, null, null);
-		db.delete(HeaderOrder.TABLE_NAME, null, null);
-		db.delete(Schedule.TABLE_NAME, null, null);
+		db.close();
+		clearData();
 	}
 
 	public void clearData() {
 		SQLiteDatabase db = getWritableDatabase();
-		db.delete(Partner.TABLE_NAME, null, null);
-		db.delete(Order.TABLE_NAME, null, null);
+		db.delete(MeasurementPoint.TABLE_NAME, null, null);
 		db.delete(Equipment.TABLE_NAME, null, null);
 		db.delete(Component.TABLE_NAME, null, null);
 		db.delete(HeaderOrder.TABLE_NAME, null, null);
 		db.delete(Operation.TABLE_NAME, null, null);
+		db.delete(VisitLog.TABLE_NAME, null, null);
+		db.delete(Visit.TABLE_NAME, null, null);
+		db.delete(Order.TABLE_NAME, null, null);
 		db.delete(Schedule.TABLE_NAME, null, null);
+		db.delete(Partner.TABLE_NAME, null, null);
+		db.close();
 	}
 }

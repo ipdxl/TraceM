@@ -2,22 +2,19 @@ package com.sf.tracem.schedule;
 
 import java.util.concurrent.ExecutionException;
 
-import com.sf.tracem.R;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
-import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import com.sf.tracem.R;
 
 public class WarningScheduleDialog {
 

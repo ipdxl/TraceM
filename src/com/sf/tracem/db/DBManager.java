@@ -28,6 +28,7 @@ import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.connection.TraceMFormater;
 import com.sf.tracem.connection.Visit;
+import com.sf.tracem.connection.VisitLog;
 
 /**
  * 
@@ -851,5 +852,65 @@ public class DBManager {
 		Log.i("Update Measurement point", "" + result);
 		traceMwdb.close();
 
+	}
+
+	public void insertVisitLog(List<VisitLog> visitLog) {
+		traceMwdb = toh.getWritableDatabase();
+		for (VisitLog vl : visitLog) {
+			ContentValues values = getVisitLogValues(vl);
+			traceMwdb.insert(VisitLog.TABLE_NAME, null, values);
+		}
+		traceMwdb.close();
+
+	}
+
+	public List<VisitLog> getVisitLog(long id_visit) {
+		traceMrdb = toh.getReadableDatabase();
+
+		Cursor cursor = traceMrdb.query(VisitLog.TABLE_NAME,
+				VisitLog.COLUMN_NAMES, VisitLog.ID_VISIT + " = ?",
+				new String[] { "" + id_visit }, null, null, null);
+
+		List<VisitLog> visitLog = getVisitLogFrom(cursor);
+
+		traceMrdb.close();
+
+		return visitLog;
+	}
+
+	private List<VisitLog> getVisitLogFrom(Cursor cursor) {
+		List<VisitLog> visitLog = new ArrayList<VisitLog>();
+
+		if (cursor.moveToFirst()) {
+			Map<String, Integer> map = getColumnMap(cursor,
+					VisitLog.COLUMN_NAMES);
+
+			do {
+				VisitLog vl = new VisitLog();
+
+				vl.setDate(cursor.getString(map.get(VisitLog.DATE)));
+				vl.setHour(cursor.getString(map.get(VisitLog.HOUR)));
+				vl.setId_event(cursor.getInt(map.get(VisitLog.ID_EVENT)));
+				vl.setText_event(cursor.getString(map.get(VisitLog.TEXT_EVENT)));
+				vl.setId_visit(cursor.getLong(map.get(VisitLog.ID_VISIT)));
+
+				visitLog.add(vl);
+			} while (cursor.moveToNext());
+
+		}
+
+		return visitLog;
+	}
+
+	private ContentValues getVisitLogValues(VisitLog vl) {
+		ContentValues values = new ContentValues();
+
+		values.put(VisitLog.DATE, vl.getDate());
+		values.put(VisitLog.HOUR, vl.getHour());
+		values.put(VisitLog.ID_EVENT, vl.getId_event());
+		values.put(VisitLog.ID_VISIT, vl.getId_visit());
+		values.put(VisitLog.TEXT_EVENT, vl.getText_event());
+
+		return values;
 	}
 }
