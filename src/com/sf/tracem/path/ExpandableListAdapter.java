@@ -111,8 +111,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 		if (childAdapter[groupPosition] == null) {
 			childAdapter[groupPosition] = new OrderListAdapter(context,
-					R.layout.order_item, R.id.aufnr, Arrays.asList(pathList
-							.get(groupPosition).getOrders()));
+					Arrays.asList(pathList.get(groupPosition).getOrders()));
 		}
 
 		return childAdapter[groupPosition].getView(childPosition, convertView,

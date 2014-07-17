@@ -58,7 +58,7 @@
         android:layout_alignRight="@+id/co_gstrp"
         android:text="Time" />
 
-    <CheckBox
+    <TextView
         android:id="@+id/order_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -3,8 +3,6 @@
  */
 package com.sf.tracem.plan;
 
-import java.util.Calendar;
-
 import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -22,8 +20,8 @@ import com.sf.tracem.login.LoginSharedPreferences;
 import com.sf.tracem.path.MyPathFragment;
 import com.sf.tracem.plan.detail.OrderDetailFragment;
 import com.sf.tracem.plan.menu.MyJobMenuFragment;
-import com.sf.tracem.schedule.SchedulesFragment;
 import com.sf.tracem.schedule.ScheduleDetailFragment;
+import com.sf.tracem.schedule.SchedulesFragment;
 import com.sf.tracem.visit.VisitDetailFragment;
 import com.sf.tracem.visit.VisitListFragment;
 
@@ -60,7 +58,8 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		sharedPreferences = getSharedPreferences(
 				LoginSharedPreferences.LOGIN_PREFERENCES, MODE_PRIVATE);
 
-		loginName = sharedPreferences.getString(LoginSharedPreferences.USERNAME, null);
+		loginName = sharedPreferences.getString(
+				LoginSharedPreferences.USERNAME, null);
 
 		if (loginName != null) {
 			mjmf = new MyJobMenuFragment();
@@ -213,8 +212,8 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 				SchedulesFragment.TAG);
 
 		Bundle args = new Bundle();
-		args.putString("USER",
-				loginPreferences.getString(LoginSharedPreferences.USERNAME, null));
+		args.putString("USER", loginPreferences.getString(
+				LoginSharedPreferences.USERNAME, null));
 		mpf.setArguments(args);
 
 		ft.commit();
@@ -229,23 +228,6 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		if (mpf == null) {
 			mpf = new MyPlanFragment();
 			Bundle args = new Bundle();
-			Calendar calendar = Calendar.getInstance();
-			String day = "" + calendar.get(Calendar.DAY_OF_MONTH);
-			if (day.length() == 1) {
-				day = "0" + day;
-			}
-			String month = "" + (calendar.get(Calendar.MONTH) + 1);
-			if (month.length() == 1) {
-				month = "0" + month;
-			}
-
-			String year = "" + calendar.get(Calendar.YEAR);
-			args.putString("DATE_HIGH",
-					String.format("%s/%s/%s", day, month, year));
-			args.putString(
-					"DATE_LOW",
-					String.format("%s/%s/%s", day, month,
-							calendar.get(Calendar.YEAR) - 7));
 
 			mpf.setArguments(args);
 
@@ -293,7 +275,8 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 	public void onVisitDetail() {
 		ft = fm.beginTransaction();
 		VisitDetailFragment vdf = new VisitDetailFragment();
-		ft.replace(R.id.content_frame, vdf).addToBackStack(VisitDetailFragment.TAG);
+		ft.replace(R.id.content_frame, vdf).addToBackStack(
+				VisitDetailFragment.TAG);
 		ft.commit();
 	}
 

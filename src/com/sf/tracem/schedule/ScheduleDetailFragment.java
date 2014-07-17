@@ -205,8 +205,7 @@ public class ScheduleDetailFragment extends Fragment {
 		// }
 		// });
 
-		ordersAdapter = new OrderListAdapter(getActivity(),
-				android.R.layout.simple_list_item_1, android.R.id.text1, orders);
+		ordersAdapter = new OrderListAdapter(getActivity(), orders);
 
 		ordersList.setAdapter(ordersAdapter);
 		ordersList.setSelector(R.drawable.list_view_keep_selection);
@@ -348,9 +347,64 @@ public class ScheduleDetailFragment extends Fragment {
 			break;
 		case R.id.delete_plan:
 			deleteSchedule();
+		case R.id.close:
+			closeSchedule();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void closeSchedule() {
+		AsyncTask<String, Integer, List<Message>> closeTask = new AsyncTask<String, Integer, List<Message>>() {
+
+			@Override
+			protected List<Message> doInBackground(String... params) {
+				try {
+					Looper.prepare();
+				} catch (Exception e) {
+				}
+
+				Connection conn = new Connection(getActivity());
+				List<Message> messages = null;
+
+				try {
+					messages = conn.closeSchedule(loginPreferences.getString(
+							LoginSharedPreferences.USERNAME, null), id);
+				} catch (HttpResponseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (XmlPullParserException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				return messages;
+			}
+
+			@Override
+			protected void onPostExecute(List<Message> result) {
+				if (result != null && result.size() != 0) {
+
+					Toast.makeText(getActivity(), R.string.schedule_closed,
+							Toast.LENGTH_LONG).show();
+
+					getActivity().onBackPressed();
+				} else {
+
+					Toast.makeText(getActivity(),
+							R.string.schedule_closed_error, Toast.LENGTH_LONG)
+							.show();
+				}
+
+			}
+
+		};
+
+		closeTask.execute();
+
 	}
 
 	private void deleteSchedule() {
@@ -495,7 +549,9 @@ public class ScheduleDetailFragment extends Fragment {
 
 				switch (processingType) {
 				case INSERT:
+
 					if (newSchedule != null) {
+
 						messageText = getResources().getString(
 								R.string.create_program_success);
 						lockActionBar();
@@ -506,6 +562,7 @@ public class ScheduleDetailFragment extends Fragment {
 					break;
 				case UPDATE:
 					if (result.size() > 0 && result.get(0).getType() == 'S') {
+
 						messageText = getResources().getString(
 								R.string.update_program_success);
 						lockActionBar();
@@ -515,6 +572,9 @@ public class ScheduleDetailFragment extends Fragment {
 
 				Toast.makeText(getActivity(), messageText, Toast.LENGTH_LONG)
 						.show();
+				if (processingType == UPDATE) {
+					getActivity().onBackPressed();
+				}
 
 			}
 		};
@@ -575,9 +635,7 @@ public class ScheduleDetailFragment extends Fragment {
 
 	private void PopulateView() {
 
-		scheduleAdapter = new OrderListAdapter(getActivity(),
-				android.R.layout.simple_list_item_1, android.R.id.text1,
-				schedule);
+		scheduleAdapter = new OrderListAdapter(getActivity(), schedule);
 
 		scheduleList.setAdapter(scheduleAdapter);
 

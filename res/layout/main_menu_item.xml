@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:orientation="vertical"
     tools:ignore="HardcodedText" >
 
     <TextView
@@ -14,13 +15,13 @@
         android:drawableTop="@drawable/my_job"
         android:gravity="center"
         android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceMedium" >
+        android:textAppearance="?android:attr/textAppearanceSmall" >
     </TextView>
 
     <TextView
         android:id="@+id/id_main_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:text="id"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:visibility="invisible" />

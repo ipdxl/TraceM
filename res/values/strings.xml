@@ -110,5 +110,13 @@
     <string name="visit_closed_error">Visit could not be closed</string>
     <string name="edit">Edit</string>
     <string name="save_schedule_alert">Your schedule does not have 40 hrs or more</string>
+    <string name="in_process">In process</string>
+    <string name="close">Close</string>
+    <string name="schedule_closed_error">Schedule could not be closed</string>
+    <string name="schedule_closed">Schedule closed</string>
+    <string name="closed">Closed</string>
+    <string name="active">Active</string>
+    <string name="created">Created</string>
+    <string name="scan_qr">Scan QR</string>
 
 </resources>

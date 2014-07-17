@@ -98,14 +98,18 @@
         android:text="hh:mm:ss"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <RadioButton
+    <CheckedTextView
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/hfin"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="false"
+        android:layout_centerVertical="false"
+        android:checkMark="?android:attr/listChoiceIndicatorSingle"
         android:checked="false"
-        android:enabled="false" />
+        android:enabled="false"
+        android:gravity="center" />
 
 </RelativeLayout>

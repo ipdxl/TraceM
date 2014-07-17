@@ -176,7 +176,23 @@ public class SchedulesFragment extends Fragment {
 			text1.setText(item.getID_PROGRAM());
 
 			text2 = (TextView) view.findViewById(android.R.id.text2);
-			text2.setText(item.getSTATUS());
+			switch (item.getSTATUS()) {
+			case 1:
+				text2.setText(R.string.created);
+				text2.setTextColor(getResources().getColor(
+						android.R.color.holo_blue_dark));
+				break;
+			case 2:
+				text2.setText(R.string.active);
+				text2.setTextColor(getResources().getColor(
+						android.R.color.holo_green_dark));
+				break;
+			case 3:
+				text2.setText(R.string.closed);
+				text2.setTextColor(getResources().getColor(
+						android.R.color.holo_red_dark));
+				break;
+			}
 
 			return view;
 		}

@@ -70,7 +70,7 @@ public class DBManager {
 				+ OrderSchedule.TABLE_NAME + " INNER JOIN "
 				+ Schedule.TABLE_NAME
 				+ " ON ORDERS_SCHEDULE.ID_PROGRAM = SCHEDULE.ID_PROGRAM"
-				+ " WHERE SCHEDULE.STATUS <> '003') AND " + Order.ORDER_STATUS
+				+ " WHERE SCHEDULE.STATUS <> '3') AND " + Order.ORDER_STATUS
 				+ " <> 1";
 		// "SELECT O.* FROM %S AS O INNER JOIN %S AS OS ON O.%S = OS.%S WHERE OS.%S = ?",
 		// OrdersTable.TABLE_NAME, OrderScheduleTable.TABLE_NAME,
@@ -235,8 +235,7 @@ public class DBManager {
 						.get(Schedule.CREATE_DATE)));
 				item.setID_PROGRAM(cursor.getString(scheduleMap
 						.get(Schedule.ID_PROGRAM)));
-				item.setSTATUS(cursor.getString(scheduleMap
-						.get(Schedule.STATUS)));
+				item.setSTATUS(cursor.getInt(scheduleMap.get(Schedule.STATUS)));
 				schedules.add(item);
 			} while (cursor.moveToNext());
 		}
@@ -354,7 +353,7 @@ public class DBManager {
 
 		Cursor cursor = traceMrdb.query(Schedule.TABLE_NAME,
 				Schedule.COLUMN_NAMES, Schedule.STATUS + " = ?",
-				new String[] { "002" }, null, null, null);
+				new String[] { "2" }, null, null, null);
 
 		String idProgram = null;
 		if (cursor.moveToFirst()) {

@@ -5,16 +5,16 @@ package com.sf.tracem.visit;
 
 import java.util.List;
 
-import com.sf.tracem.R;
-import com.sf.tracem.connection.Visit;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.RadioButton;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
+
+import com.sf.tracem.R;
+import com.sf.tracem.connection.Visit;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -48,7 +48,7 @@ public class VisitListAdapter extends ArrayAdapter<Visit> {
 		TextView ffin = (TextView) view.findViewById(R.id.ffin);
 		TextView hfin = (TextView) view.findViewById(R.id.hfin);
 		CheckBox tfin = (CheckBox) view.findViewById(R.id.tfin);
-		RadioButton status = (RadioButton) view.findViewById(R.id.status);
+		CheckedTextView status = (CheckedTextView) view.findViewById(R.id.status);
 
 		idProgram.setText("" + item.getID_PROGRAM());
 		idVisit.setText("" + item.getID_VISIT());

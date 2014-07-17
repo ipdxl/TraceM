@@ -28,8 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.sf.tracem.R;
@@ -260,12 +260,12 @@ public class VisitListFragment extends Fragment {
 
 	private class OnVisitClickListener implements OnItemClickListener {
 
-		private RadioButton status;
+		private CheckedTextView status;
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			status = (RadioButton) view.findViewById(R.id.status);
+			status = (CheckedTextView) view.findViewById(R.id.status);
 			if (status.isChecked()) {
 				navigation.onVisitDetail();
 			} else {

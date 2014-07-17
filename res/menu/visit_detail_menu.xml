@@ -7,5 +7,10 @@
         android:showAsAction="always"
         android:title="@string/close_visit">
     </item>
+    <item
+        android:id="@+id/scan_qr"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="@string/scan_qr">
+    </item>
 
 </menu>

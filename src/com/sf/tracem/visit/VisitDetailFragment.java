@@ -24,7 +24,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -162,6 +161,7 @@ public class VisitDetailFragment extends Fragment {
 		case R.id.close_visit:
 			closeVisit();
 			break;
+		case R.id.scan_qr:
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -216,9 +216,7 @@ public class VisitDetailFragment extends Fragment {
 											+ visit.getID_VISIT(),
 									Toast.LENGTH_LONG).show();
 
-							getActivity().dispatchKeyEvent(
-									new KeyEvent(KeyEvent.ACTION_DOWN,
-											KeyEvent.KEYCODE_BACK));
+							getActivity().onBackPressed();
 						} else {
 
 							Toast.makeText(

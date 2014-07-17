@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/createProgram"
-        android:icon="@android:drawable/ic_menu_week"
+        android:icon="@android:drawable/ic_input_add"
         android:showAsAction="always"
         android:title="@string/create_program">
     </item>

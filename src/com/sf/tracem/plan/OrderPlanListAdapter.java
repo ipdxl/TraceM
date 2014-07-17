@@ -25,7 +25,7 @@ public class OrderPlanListAdapter extends
 	 */
 	public OrderPlanListAdapter(Context context, int resource,
 			int textViewResourceId, List<Order> orders) {
-		super(context, resource, textViewResourceId, orders);
+		super(context, orders);
 	}
 
 	@Override

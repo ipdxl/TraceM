@@ -14,7 +14,7 @@ public class Schedule implements Serializable {
 
 	private String create_date;
 	private String id_program;
-	private String status;
+	private int status;
 
 	/**
 	 * Program Id
@@ -40,10 +40,8 @@ public class Schedule implements Serializable {
 			ID_PROGRAM, STATUS };
 
 	public static final String CREATE_TABLE = "CREATE TABLE SCHEDULE("
-			+ "ID_PROGRAM INTEGER PRIMARY KEY"
-			+ ", CREATE_DATE TEXT"
-			+ ", STATUS TEXT" 
-			+ ")";
+			+ "ID_PROGRAM INTEGER PRIMARY KEY" + ", CREATE_DATE TEXT"
+			+ ", STATUS INTEGER" + ")";
 
 	/**
 	 * @return the dATE
@@ -62,7 +60,7 @@ public class Schedule implements Serializable {
 	/**
 	 * @return the sTATUS
 	 */
-	public String getSTATUS() {
+	public int getSTATUS() {
 		return status;
 	}
 
@@ -86,7 +84,7 @@ public class Schedule implements Serializable {
 	 * @param sTATUS
 	 *            the sTATUS to set
 	 */
-	public void setSTATUS(String sTATUS) {
+	public void setSTATUS(int sTATUS) {
 		status = sTATUS;
 	}
 

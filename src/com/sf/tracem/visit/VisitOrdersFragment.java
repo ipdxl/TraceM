@@ -53,8 +53,7 @@ public class VisitOrdersFragment extends Fragment {
 		list = (ListView) view.findViewById(android.R.id.list);
 		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-		adapter = new OrderListAdapter(getActivity(), R.layout.order_item,
-				R.id.aufnr, orders);
+		adapter = new OrderListAdapter(getActivity(), orders);
 
 		return view;
 	}

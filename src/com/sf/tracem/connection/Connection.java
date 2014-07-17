@@ -66,6 +66,7 @@ public class Connection extends Activity {
 	private static final String IT_CONFIRMATION = "IT_CONFIRMATION";
 	private static final String Z_PM_AP_SAVE_MEASURE_DOCUEMNT = "Z_PM_AP_SAVE_MEASURE_DOCUEMNT";
 	private static final String Z_PM_AP_GET_VISIT_DETAIL = "Z_PM_AP_GET_VISIT_DETAIL";
+	private static final String Z_PM_AP_CLOSE_SCHEDULE = "Z_PM_AP_CLOSE_SCHEDULE";
 	private Context context;
 	private DBManager dbManager;
 
@@ -620,7 +621,7 @@ public class Connection extends Activity {
 		if (item.getPropertyCount() > 0
 				&& parseResult(item.getPropertyAsString(Schedule.STATUS)) != null) {
 			schedule = new Schedule();
-			schedule.setSTATUS(parseResult(item
+			schedule.setSTATUS((int) parseNumericResult(item
 					.getPropertyAsString(Schedule.STATUS)));
 			schedule.setID_PROGRAM(parseResult(item
 					.getPropertyAsString(Schedule.ID_PROGRAM)));
@@ -1300,5 +1301,22 @@ public class Connection extends Activity {
 		dbManager.insertVisitLog(visitLog);
 
 		return visitLog;
+	}
+
+	public List<Message> closeSchedule(String user, String id)
+			throws HttpResponseException, IOException, XmlPullParserException {
+
+		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_CLOSE_SCHEDULE);
+
+		request.addProperty(P_PROGRAM, id);
+		request.addProperty(P_USER, user);
+
+		SoapSerializationEnvelope envelope = call(request);
+
+		SoapObject response = (SoapObject) envelope.getResponse();
+
+		List<Message> messages = getMessageList(response);
+
+		return messages;
 	}
 }

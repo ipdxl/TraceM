@@ -43,6 +43,8 @@ public class MyPlanFragment extends Fragment {
 
 	public static final String TAG = "MY_PLAN_FRAGMENT";
 
+	public static final String ORDERS = "ORDERS";
+
 	// private TableLayout contentTable;
 	//
 	// private TableRow headerRow, contentRow;
@@ -106,8 +108,7 @@ public class MyPlanFragment extends Fragment {
 		if (savedInstanceState != null) {
 
 			Order[] ordersArray;
-			ordersArray = (Order[]) savedInstanceState
-					.getSerializable("orders");
+			ordersArray = (Order[]) savedInstanceState.getSerializable(ORDERS);
 			orders = new ArrayList<Order>(Arrays.asList(ordersArray));
 		} else {
 			getOrdersFromDB();
@@ -135,7 +136,7 @@ public class MyPlanFragment extends Fragment {
 		Order[] ordersArray = new Order[orders.size()];
 		orders.toArray(ordersArray);
 
-		outState.putSerializable("orders", ordersArray);
+		outState.putSerializable(ORDERS, ordersArray);
 
 		super.onSaveInstanceState(outState);
 	}
