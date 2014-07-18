@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import android.app.ActionBar;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -71,7 +72,6 @@ public class OrderDetailFragment extends Fragment {
 			Bundle savedInstanceState) {
 
 		onRestoreSavedInstanceState(savedInstanceState);
-
 
 		View view = inflater.inflate(R.layout.order_detail, container, false);
 
@@ -161,9 +161,9 @@ public class OrderDetailFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		getActivity().getActionBar().setDisplayShowCustomEnabled(false);
-		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActivity().getActionBar().setHomeButtonEnabled(true);
+		super.onCreateOptionsMenu(menu, inflater);
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		inflater.inflate(R.menu.order_details_menu, menu);
 
@@ -175,7 +175,6 @@ public class OrderDetailFragment extends Fragment {
 		descriptionText.setText(String.format("%s : %s", getArguments()
 				.getString(AUFNR), getArguments().getString(NAME)));
 
-		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override
@@ -184,6 +183,9 @@ public class OrderDetailFragment extends Fragment {
 		switch (item.getItemId()) {
 		case R.id.components:
 			showComponents();
+			break;
+		case android.R.id.home:
+			getActivity().onBackPressed();
 			break;
 
 		default:

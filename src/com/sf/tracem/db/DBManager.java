@@ -912,4 +912,14 @@ public class DBManager {
 
 		return values;
 	}
+
+	public void updateScheduleStatus(String id, int status) {
+		traceMwdb = toh.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(Schedule.STATUS, status);
+
+		traceMwdb.update(Schedule.TABLE_NAME, values, Schedule.ID_PROGRAM
+				+ "= ?", new String[] { id });
+
+	}
 }

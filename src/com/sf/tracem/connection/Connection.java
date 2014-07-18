@@ -1317,6 +1317,14 @@ public class Connection extends Activity {
 
 		List<Message> messages = getMessageList(response);
 
+		for (Message m : messages) {
+			if (m.getType() == 'E') {
+				return messages;
+			}
+		}
+
+		dbManager.updateScheduleStatus(id, 3);
+
 		return messages;
 	}
 }

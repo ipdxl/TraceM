@@ -12,6 +12,7 @@ import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -84,7 +85,7 @@ public class ScheduleDetailFragment extends Fragment {
 	 */
 	public static final String ORDERS = "ORDERS";
 
-	public final static String SCHEDULE_DETAIL = "SCHEDULE_DETAIL";
+	public final static String TAG = "SCHEDULE_DETAIL";
 
 	private ListView ordersList;
 	private ListView scheduleList;
@@ -100,7 +101,7 @@ public class ScheduleDetailFragment extends Fragment {
 	private int year;
 	private int week;
 
-	private MenuItem deletemenu;
+	private MenuItem deleteMenu;
 
 	protected List<Order> oldSchedule;
 
@@ -112,6 +113,8 @@ public class ScheduleDetailFragment extends Fragment {
 	private TextView planHoursText;
 	private float scheduleHours;
 	private TextView scheduleHoursText;
+
+	private MenuItem closeMenu;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -323,18 +326,17 @@ public class ScheduleDetailFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// getActivity().getActionBar().setNavigationMode(
-		// ActionBar.DISPLAY_SHOW_HOME);
-		// getActivity().getActionBar().setNavigationMode(
-		// ActionBar.DISPLAY_HOME_AS_UP);
-		getActivity().getActionBar().setDisplayShowCustomEnabled(false);
-		getActivity().getActionBar().setHomeButtonEnabled(false);
-		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		inflater.inflate(R.menu.schedule_detail_menu, menu);
 
-		deletemenu = menu.findItem(R.id.delete_plan);
-		if (processingType == INSERT)
-			deletemenu.setVisible(false);
+		deleteMenu = menu.findItem(R.id.delete_plan);
+		closeMenu = menu.findItem(R.id.close);
+
+		if (processingType == INSERT) {
+			deleteMenu.setVisible(false);
+			closeMenu.setVisible(false);
+		}
 
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -348,17 +350,20 @@ public class ScheduleDetailFragment extends Fragment {
 		case R.id.delete_plan:
 			deleteSchedule();
 		case R.id.close:
-			closeSchedule();
+			closeSchedule(3);
+			break;
+		case android.R.id.home:
+			getActivity().onBackPressed();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void closeSchedule() {
-		AsyncTask<String, Integer, List<Message>> closeTask = new AsyncTask<String, Integer, List<Message>>() {
+	private void closeSchedule(int status) {
+		AsyncTask<Integer, Integer, List<Message>> closeTask = new AsyncTask<Integer, Integer, List<Message>>() {
 
 			@Override
-			protected List<Message> doInBackground(String... params) {
+			protected List<Message> doInBackground(Integer... params) {
 				try {
 					Looper.prepare();
 				} catch (Exception e) {
@@ -386,16 +391,17 @@ public class ScheduleDetailFragment extends Fragment {
 
 			@Override
 			protected void onPostExecute(List<Message> result) {
-				if (result != null && result.size() != 0) {
+				if (result != null && result.size() != 0
+						&& result.get(0).getType() != 'E') {
 
-					Toast.makeText(getActivity(), R.string.schedule_closed,
+					Toast.makeText(getActivity(), R.string.schedule_modified,
 							Toast.LENGTH_LONG).show();
 
 					getActivity().onBackPressed();
 				} else {
 
 					Toast.makeText(getActivity(),
-							R.string.schedule_closed_error, Toast.LENGTH_LONG)
+							R.string.schedule_modified_error, Toast.LENGTH_LONG)
 							.show();
 				}
 
@@ -403,7 +409,7 @@ public class ScheduleDetailFragment extends Fragment {
 
 		};
 
-		closeTask.execute();
+		closeTask.execute(status);
 
 	}
 

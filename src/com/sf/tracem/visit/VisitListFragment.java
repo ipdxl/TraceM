@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sf.tracem.R;
@@ -182,6 +183,31 @@ public class VisitListFragment extends Fragment {
 
 	@SuppressLint("InflateParams")
 	private void createVisit() {
+		if (activeIDProgram != null) {
+			showCreateVisitDialog();
+		} else {
+			showNonActiveScheduleAlert();
+		}
+
+	}
+
+	private void showNonActiveScheduleAlert() {
+
+		View view = getActivity().getLayoutInflater().inflate(
+				android.R.layout.simple_list_item_2, null, false);
+		TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+		text1.setText(R.string.non_active_schedule);
+
+		new AlertDialog.Builder(getActivity())
+				.setTitle(android.R.string.dialog_alert_title)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setPositiveButton(android.R.string.ok, null).setView(view)
+				.create().show();
+
+	}
+
+	private void showCreateVisitDialog() {
+
 		visit = new Visit();
 		visit.setID_PROGRAM(activeIDProgram);
 
@@ -255,7 +281,6 @@ public class VisitListFragment extends Fragment {
 				.setPositiveButton(android.R.string.ok, createVisitConfirmation)
 				.setNegativeButton(android.R.string.cancel, null).create();
 		cvd.show();
-
 	}
 
 	private class OnVisitClickListener implements OnItemClickListener {

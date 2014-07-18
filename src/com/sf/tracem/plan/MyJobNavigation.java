@@ -13,7 +13,7 @@ public interface MyJobNavigation {
 
 	void onCreateSchedule(String id);
 
-	void onViewPlans();
+	void onViewSchedules();
 
 	void onViewMyJob();
 

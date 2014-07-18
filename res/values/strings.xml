@@ -59,7 +59,7 @@
     <string name="move_to_plan">Move to plan</string>
     <string name="move_to_orders">Move to orders</string>
     <string name="save">Save</string>
-    <string name="activate_plan">Activate plan</string>
+    <string name="activate_schedule">Activate schedule</string>
     <string name="order_description">Order Description</string>
     <string name="creation_program_error">Unable to create plan</string>
     <string name="planCreated">Plan created</string>
@@ -112,11 +112,12 @@
     <string name="save_schedule_alert">Your schedule does not have 40 hrs or more</string>
     <string name="in_process">In process</string>
     <string name="close">Close</string>
-    <string name="schedule_closed_error">Schedule could not be closed</string>
-    <string name="schedule_closed">Schedule closed</string>
+    <string name="schedule_modified_error">Schedule could not be modified</string>
+    <string name="schedule_modified">Schedule modified</string>
     <string name="closed">Closed</string>
     <string name="active">Active</string>
     <string name="created">Created</string>
     <string name="scan_qr">Scan QR</string>
+    <string name="non_active_schedule">There is not an active schedule</string>
 
 </resources>

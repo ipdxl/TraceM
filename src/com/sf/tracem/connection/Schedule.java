@@ -43,6 +43,12 @@ public class Schedule implements Serializable {
 			+ "ID_PROGRAM INTEGER PRIMARY KEY" + ", CREATE_DATE TEXT"
 			+ ", STATUS INTEGER" + ")";
 
+	public static final String[] TRIGGERS = new String[] { "CREATE TRIGGER update_schedule_status"
+			+ " AFTER UPDATE OF STATUS ON SCHEDULE"
+			+ " WHEN OLD.STATUS = 2 AND NEW.STATUS = 3"
+			+ " BEGIN"
+			+ "	UPDATE SCHEDULE SET STATUS = 2" + "	WHERE STATUS = 1;" + "END" };
+
 	/**
 	 * @return the dATE
 	 */

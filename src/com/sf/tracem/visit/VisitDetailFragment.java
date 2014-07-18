@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutionException;
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -139,10 +140,8 @@ public class VisitDetailFragment extends Fragment {
 		try {
 			orders = visitOrderTask.get();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -152,6 +151,9 @@ public class VisitDetailFragment extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.visit_detail_menu, menu);
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -162,6 +164,10 @@ public class VisitDetailFragment extends Fragment {
 			closeVisit();
 			break;
 		case R.id.scan_qr:
+			break;
+		case android.R.id.home:
+			getActivity().onBackPressed();
+			break;
 		}
 
 		return super.onOptionsItemSelected(item);

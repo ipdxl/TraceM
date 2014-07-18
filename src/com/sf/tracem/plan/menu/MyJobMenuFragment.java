@@ -115,7 +115,7 @@ public class MyJobMenuFragment extends Fragment {
 			navigation.onViewMyJob();
 			break;
 		case 7:
-			navigation.onViewPlans();
+			navigation.onViewSchedules();
 			break;
 		case 8:
 			navigation.onViewMyPath();

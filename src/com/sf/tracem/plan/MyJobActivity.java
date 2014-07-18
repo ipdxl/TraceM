@@ -183,6 +183,7 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		ft.replace(R.id.content_frame, od, OrderDetailFragment.TAG)
 				.addToBackStack(OrderDetailFragment.TAG);
 		ft.commit();
+		mDrawerToggle.setDrawerIndicatorEnabled(false);
 	}
 
 	@Override
@@ -198,18 +199,16 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 			cpf.setArguments(args);
 		}
 
-		ft.replace(R.id.content_frame, cpf,
-				ScheduleDetailFragment.SCHEDULE_DETAIL)
-				.addToBackStack(ScheduleDetailFragment.SCHEDULE_DETAIL)
-				.commit();
+		ft.replace(R.id.content_frame, cpf, ScheduleDetailFragment.TAG)
+				.addToBackStack(ScheduleDetailFragment.TAG).commit();
+		mDrawerToggle.setDrawerIndicatorEnabled(false);
 	}
 
 	@Override
-	public void onViewPlans() {
+	public void onViewSchedules() {
 		ft = fm.beginTransaction();
 		SchedulesFragment mpf = new SchedulesFragment();
-		ft.replace(R.id.content_frame, mpf).addToBackStack(
-				SchedulesFragment.TAG);
+		ft.replace(R.id.content_frame, mpf, SchedulesFragment.TAG);
 
 		Bundle args = new Bundle();
 		args.putString("USER", loginPreferences.getString(
@@ -278,6 +277,7 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		ft.replace(R.id.content_frame, vdf).addToBackStack(
 				VisitDetailFragment.TAG);
 		ft.commit();
+		mDrawerToggle.setDrawerIndicatorEnabled(false);
 	}
 
 	@Override
@@ -292,5 +292,11 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		odf.setArguments(args);
 		ft.replace(R.id.order_detail_frame, odf);
 		ft.commit();
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		mDrawerToggle.setDrawerIndicatorEnabled(true);
 	}
 }

@@ -53,6 +53,7 @@ public class Visit {
 
 	public static final String[] TRIGGERS = new String[] { "CREATE TRIGGER update_visit_status"
 			+ " AFTER INSERT ON VISIT"
+			+ " WHEN NEW.STATUS = 1"
 			+ " BEGIN"
 			+ " 	UPDATE VISIT SET STATUS = 0"
 			+ " 	WHERE ID_VISIT <> NEW.ID_VISIT;" + " END;" };
