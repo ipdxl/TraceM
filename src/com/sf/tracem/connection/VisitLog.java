@@ -4,93 +4,117 @@ public class VisitLog {
 
 	public static final String TABLE_NAME = "VISIT_LOG";
 
-	public static final String CREATE_TABLE = 
-			"CREATE TABLE VISIT_LOG(" 
+	public static final String CREATE_TABLE = "CREATE TABLE VISIT_LOG("
 			+ "	ID INTEGER PRIMARY KEY AUTOINCREMENT"
+			+ " , ID_PROGRAM INTEGER NOT NULL REFERENCES VISIT(ID_PROGRAM) ON UPDATE CASCADE ON DELETE CASCADE"
 			+ "	, ID_VISIT TEXT NOT NULL REFERENCES VISIT(ID_VISIT)"
-			+ "	, ZDATE TEXT NOT NULL" 
-			+ "	, ZHOUR TEXT NOT NULL" 
-			+ "	, ID_EVENT INTEGER NOT NULL"
-			+ "	, TEXT_EVENT TEXT"
-			+ ")";
+			+ "	, ZDATE TEXT NOT NULL" + "	, ZHOUR TEXT NOT NULL"
+			+ "	, ID_EVENT INTEGER NOT NULL" + "	, TEXT_EVENT TEXT" + ")";
 
 	public static final String ID_VISIT = Visit.ID_VISIT;
 	public static final String DATE = "ZDATE";
 	public static final String HOUR = "ZHOUR";
 	public static final String ID_EVENT = "ID_EVENT";
 	public static final String TEXT_EVENT = "TEXT_EVENT";
-	
-	public static final String[] COLUMN_NAMES = new String[]{
-		ID_VISIT
-		,DATE
-		,HOUR
-		,ID_EVENT
-		,TEXT_EVENT
-	};
-	
+	public static final String ID_PROGRAM = Visit.ID_PROGRAM;
+
+	public static final String[] COLUMN_NAMES = new String[] { ID_VISIT, DATE,
+			HOUR, ID_EVENT, TEXT_EVENT, ID_PROGRAM };
+
 	private long id_visit;
 	private String date;
 	private String hour;
 	private long id_event;
 	private String text_event;
+	private int id_program;
+
 	/**
 	 * @return the id_visit
 	 */
 	public long getId_visit() {
 		return id_visit;
 	}
+
 	/**
-	 * @param id_visit the id_visit to set
+	 * @param id_visit
+	 *            the id_visit to set
 	 */
 	public void setId_visit(long id_visit) {
 		this.id_visit = id_visit;
 	}
+
 	/**
 	 * @return the date
 	 */
 	public String getDate() {
 		return date;
 	}
+
 	/**
-	 * @param date the date to set
+	 * @param date
+	 *            the date to set
 	 */
 	public void setDate(String date) {
 		this.date = date;
 	}
+
 	/**
 	 * @return the hour
 	 */
 	public String getHour() {
 		return hour;
 	}
+
 	/**
-	 * @param hour the hour to set
+	 * @param hour
+	 *            the hour to set
 	 */
 	public void setHour(String hour) {
 		this.hour = hour;
 	}
+
 	/**
 	 * @return the id_event
 	 */
 	public long getId_event() {
 		return id_event;
 	}
+
 	/**
-	 * @param id_event the id_event to set
+	 * @param id_event
+	 *            the id_event to set
 	 */
 	public void setId_event(long id_event) {
 		this.id_event = id_event;
 	}
+
 	/**
 	 * @return the text_event
 	 */
 	public String getText_event() {
 		return text_event;
 	}
+
 	/**
-	 * @param text_event the text_event to set
+	 * @param text_event
+	 *            the text_event to set
 	 */
 	public void setText_event(String text_event) {
 		this.text_event = text_event;
+	}
+
+	/**
+	 * @return the id_program
+	 */
+	public int getId_program() {
+		return id_program;
+	}
+
+	/**
+	 * @param id_program
+	 *            the id_program to set
+	 */
+	public void setId_program(int id_program) {
+		this.id_program = id_program;
 	}
 }

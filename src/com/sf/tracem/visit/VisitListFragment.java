@@ -52,7 +52,7 @@ public class VisitListFragment extends Fragment {
 	private List<Visit> visistList;
 	private SharedPreferences loginPreferences;
 	private VisitListAdapter visitAdapter;
-	protected String activeIDProgram;
+	protected int activeIDProgram;
 	protected int year;
 	protected int week;
 	private MyJobNavigation navigation;
@@ -99,9 +99,9 @@ public class VisitListFragment extends Fragment {
 		getVisitsList();
 	}
 
-	private String getActiveSchedule() {
+	private int getActiveSchedule() {
 
-		String id = null;
+		int id = null;
 
 		DBManager dbManager = new DBManager(getActivity());
 
@@ -117,7 +117,7 @@ public class VisitListFragment extends Fragment {
 			@Override
 			protected void onPreExecute() {
 				activeIDProgram = getActiveSchedule();
-				if (activeIDProgram != null) {
+				if (activeIDProgram != 0) {
 					year = Integer.parseInt(activeIDProgram.substring(0, 4));
 					week = Integer.parseInt(activeIDProgram.substring(4));
 				} else {
@@ -183,7 +183,7 @@ public class VisitListFragment extends Fragment {
 
 	@SuppressLint("InflateParams")
 	private void createVisit() {
-		if (activeIDProgram != null) {
+		if (activeIDProgram != 0) {
 			showCreateVisitDialog();
 		} else {
 			showNonActiveScheduleAlert();
@@ -191,6 +191,7 @@ public class VisitListFragment extends Fragment {
 
 	}
 
+	@SuppressLint("InflateParams")
 	private void showNonActiveScheduleAlert() {
 
 		View view = getActivity().getLayoutInflater().inflate(
@@ -297,6 +298,7 @@ public class VisitListFragment extends Fragment {
 				DBManager dbManager = new DBManager(getActivity());
 				logList.clear();
 				logList.addAll(dbManager.getVisitLog(visistList.get(position)
+						.getID_PROGRAM(), visistList.get(position)
 						.getID_VISIT()));
 				logAdapter.notifyDataSetChanged();
 			}

@@ -9,7 +9,7 @@ package com.sf.tracem.connection;
  */
 public class Visit {
 	private long id_visit;
-	private String id_program;
+	private int id_program;
 	private String user;
 	private String fini;
 	private String hini;
@@ -76,7 +76,7 @@ public class Visit {
 	/**
 	 * @return the iD_PROGRAM
 	 */
-	public String getID_PROGRAM() {
+	public int getID_PROGRAM() {
 		return id_program;
 	}
 
@@ -84,7 +84,7 @@ public class Visit {
 	 * @param iD_PROGRAM
 	 *            the iD_PROGRAM to set
 	 */
-	public void setID_PROGRAM(String iD_PROGRAM) {
+	public void setID_PROGRAM(int iD_PROGRAM) {
 		id_program = iD_PROGRAM;
 	}
 
