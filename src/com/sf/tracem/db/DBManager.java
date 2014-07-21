@@ -262,10 +262,10 @@ public class DBManager {
 
 	}
 
-	public List<Order> getScheduleDetail(int activeID) {
+	public List<Order> getScheduleDetail(String id) {
 
-		int year = getYeat("" + activeID);
-		int week = getWeek("" + activeID);
+		int year = getYeat(id);
+		int week = getWeek(id);
 
 		return getScheduleDetail(year, week);
 	}
@@ -347,7 +347,7 @@ public class DBManager {
 				new String[] { id });
 	}
 
-	public int getActiveSchedule() {
+	public String getActiveSchedule() {
 
 		traceMrdb = toh.getReadableDatabase();
 
@@ -355,9 +355,9 @@ public class DBManager {
 				Schedule.COLUMN_NAMES, Schedule.STATUS + " = ?",
 				new String[] { "2" }, null, null, null);
 
-		int idProgram = 0;
+		String idProgram = null;
 		if (cursor.moveToFirst()) {
-			idProgram = cursor.getInt(1);
+			idProgram = cursor.getString(1);
 		}
 
 		return idProgram;
@@ -727,7 +727,7 @@ public class DBManager {
 				visit.setFINI(cursor.getString(map.get(Visit.FINI)));
 				visit.setHFIN(cursor.getString(map.get(Visit.HFIN)));
 				visit.setHINI(cursor.getString(map.get(Visit.HINI)));
-				visit.setID_PROGRAM(cursor.getInt(map.get(Visit.ID_PROGRAM)));
+				visit.setID_PROGRAM(cursor.getString(map.get(Visit.ID_PROGRAM)));
 				visit.setID_VISIT(cursor.getInt(map.get(Visit.ID_VISIT)));
 				visit.setSTATUS((byte) cursor.getInt(map.get(Visit.STATUS)));
 				visit.setTFIN((byte) cursor.getInt(map.get(Visit.TFIN)));
@@ -771,7 +771,7 @@ public class DBManager {
 		List<Order> orders = null;
 		List<Order> uncompleteorders = new ArrayList<Order>();
 
-		int activeID = getActiveSchedule();
+		String activeID = getActiveSchedule();
 
 		orders = getScheduleDetail(activeID);
 
@@ -786,9 +786,10 @@ public class DBManager {
 	public void updateViisit(Visit visit) {
 		traceMwdb = toh.getWritableDatabase();
 		ContentValues values = getVisitValues(visit);
-		traceMwdb.update(Visit.TABLE_NAME, values, Visit.ID_PROGRAM
-				+ " = ? AND " + Visit.ID_VISIT + " = ?", new String[] {
-				"" + visit.getID_PROGRAM(), "" + visit.getID_VISIT() });
+		traceMwdb
+				.update(Visit.TABLE_NAME, values, Visit.ID_PROGRAM
+						+ " = ? AND " + Visit.ID_VISIT + " = ?", new String[] {
+						visit.getID_PROGRAM(), "" + visit.getID_VISIT() });
 	}
 
 	public UncommitedChanges getUncommitedChanges() {
@@ -862,13 +863,12 @@ public class DBManager {
 
 	}
 
-	public List<VisitLog> getVisitLog(int id_program, long id_visit) {
+	public List<VisitLog> getVisitLog(long id_visit) {
 		traceMrdb = toh.getReadableDatabase();
 
 		Cursor cursor = traceMrdb.query(VisitLog.TABLE_NAME,
-				VisitLog.COLUMN_NAMES, Visit.ID_PROGRAM + " = ? AND "
-						+ VisitLog.ID_VISIT + " = ?", new String[] {
-						"" + id_program, "" + id_visit }, null, null, null);
+				VisitLog.COLUMN_NAMES, VisitLog.ID_VISIT + " = ?",
+				new String[] { "" + id_visit }, null, null, null);
 
 		List<VisitLog> visitLog = getVisitLogFrom(cursor);
 
@@ -892,7 +892,6 @@ public class DBManager {
 				vl.setId_event(cursor.getInt(map.get(VisitLog.ID_EVENT)));
 				vl.setText_event(cursor.getString(map.get(VisitLog.TEXT_EVENT)));
 				vl.setId_visit(cursor.getLong(map.get(VisitLog.ID_VISIT)));
-				vl.setId_program(cursor.getInt(map.get(VisitLog.ID_PROGRAM)));
 
 				visitLog.add(vl);
 			} while (cursor.moveToNext());
@@ -910,7 +909,6 @@ public class DBManager {
 		values.put(VisitLog.ID_EVENT, vl.getId_event());
 		values.put(VisitLog.ID_VISIT, vl.getId_visit());
 		values.put(VisitLog.TEXT_EVENT, vl.getText_event());
-		values.put(VisitLog.ID_PROGRAM, vl.getId_program());
 
 		return values;
 	}

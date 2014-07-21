@@ -904,7 +904,7 @@ public class Connection extends Activity {
 			Visit visit = new Visit();
 			visit.setID_VISIT((long) parseNumericResult(item
 					.getPropertyAsString(Visit.ID_VISIT)));
-			visit.setID_PROGRAM((int) parseNumericResult(item
+			visit.setID_PROGRAM(parseResult(item
 					.getPropertyAsString(Visit.ID_PROGRAM)));
 			visit.setUSER(parseResult(item.getPropertyAsString("ZUSER")));
 			visit.setFINI(parseResult(item.getPropertyAsString(Visit.FINI)));
@@ -1294,7 +1294,6 @@ public class Connection extends Activity {
 			vl.setId_visit(visit.getID_VISIT());
 			vl.setText_event(parseResult(item
 					.getPropertyAsString(VisitLog.TEXT_EVENT)));
-			vl.setId_program(visit.getID_PROGRAM());
 
 			visitLog.add(vl);
 		}
