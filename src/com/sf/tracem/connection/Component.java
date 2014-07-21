@@ -5,7 +5,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Component implements Serializable {
 	private String material;
-	private String activity;
+	private int activity;
 	private String matl_desc;
 	private String requirement_quantity;
 	private String requirement_quantity_unit;
@@ -45,22 +45,14 @@ public class Component implements Serializable {
 	 */
 	public final static String CREATE_TABLE = "CREATE TABLE COMPONENT (\n"
 			+ "	  AUFNR 	TEXT REFERENCES ORDERS(AUFNR) ON UPDATE CASCADE ON DELETE CASCADE \n"
-			+ "	, ACTIVITY 	TEXT\n"  
-			+ "	, MATERIAL 	TEXT\n"
-			+ "	, MATL_DESC TEXT\n"
-			+ "	, REQUIREMENT_QUANTITY 		REAL\n"
+			+ "	, ACTIVITY 	INTEGER\n" + "	, MATERIAL 	TEXT\n"
+			+ "	, MATL_DESC TEXT\n" + "	, REQUIREMENT_QUANTITY 		REAL\n"
 			+ "	, REQUIREMENT_QUANTITY_UNIT TEXT\n"
-			+ "	, PRIMARY KEY (AUFNR,ACTIVITY,MATERIAL)\n" 
-			+ ");";
+			+ "	, PRIMARY KEY (AUFNR,ACTIVITY,MATERIAL)\n" + ");";
 
-	public static final String[] COLUMN_NAMES = new String[] { 
-		AUFNR
-		, ACTIVITY
-		, MATERIAL
-		, MATL_DESC
-		, REQUIREMENT_QUANTITY
-		, REQUIREMENT_QUANTITY_UNIT 
-		};
+	public static final String[] COLUMN_NAMES = new String[] { AUFNR, ACTIVITY,
+			MATERIAL, MATL_DESC, REQUIREMENT_QUANTITY,
+			REQUIREMENT_QUANTITY_UNIT };
 
 	public String getMATERIAL() {
 		return material;
@@ -70,11 +62,11 @@ public class Component implements Serializable {
 		material = mATERIAL;
 	}
 
-	public String getACTIVITY() {
+	public int getACTIVITY() {
 		return activity;
 	}
 
-	public void setACTIVITY(String aCTIVITY) {
+	public void setACTIVITY(int aCTIVITY) {
 		activity = aCTIVITY;
 	}
 

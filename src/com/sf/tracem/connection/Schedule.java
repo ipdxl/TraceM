@@ -40,7 +40,7 @@ public class Schedule implements Serializable {
 			ID_PROGRAM, STATUS };
 
 	public static final String CREATE_TABLE = "CREATE TABLE SCHEDULE("
-			+ "ID_PROGRAM INTEGER PRIMARY KEY" + ", CREATE_DATE TEXT"
+			+ "ID_PROGRAM TEXT PRIMARY KEY" + ", CREATE_DATE TEXT"
 			+ ", STATUS INTEGER" + ")";
 
 	public static final String[] TRIGGERS = new String[] { "CREATE TRIGGER update_schedule_status"

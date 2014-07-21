@@ -43,7 +43,7 @@ public class ComponentsAdapter extends ArrayAdapter<Component> {
 		Component component = getItem(position);
 
 		matnr.setText(component.getMATERIAL());
-		activity.setText(component.getACTIVITY());
+		activity.setText("" + component.getACTIVITY());
 		maktx.setText(component.getMATL_DESC());
 		menge.setText(component.getREQUIREMENT_QUANTITY());
 		meins.setText(component.getREQUIREMENT_QUANTITY_UNIT());

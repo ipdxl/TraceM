@@ -191,6 +191,7 @@ public class VisitListFragment extends Fragment {
 
 	}
 
+	@SuppressLint("InflateParams")
 	private void showNonActiveScheduleAlert() {
 
 		View view = getActivity().getLayoutInflater().inflate(
@@ -259,6 +260,9 @@ public class VisitListFragment extends Fragment {
 									getResources().getString(
 											R.string.visit_created)
 											+ visit, Toast.LENGTH_LONG).show();
+
+							getVisitsList();
+
 						} else {
 
 							Toast.makeText(
@@ -296,8 +300,7 @@ public class VisitListFragment extends Fragment {
 			} else {
 				DBManager dbManager = new DBManager(getActivity());
 				logList.clear();
-				logList.addAll(dbManager.getVisitLog(visistList.get(position)
-						.getID_VISIT()));
+				logList.addAll(dbManager.getVisitLog(visistList.get(position)));
 				logAdapter.notifyDataSetChanged();
 			}
 		}

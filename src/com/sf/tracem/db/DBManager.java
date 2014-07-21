@@ -7,6 +7,7 @@ package com.sf.tracem.db;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import android.content.ContentValues;
@@ -482,7 +483,7 @@ public class DBManager {
 				Component component = new Component();
 
 				try {
-					component.setACTIVITY(cursor.getString(map
+					component.setACTIVITY(cursor.getInt(map
 							.get(Component.ACTIVITY)));
 					component.setMATERIAL(cursor.getString(map
 							.get(Component.MATERIAL)));
@@ -863,12 +864,16 @@ public class DBManager {
 
 	}
 
-	public List<VisitLog> getVisitLog(long id_visit) {
+	public List<VisitLog> getVisitLog(Visit visit) {
 		traceMrdb = toh.getReadableDatabase();
 
-		Cursor cursor = traceMrdb.query(VisitLog.TABLE_NAME,
-				VisitLog.COLUMN_NAMES, VisitLog.ID_VISIT + " = ?",
-				new String[] { "" + id_visit }, null, null, null);
+		Cursor cursor = traceMrdb
+				.query(VisitLog.TABLE_NAME,
+						VisitLog.COLUMN_NAMES,
+						String.format(Locale.US, "%S = ? AND %S = ?",
+								VisitLog.ID_PROGRAM, VisitLog.ID_VISIT),
+						new String[] { visit.getID_PROGRAM(),
+								"" + visit.getID_VISIT() }, null, null, null);
 
 		List<VisitLog> visitLog = getVisitLogFrom(cursor);
 
@@ -892,6 +897,7 @@ public class DBManager {
 				vl.setId_event(cursor.getInt(map.get(VisitLog.ID_EVENT)));
 				vl.setText_event(cursor.getString(map.get(VisitLog.TEXT_EVENT)));
 				vl.setId_visit(cursor.getLong(map.get(VisitLog.ID_VISIT)));
+				vl.setId_program(cursor.getString(map.get(VisitLog.ID_PROGRAM)));
 
 				visitLog.add(vl);
 			} while (cursor.moveToNext());
@@ -909,6 +915,7 @@ public class DBManager {
 		values.put(VisitLog.ID_EVENT, vl.getId_event());
 		values.put(VisitLog.ID_VISIT, vl.getId_visit());
 		values.put(VisitLog.TEXT_EVENT, vl.getText_event());
+		values.put(VisitLog.ID_PROGRAM, vl.getId_program());
 
 		return values;
 	}

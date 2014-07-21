@@ -8,30 +8,31 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="8dp"
-        android:text="date" />
-
-    <TextView
-        android:id="@+id/text_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_toLeftOf="@+id/hour"
-        android:text="TextView" />
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="date"
+        android:textColor="@android:color/secondary_text_light" />
 
     <TextView
         android:id="@+id/hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/date"
-        android:layout_alignRight="@+id/date"
-        android:layout_below="@+id/date"
-        android:text="hour" />
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/date"
+        android:paddingRight="8dp"
+        android:text="hour"
+        android:textColor="@android:color/secondary_text_light" />
+
+    <TextView
+        android:id="@+id/text_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/hour"
+        android:text="TextView"
+        android:textColor="@android:color/primary_text_light" />
 
 </RelativeLayout>

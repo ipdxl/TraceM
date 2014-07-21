@@ -194,20 +194,6 @@ public class ScheduleDetailFragment extends Fragment {
 		planHoursText = (TextView) view.findViewById(R.id.hours_plan);
 		scheduleHoursText = (TextView) view.findViewById(R.id.hours_schedule);
 
-		// ordersList.setOnItemLongClickListener(new OnItemLongClickListener() {
-		//
-		// @Override
-		// public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-		// int position, long arg3) {
-		// Order value = orders.get(position);
-		// orders.remove(position);
-		// schedule.add(value);
-		// scheduleAdapter.notifyDataSetChanged();
-		// ordersAdapter.notifyDataSetChanged();
-		// return false;
-		// }
-		// });
-
 		ordersAdapter = new OrderListAdapter(getActivity(), orders);
 
 		ordersList.setAdapter(ordersAdapter);

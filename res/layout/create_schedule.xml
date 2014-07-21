@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/schedule"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@android:color/background_light"
@@ -19,17 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/weekNumberSpinner" />
-
-    <TextView
-        android:id="@+id/mycheduleJobText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/yearSpinner"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="1dp"
-        android:layout_marginLeft="3dp"
-        android:layout_marginTop="1dp"
-        android:text="@string/my_schedule" />
 
     <LinearLayout
         android:id="@+id/directionLinearLayout"
@@ -61,7 +51,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/hours_plan_text"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/mycheduleJobText"
+        android:layout_below="@+id/yearSpinner"
         android:layout_toLeftOf="@+id/directionLinearLayout"
         android:choiceMode="singleChoice" >
     </ListView>
@@ -77,25 +67,6 @@
         android:layout_toRightOf="@+id/directionLinearLayout"
         android:choiceMode="singleChoice" >
     </ListView>
-
-    <TextView
-        android:id="@+id/hours_plan_text"
-        style="@style/total_hours_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/directionLinearLayout"
-        android:text="@string/hours"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/hours_plan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/hours_plan_text"
-        android:layout_toLeftOf="@+id/hours_plan_text"
-        android:text="0"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/hours_schedule_text"
@@ -116,6 +87,47 @@
         android:layout_alignBottom="@+id/hours_schedule_text"
         android:layout_alignLeft="@+id/planList"
         android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/plan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/hours_plan_text"
+        android:layout_alignBottom="@+id/hours_plan_text"
+        android:layout_alignRight="@+id/orderList"
+        android:text="@string/plan"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/hours_plan_text"
+        style="@style/total_hours_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="14dp"
+        android:layout_toLeftOf="@+id/plan"
+        android:text="@string/hours"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/hours_plan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/hours_plan_text"
+        android:layout_alignBottom="@+id/hours_plan_text"
+        android:layout_toLeftOf="@+id/hours_plan_text"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/hours_schedule_text"
+        android:layout_alignBottom="@+id/hours_schedule_text"
+        android:layout_toRightOf="@+id/hours_schedule_text"
+        android:text="@string/schedule"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

@@ -109,7 +109,6 @@
         android:layout_centerVertical="false"
         android:checkMark="?android:attr/listChoiceIndicatorSingle"
         android:checked="false"
-        android:enabled="false"
         android:gravity="center" />
 
 </RelativeLayout>

@@ -6,8 +6,10 @@ package com.sf.tracem.plan.detail;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -20,8 +22,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
-
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Component;
 import com.sf.tracem.connection.Equipment;
@@ -195,15 +197,26 @@ public class OrderDetailFragment extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 
+	@SuppressLint("InflateParams")
 	private void showComponents() {
 
-		ComponentsDialog compDialog = new ComponentsDialog();
-		Bundle args = new Bundle();
-		args.putSerializable(ComponentsDialog.COMPONENTS,
-				(ArrayList<Component>) orderDetails.getComponents());
-		compDialog.setArguments(args);
+		LayoutInflater inflater = LayoutInflater.from(getActivity());
 
-		compDialog.show(getFragmentManager(), ComponentsDialog.COMPONENTS);
+		View view = inflater
+				.inflate(android.R.layout.list_content, null, false);
+		ListView list = (ListView) view.findViewById(android.R.id.list);
+
+		ComponentsAdapter ca = new ComponentsAdapter(getActivity(),
+				orderDetails.getComponents());
+
+		list = (ListView) view.findViewById(android.R.id.list);
+		list.setAdapter(ca);
+
+		new AlertDialog.Builder(getActivity())
+				.setPositiveButton(android.R.string.ok, null)
+				.setTitle(R.string.components)
+				.setIcon(android.R.drawable.ic_dialog_info).setView(view)
+				.create().show();
 
 	}
 

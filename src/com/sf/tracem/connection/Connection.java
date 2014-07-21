@@ -832,7 +832,7 @@ public class Connection extends Activity {
 			SoapObject item = (SoapObject) soapComponents.getProperty(i);
 			Component component = new Component();
 
-			component.setACTIVITY(parseResult(item.getProperty(
+			component.setACTIVITY((int) parseNumericResult(item.getProperty(
 					Operation.ACTIVITY).toString()));
 			component.setMATERIAL(parseResult(item.getProperty(
 					Component.MATERIAL).toString()));
@@ -857,7 +857,7 @@ public class Connection extends Activity {
 	 *            Year Program
 	 * @param week
 	 *            Week program
-	 * @return A list of Visists for the passed program
+	 * @return A list of Visits for the passed program
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 * @throws HttpResponseException
@@ -878,8 +878,6 @@ public class Connection extends Activity {
 		List<Visit> visitList = getVisits(response.get(1));
 
 		dbManager.insertVisits(visitList);
-
-		visitList = dbManager.getVisits();
 
 		for (Visit visit : visitList) {
 			visit.setUSER(userName);
@@ -1294,6 +1292,8 @@ public class Connection extends Activity {
 			vl.setId_visit(visit.getID_VISIT());
 			vl.setText_event(parseResult(item
 					.getPropertyAsString(VisitLog.TEXT_EVENT)));
+
+			vl.setId_program(visit.getID_PROGRAM());
 
 			visitLog.add(vl);
 		}

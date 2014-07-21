@@ -61,8 +61,8 @@
     <string name="save">Save</string>
     <string name="activate_schedule">Activate schedule</string>
     <string name="order_description">Order Description</string>
-    <string name="creation_program_error">Unable to create plan</string>
-    <string name="planCreated">Plan created</string>
+    <string name="creation_program_error">Unable to create schedule</string>
+    <string name="schedule_created">Schedule created</string>
     <string name="welcome">Welcome</string>
     <string name="incorrect_login">User does not exist</string>
     <string name="path_locations">Path locations</string>
@@ -119,5 +119,8 @@
     <string name="created">Created</string>
     <string name="scan_qr">Scan QR</string>
     <string name="non_active_schedule">There is not an active schedule</string>
+    <string name="move">Move</string>
+    <string name="schedule">Schedule</string>
+    <string name="plan">Plan</string>
 
 </resources>
