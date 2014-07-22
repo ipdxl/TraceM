@@ -3,18 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="8dp"
     android:showDividers="none" >
 
     <TextView
         android:id="@+id/point"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
         android:text="@string/point" />
 
     <TextView
         android:id="@+id/comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
         android:text="@string/description"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -30,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
+            android:paddingLeft="8dp"
             android:text="@string/read" />
 
         <TextView
@@ -43,6 +47,7 @@
         android:id="@+id/notes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
         android:text="@string/notes"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 

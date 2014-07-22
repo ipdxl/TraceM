@@ -1,59 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
+    android:layout_margin="8dp"
     tools:ignore="HardcodedText" >
+
+    <TextView
+        android:id="@+id/maktx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="Description"
+        android:textColor="@android:color/primary_text_light_nodisable" />
 
     <TextView
         android:id="@+id/matnr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@+id/maktx"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:text="Material"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/matnr"
-        android:layout_alignBottom="@+id/matnr"
-        android:layout_alignParentRight="true"
-        android:text="Activity"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/secondary_text_light" />
 
     <TextView
         android:id="@+id/meins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/matnr"
+        android:layout_alignParentTop="true"
         android:text="Unit" />
-
-    <TextView
-        android:id="@+id/maktx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/matnr"
-        android:layout_alignParentBottom="true"
-        android:layout_alignTop="@+id/menge"
-        android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@+id/menge"
-        android:text="Description" />
 
     <TextView
         android:id="@+id/menge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/meins"
-        android:layout_alignBottom="@+id/meins"
-        android:layout_marginRight="10dp"
+        android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/meins"
+        android:paddingRight="8dp"
         android:text="QNT" />
+
+    <TextView
+        android:id="@+id/activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/matnr"
+        android:paddingRight="8dp"
+        android:text="Activity"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
