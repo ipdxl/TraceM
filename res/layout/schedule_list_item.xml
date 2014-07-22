@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Order number"
+        android:text="@string/aufnr"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <RadioButton
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/dateVPlan"
         android:layout_alignParentRight="true"
-        android:text="@string/activate_plan" />
+        android:text="@string/activate_schedule" />
 
     <TextView
         android:id="@+id/dateVPlan"

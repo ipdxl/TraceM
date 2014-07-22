@@ -39,10 +39,10 @@
 
     <drawable name="table_divider">#606060</drawable>
 
-    <string name="create_program">Create program</string>
-    <string name="create_program_success">Program created successfully</string>
-    <string name="update_program">update program</string>
-    <string name="update_program_success">Program updated successfully</string>
+    <string name="create_schedule">Create program</string>
+    <string name="create_schedule_success">Program created successfully</string>
+    <string name="update_schedule">update program</string>
+    <string name="update_schedule_success">Program updated successfully</string>
     <string name="filter">Filter</string>
 
     <string-array name="filters">
@@ -61,7 +61,7 @@
     <string name="save">Save</string>
     <string name="activate_schedule">Activate schedule</string>
     <string name="order_description">Order Description</string>
-    <string name="creation_program_error">Unable to create schedule</string>
+    <string name="creation_schedule_error">Unable to create schedule</string>
     <string name="schedule_created">Schedule created</string>
     <string name="welcome">Welcome</string>
     <string name="incorrect_login">User does not exist</string>
@@ -88,7 +88,7 @@
 
     <string name="loading">Loading</string>
     <string name="delete">Delete</string>
-    <string name="update_program_error">Error updating schedule</string>
+    <string name="update_schedule_error">Error updating schedule</string>
     <string name="delete_schedule_success">Schedule deleted</string>
     <string name="delete_schedule_error">Schedule can not be deleted</string>
     <string name="create_visit">Create visit</string>
@@ -122,5 +122,6 @@
     <string name="move">Move</string>
     <string name="schedule">Schedule</string>
     <string name="plan">Plan</string>
+    <string name="manual">Manual</string>
 
 </resources>

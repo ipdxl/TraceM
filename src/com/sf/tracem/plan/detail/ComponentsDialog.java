@@ -3,17 +3,17 @@
  */
 package com.sf.tracem.plan.detail;
 
-import java.util.ArrayList;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
+
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Component;
 
@@ -58,7 +58,6 @@ public class ComponentsDialog extends DialogFragment {
 		return dialog;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public View getView() {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());

@@ -58,14 +58,13 @@
         android:text="yyyy-MM-dd"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <CheckBox
+    <TextView
         android:id="@+id/tini"
         style="?android:attr/textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/comment"
         android:layout_toRightOf="@+id/hini"
-        android:enabled="false"
         android:text="@string/automatic" />
 
     <TextView
@@ -73,18 +72,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tini"
+        android:layout_marginRight="8dp"
         android:layout_toRightOf="@+id/fini"
         android:text="hh:mm:ss"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <CheckBox
+    <TextView
         android:id="@+id/tfin"
         style="?android:attr/textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tini"
         android:layout_below="@+id/tini"
-        android:enabled="false"
         android:text="@string/automatic" />
 
     <TextView

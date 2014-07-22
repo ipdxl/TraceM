@@ -6,10 +6,10 @@ package com.sf.tracem.plan.detail;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -24,8 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.sf.tracem.R;
-import com.sf.tracem.connection.Component;
 import com.sf.tracem.connection.Equipment;
 import com.sf.tracem.connection.Operation;
 import com.sf.tracem.connection.OrderDetails;

@@ -1,86 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">"TraceM"</string>
-    <string name="title_item_detail">"Detalles del artículo"</string>
-    <string name="todo">"TODO"</string>
-    <string name="login">"Acceder"</string>
-    <string name="user">"Usuario"</string>
-    <string name="password">"Contraseña"</string>
-    <string name="my_job">"Mi trabajo"</string>
-    <string name="drawer_close">"Cerrar"</string>
-    <string name="drawer_open">"Abrir"</string>
-    <string name="my_schedule">"Mi Programa"</string>
-    <string name="my_plans">"Mis planes"</string>
-    <string name="my_path">"Mi ruta"</string>
-    <string name="my_visit">"Mi visita"</string>
-    <string name="aufnr">"Número de orden"</string>
-    <string name="aufart">"Tipo de orden"</string>
-    <string name="auftext">"Descripción"</string>
-    <string name="co_gstrp">"Fecha de inicio"</string>
-    <string name="name">"Nombre"</string>
-    <string name="address">"Dirección"</string>
+    <string name="app_name">TraceM</string>
+    <string name="title_item_detail">Detalle</string>
+    <string name="todo">TODO</string>
+    <string name="login">Acceder</string>
+    <string name="user">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="my_job">Mi trabajo</string>
+    <string name="drawer_close">Cerrar</string>
+    <string name="drawer_open">Abrir</string>
+    <string name="my_schedule">MI programa</string>
+    <string name="my_plans">Mis planes</string>
+    <string name="my_path">Mi ruta</string>
+    <string name="my_visit">Mis visitas</string>
+    <string name="aufnr">Número de orden</string>
+    <string name="aufart">Typo</string>
+    <string name="auftext">Descripción</string>
+    <string name="co_gstrp">Fecha inicio</string>
+    <string name="name">Nombre</string>
+    <string name="address">Dirección</string>
 
-    <color name="blue_sf">#850024B0</color>
+    <color name="blue_sf">#779FF7</color>
     <color name="obscure_bg">#8D8C8B</color>
 
     <string-array name="my_job_items">
-        <item>"Proyecto"</item>
-        <item>"Programa"</item>
-        <item>"Ruta"</item>
-        <item>"Visita"</item>
+        <item>Planes</item>
+        <item>Programa</item>
+        <item>Ruta</item>
+        <item>Visita</item>
     </string-array>
     <string-array name="my_job_filter_options">
-        <item>"Abierto"</item>
-        <item>"Cerrado"</item>
-        <item>"En proceso"</item>
-        <item>"Cancelado"</item>
+        <item>Abierto</item>
+        <item>Cerrado</item>
+        <item>En proceso</item>
+        <item>Cancelado</item>
     </string-array>
 
     <drawable name="table_divider">#606060</drawable>
 
-    <string name="create_program">"Crear programa"</string>
-    <string name="filter">"Filtro"</string>
+    <string name="create_schedule">Crear programa</string>
+    <string name="create_schedule_success">Programa creado</string>
+    <string name="update_schedule">Actualizar programa</string>
+    <string name="update_schedule_success">Programa Actualizado</string>
+    <string name="filter">Filtro</string>
 
     <string-array name="filters">
-        <item>"En proceso"</item>
+        <item>En proceso</item>
     </string-array>
 
-    <string name="search">"Buscar"</string>
-    <string name="update">"Actualizar"</string>
-    <string name="equipment">"Equipo"</string>
-    <string name="visit">"Visita"</string>
-    <string name="pick_date">"Fecha de entrega"</string>
-    <string name="date_low">"Fecha inferior"</string>
-    <string name="date_high">"Fecha superior"</string>
-    <string name="move_to_plan">"Mover a plan"</string>
-    <string name="move">"Mover a órdenes"</string>
-    <string name="save">"Guardar"</string>
-    <string name="activate_plan">"Activar el plan"</string>
-    <string name="order_description">"Descripción de orden"</string>
-    <string name="creation_program_error">"No se puede crear el plan"</string>
-    <string name="planCreated">"Plan de creado"</string>
-    <string name="welcome">"Bienvenido"</string>
-    <string name="incorrect_login">"El usuario no existe"</string>
-    <string name="path_locations">"Ubicaciones de ruta"</string>
-    <string name="location">"Ubicación"</string>
-    <string name="add_location">"Añadir locación"</string>
-    <string name="normal_map">"Normal"</string>
-    <string name="satelite_map">"Satelite"</string>
-    <string name="terrain_map">"Suelo"</string>
-    <string name="hybrid_map">"Híbrido"</string>
+    <string name="search">Buscar</string>
+    <string name="update">Actualizar</string>
+    <string name="equipment">Equipo</string>
+    <string name="visit">Vista</string>
+    <string name="pick_date">Seleccionar fecha</string>
+    <string name="date_low">Fecha inicio</string>
+    <string name="date_high">Fecha fin</string>
+    <string name="move_to_plan">Mover a plan</string>
+    <string name="move_to_orders">Mover a ordenes</string>
+    <string name="save">Guardar</string>
+    <string name="activate_schedule">Activar programa</string>
+    <string name="order_description">Descripción de orden</string>
+    <string name="creation_schedule_error">No es posible crear un programa</string>
+    <string name="schedule_created">Schedule created</string>
+    <string name="welcome">Welcome</string>
+    <string name="incorrect_login">User does not exist</string>
+    <string name="path_locations">Path locations</string>
+    <string name="location">Location</string>
+    <string name="add_location">Add location</string>
+    <string name="normal_map">Normal</string>
+    <string name="satelite_map">Satellite</string>
+    <string name="terrain_map">Terrain</string>
+    <string name="hybrid_map">Hybrid</string>
 
     <string-array name="main_menu_titles">
-        <item>"Mi trabajo"</item>
-        <item>"Mi inventario"</item>
-        <item>"Mis compras"</item>
-        <item>"Mi esfuerzo"</item>
-        <item>"Mis notificaciones"</item>
+        <item>Mi trabajo</item>
+        <item>Mi inventario</item>
+        <item>Mis Compras</item>
+        <item>Mi esfuerzo</item>
+        <item>Mis Notificaciones</item>
     </string-array>
 
-    <string name="logout">"Salir"</string>
-    <string name="logout_error">"Error de conexión al salir"</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="logout_error">No se puede reportar el cierre de sesión</string>
 
-    <color name="light_gray">#8F8F8F</color>
+    <color name="light_gray">#D8D8D8</color>
+
     <string name="loading">Cargando</string>
+    <string name="delete">Eliminar</string>
+    <string name="update_schedule_error">No se puede actulizar el programa</string>
+    <string name="delete_schedule_success">Programa eliminado</string>
+    <string name="delete_schedule_error">No se puede eliminar el programa</string>
+    <string name="create_visit">Crear visita</string>
+    <string name="complete">Completo</string>
+    <string name="hours">Horas</string>
+    <string name="components">Componentes</string>
+    <string name="automatic">Automatico</string>
+    <string name="fini">Fecha de cierre</string>
+    <string name="hini">Fecha de apertura</string>
+    <string name="point">Punto</string>
+    <string name="description">Descripción</string>
+    <string name="read">Lectura</string>
+    <string name="unit">Unidad</string>
+    <string name="notes">Notas</string>
+    <string name="create_visit_error">Visita no creada</string>
+    <string name="visit_created">Visita creada con número</string>
+    <string name="close_visit">Cerrar visita</string>
+    <string name="visit_closed">Visita cerrada</string>
+    <string name="visit_closed_error">No se pudo cerrar la visita</string>
+    <string name="edit">Editar</string>
+    <string name="save_schedule_alert">El programa no tiene 40 hrs o más</string>
+    <string name="in_process">En proceso</string>
+    <string name="close">cerrar</string>
+    <string name="schedule_modified_error">No se pudo actualizar el programa</string>
+    <string name="schedule_modified">Programa actualizado</string>
+    <string name="closed">cerrado</string>
+    <string name="active">Activo</string>
+    <string name="created">Creado</string>
+    <string name="scan_qr">Leer QR</string>
+    <string name="non_active_schedule">No hay un programa activo</string>
+    <string name="move">Mover</string>
+    <string name="schedule">Programa</string>
+    <string name="plan">Plan</string>
+    <string name="manual">Manual</string>
 
 </resources>

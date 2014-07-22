@@ -30,7 +30,7 @@
     </item>
     -->
     <item
-        android:id="@+id/refresh_program"
+        android:id="@+id/refresh_schedule"
         android:icon="@android:drawable/stat_notify_sync"
         android:showAsAction="always"
         android:title="@string/update">
@@ -39,7 +39,7 @@
         android:id="@+id/createPlan"
         android:icon="@android:drawable/ic_menu_week"
         android:showAsAction="always"
-        android:title="@string/create_program">
+        android:title="@string/create_schedule">
     </item>
 
 </menu>

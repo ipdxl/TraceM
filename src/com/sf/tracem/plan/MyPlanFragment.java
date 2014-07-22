@@ -157,7 +157,7 @@ public class MyPlanFragment extends Fragment {
 		case R.id.createPlan:
 			navigation.onCreateSchedule(null);
 			break;
-		case R.id.refresh_program:
+		case R.id.refresh_schedule:
 			getOrders();
 			break;
 		}

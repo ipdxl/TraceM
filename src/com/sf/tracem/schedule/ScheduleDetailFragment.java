@@ -533,10 +533,10 @@ public class ScheduleDetailFragment extends Fragment {
 
 				if (processingType == INSERT) {
 					messageText = getResources().getString(
-							R.string.creation_program_error);
+							R.string.creation_schedule_error);
 				} else {
 					messageText = getResources().getString(
-							R.string.update_program_error);
+							R.string.update_schedule_error);
 				}
 
 				switch (processingType) {
@@ -545,7 +545,7 @@ public class ScheduleDetailFragment extends Fragment {
 					if (newSchedule != null) {
 
 						messageText = getResources().getString(
-								R.string.create_program_success);
+								R.string.create_schedule_success);
 						lockActionBar();
 						DBManager dbManager = new DBManager(getActivity());
 						dbManager.insertSchedule(newSchedule);
@@ -556,7 +556,7 @@ public class ScheduleDetailFragment extends Fragment {
 					if (result.size() > 0 && result.get(0).getType() == 'S') {
 
 						messageText = getResources().getString(
-								R.string.update_program_success);
+								R.string.update_schedule_success);
 						lockActionBar();
 					}
 				default:
@@ -575,7 +575,7 @@ public class ScheduleDetailFragment extends Fragment {
 			modifySchedule.execute();
 		} else {
 			Toast.makeText(getActivity(),
-					getResources().getString(R.string.creation_program_error),
+					getResources().getString(R.string.creation_schedule_error),
 					Toast.LENGTH_LONG).show();
 		}
 

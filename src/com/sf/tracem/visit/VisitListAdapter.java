@@ -9,7 +9,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
@@ -44,21 +43,32 @@ public class VisitListAdapter extends ArrayAdapter<Visit> {
 		TextView comment = (TextView) view.findViewById(R.id.comment);
 		TextView fini = (TextView) view.findViewById(R.id.fini);
 		TextView hini = (TextView) view.findViewById(R.id.hini);
-		CheckBox tini = (CheckBox) view.findViewById(R.id.tini);
+		TextView tini = (TextView) view.findViewById(R.id.tini);
 		TextView ffin = (TextView) view.findViewById(R.id.ffin);
 		TextView hfin = (TextView) view.findViewById(R.id.hfin);
-		CheckBox tfin = (CheckBox) view.findViewById(R.id.tfin);
-		CheckedTextView status = (CheckedTextView) view.findViewById(R.id.status);
+		TextView tfin = (TextView) view.findViewById(R.id.tfin);
+		CheckedTextView status = (CheckedTextView) view
+				.findViewById(R.id.status);
 
 		idProgram.setText("" + item.getID_PROGRAM());
 		idVisit.setText("" + item.getID_VISIT());
 		comment.setText(item.getCOMENTARIO());
 		fini.setText(item.getFINI());
 		hini.setText(item.getHINI());
-		tini.setChecked(item.getTINI() == 1 ? true : false);
+		
+		tini.setText(item.getTINI() == 1 ? R.string.automatic : R.string.manual);
+		tini.setTextColor(item.getTINI() == 1 ? getContext().getResources()
+				.getColor(android.R.color.holo_red_dark) : getContext()
+				.getResources().getColor(android.R.color.holo_blue_dark));
+		
 		ffin.setText(item.getFFIN());
 		hfin.setText(item.getHFIN());
-		tfin.setChecked(item.getTFIN() == 1 ? true : false);
+		
+		tfin.setText(item.getTINI() == 1 ? R.string.automatic : R.string.manual);
+		tfin.setTextColor(item.getTINI() == 1 ? getContext().getResources()
+				.getColor(android.R.color.holo_red_dark) : getContext()
+				.getResources().getColor(android.R.color.holo_blue_dark));
+		
 		status.setChecked(item.getSTATUS() == 1 ? true : false);
 
 		return view;
