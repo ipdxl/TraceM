@@ -28,7 +28,7 @@ public class Connection extends Activity {
 	private final static String SAP_USER = "sapuser";
 	private final static String SAP_PASSWORD = "password3";
 	private final static String SOAP_ACTION = "";
-	private final static String MY_EFFORT_WM = "Z_PM_EFFORT";
+	private final static String Z_PM_AP_GET_EFFORT = "Z_PM_AP_GET_EFFORT";
 	private final static String Z_PM_AP_GET_PLAN = "Z_PM_AP_GET_PLAN";
 	private final static String Z_PM_AP_GET_SCHEDULE_DETAIL = "Z_PM_AP_GET_SCHEDULE_DETAIL";
 	private final static String Z_PM_AP_GET_ORDER_DETAIL = "Z_PM_AP_GET_ORDER_DETAIL";
@@ -226,7 +226,7 @@ public class Connection extends Activity {
 	public ZEMYEFFORT getMyEffort(String user) throws Exception {
 
 		// Create request
-		SoapObject request = new SoapObject(NAMESPACE, MY_EFFORT_WM);
+		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_EFFORT);
 
 		request.addProperty(P_USER, user);
 		// Create envelope
@@ -378,6 +378,8 @@ public class Connection extends Activity {
 			String id = schedule.getID_PROGRAM();
 			getScheduleDetail(users[0], id);
 			getVisitList(users[0], id);
+
+			getMyEffort(users, schedule.getID_PROGRAM());
 		}
 
 		return zOrders;
@@ -1326,5 +1328,62 @@ public class Connection extends Activity {
 		dbManager.updateScheduleStatus(id, 3);
 
 		return messages;
+	}
+
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 * @throws HttpResponseException
+	 * @throws Exception
+	 */
+	public void getMyEffort(String[] users, String program)
+			throws HttpResponseException, IOException, XmlPullParserException {
+
+		// Create request
+		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_EFFORT);
+
+		SoapObject userslist = new SoapObject();
+
+		for (String user : users) {
+			SoapObject item = new SoapObject();
+			item.addProperty("ZUSER", user);
+			userslist.addProperty(ITEM, item);
+		}
+		request.addProperty("IT_USER", userslist);
+		request.addProperty("P_PROGRAM", program);
+
+		// Create envelope
+		SoapSerializationEnvelope envelope = call(request);
+
+		// Get the response
+		@SuppressWarnings("unchecked")
+		Vector<Object> response3 = (Vector<Object>) envelope.getResponse();
+
+		@SuppressWarnings("unchecked")
+		Vector<SoapObject> response2 = (Vector<SoapObject>) envelope
+				.getResponse();
+
+		ZEMYEFFORT zEffort = new ZEMYEFFORT();
+
+		SoapObject errorSoap = response2.get(1);
+		List<Message> errors = getMessageList(errorSoap);
+
+		zEffort.setErrors(errors);
+
+		if (errors.size() > 0) {
+			return;
+		}
+
+		zEffort.setCONFIRMADAS(parseResult(response3.get(0).toString()));
+		zEffort.setPCONFIRMADAS(parseResult(response3.get(2).toString()));
+		zEffort.setPENDIENTES(parseResult(response3.get(3).toString()));
+		zEffort.setT_CONFIRMADOS(parseResult(response3.get(4).toString()));
+		zEffort.setT_ESTIMADOS(parseResult(response3.get(5).toString()));
+		zEffort.setTOTAL(parseResult(response3.get(6).toString()));
+
+		dbManager.insertEffort(zEffort, program);
 	}
 }

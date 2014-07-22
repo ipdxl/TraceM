@@ -84,7 +84,8 @@
     <string name="logout">Logout</string>
     <string name="logout_error">Logout connection error</string>
 
-    <color name="light_gray">#D8D8D8</color>
+    <color name="light_gray">#F4F4F4</color>
+    <!-- <color name="light_gray">#F0F0F0</color> -->
 
     <string name="loading">Loading</string>
     <string name="delete">Delete</string>
@@ -122,6 +123,10 @@
     <string name="move">Move</string>
     <string name="schedule">Schedule</string>
     <string name="plan">Plan</string>
-    <string name="manual">Manual</string>
+    <string name="unatended">Unatended</string>
+    <string name="confirmed">Confirmed</string>
+    <string name="schedule_orders">Schedule orders</string>
+    <string name="estimated_time">Estimated Time</string>
+    <string name="confirmed_time">Confirmed Time</string>
 
 </resources>

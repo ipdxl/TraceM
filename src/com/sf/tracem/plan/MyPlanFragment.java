@@ -195,8 +195,6 @@ public class MyPlanFragment extends Fragment {
 
 				} catch (Exception e) {
 					e.printStackTrace();
-				} finally {
-					Looper.myLooper().quit();
 				}
 				return orders;
 			}

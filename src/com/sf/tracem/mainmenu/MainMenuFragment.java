@@ -29,6 +29,7 @@ import com.sf.tracem.connection.Menu;
 import com.sf.tracem.connection.Message;
 import com.sf.tracem.db.TraceMOpenHelper;
 import com.sf.tracem.login.LoginSharedPreferences;
+import com.sf.tracem.myEffort.MyEffortMenu;
 import com.sf.tracem.plan.MyJobActivity;
 
 public class MainMenuFragment extends Fragment {
@@ -58,16 +59,15 @@ public class MainMenuFragment extends Fragment {
 		View view = inflater.inflate(R.layout.mainmenu_options, container,
 				false);
 
-		getActivity().getSharedPreferences(LoginSharedPreferences.LOGIN_PREFERENCES,
-				Context.MODE_PRIVATE);
+		getActivity().getSharedPreferences(
+				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
 
 		TraceMOpenHelper toh = new TraceMOpenHelper(getActivity());
 		tracemrdb = toh.getReadableDatabase();
 
 		cursorMenu = tracemrdb.query(Menu.TABLE_NAME,
-				new String[] { Menu.ID_MENU }, Menu.ID_FATHER
-						+ " = ?", new String[] { "0" }, null, null,
-				Menu.ID_MENU);
+				new String[] { Menu.ID_MENU }, Menu.ID_FATHER + " = ?",
+				new String[] { "0" }, null, null, Menu.ID_MENU);
 
 		menus = new ArrayList<Menu>();
 		if (cursorMenu.moveToFirst())
@@ -166,7 +166,8 @@ public class MainMenuFragment extends Fragment {
 				toh = new TraceMOpenHelper(getActivity());
 				toh.clear();
 				loginPreferences = getActivity().getSharedPreferences(
-						LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
+						LoginSharedPreferences.LOGIN_PREFERENCES,
+						Context.MODE_PRIVATE);
 
 				// clear LOGIN_PREFERENCES
 				loginPreferences.edit().clear().commit();
@@ -184,6 +185,10 @@ public class MainMenuFragment extends Fragment {
 		case 0:
 			Intent intent = new Intent(getActivity(), MyJobActivity.class);
 			getActivity().startActivity(intent);
+			break;
+		case 3:
+			Intent intentEffort = new Intent(getActivity(), MyEffortMenu.class);
+			getActivity().startActivity(intentEffort);
 			break;
 		default:
 		}

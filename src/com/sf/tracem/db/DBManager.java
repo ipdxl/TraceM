@@ -30,6 +30,7 @@ import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.connection.TraceMFormater;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.connection.VisitLog;
+import com.sf.tracem.connection.ZEMYEFFORT;
 
 /**
  * 
@@ -928,5 +929,74 @@ public class DBManager {
 		traceMwdb.update(Schedule.TABLE_NAME, values, Schedule.ID_PROGRAM
 				+ "= ?", new String[] { id });
 
+	}
+
+	public void insertEffort(ZEMYEFFORT effort, String schedule) {
+
+		traceMwdb = toh.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.clear();
+		values.put(ZEMYEFFORT.ID_SCHEDULE, schedule);
+		values.put(ZEMYEFFORT.CONFIRMADAS, effort.getCONFIRMADAS());
+		values.put(ZEMYEFFORT.PENDIENTES, effort.getPENDIENTES());
+		values.put(ZEMYEFFORT.P_CONF, effort.getPCONFIRMADAS());
+		values.put(ZEMYEFFORT.TOTAL, effort.getTOTAL());
+		values.put(ZEMYEFFORT.T_CONFIRMADOS, effort.getT_CONFIRMADOS());
+		values.put(ZEMYEFFORT.T_ESTIMADOS, effort.getT_ESTIMADOS());
+
+		traceMwdb.insert(ZEMYEFFORT.TABLE_NAME, null, values);
+		traceMwdb.close();
+	}
+
+	public List<ZEMYEFFORT> getEffort() {
+		traceMrdb = toh.getReadableDatabase();
+
+		List<ZEMYEFFORT> effort;
+
+		String query = "SELECT * FROM EFFORT";
+
+		Cursor effortCursor = traceMrdb.rawQuery(query, null);
+
+		// Cursor ordersCursor = traceMrdb.query(OrdersTable.TABLE_NAME,
+		// OrdersTable.COLUMN_NAMES, OrdersTable.ID_PROGRAM + " = ?",
+		// new String[] { id }, null, null, OrdersTable.AUFNR);
+
+		effort = getEffortFrom(effortCursor);
+
+		return effort;
+	}
+
+	private List<ZEMYEFFORT> getEffortFrom(Cursor cursor) {
+		List<ZEMYEFFORT> effortReturn = new ArrayList<ZEMYEFFORT>();
+
+		if (cursor.moveToFirst()) {
+			
+			Map<String, Integer> columnsMap = getColumnMap(cursor,
+					ZEMYEFFORT.COLUMN_NAMES);
+
+			do {
+				ZEMYEFFORT effort = new ZEMYEFFORT();
+				effort.setID_SCHEDULE(cursor.getString(columnsMap
+						.get(ZEMYEFFORT.ID_SCHEDULE)));
+				effort.setCONFIRMADAS(cursor.getString(columnsMap
+						.get(ZEMYEFFORT.CONFIRMADAS)));
+				effort.setPENDIENTES(cursor.getString(columnsMap
+						.get(ZEMYEFFORT.PENDIENTES)));
+				effort.setPCONFIRMADAS(cursor.getString(columnsMap
+						.get(ZEMYEFFORT.P_CONF)));
+				effort.setTOTAL(cursor.getString(columnsMap
+						.get(ZEMYEFFORT.TOTAL)));
+				effort.setT_CONFIRMADOS(cursor.getString(columnsMap
+						.get(ZEMYEFFORT.T_CONFIRMADOS)));
+				effort.setT_ESTIMADOS(cursor.getString(columnsMap
+						.get(ZEMYEFFORT.T_ESTIMADOS)));
+
+				effortReturn.add(effort);
+			} while (cursor.moveToNext());
+		}
+
+		return effortReturn;
 	}
 }

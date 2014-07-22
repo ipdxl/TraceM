@@ -123,5 +123,10 @@
     <string name="schedule">Programa</string>
     <string name="plan">Plan</string>
     <string name="manual">Manual</string>
+    <string name="unatended">Pendientes</string>
+    <string name="confirmed">Confirmadas</string>
+    <string name="schedule_orders">Ordenes por programa</string>
+    <string name="estimated_time">Tiempo estimado</string>
+    <string name="confirmed_time">Tiempo confirmado</string>
 
 </resources>
