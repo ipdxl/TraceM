@@ -259,7 +259,8 @@ public class VisitListFragment extends Fragment {
 									getActivity(),
 									getResources().getString(
 											R.string.visit_created)
-											+ visit, Toast.LENGTH_LONG).show();
+											+ " " + visit.getID_VISIT(),
+									Toast.LENGTH_LONG).show();
 
 							getVisitsList();
 

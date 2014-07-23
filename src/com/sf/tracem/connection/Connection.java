@@ -24,7 +24,7 @@ import com.sf.tracem.db.UncommitedChanges;
 public class Connection extends Activity {
 
 	private final static String NAMESPACE = "urn:sap-com:document:sap:rfc:functions";
-	private final static String URL2 = "http://25.111.9.178:8004/sap/bc/srt/rfc/sap/ZPM_AP_WS?sap-client=800";
+	private final static String URL = "http://25.111.9.178:8004/sap/bc/srt/rfc/sap/ZPM_AP_WS?sap-client=800";
 	private final static String SAP_USER = "sapuser";
 	private final static String SAP_PASSWORD = "password3";
 	private final static String SOAP_ACTION = "";
@@ -223,7 +223,7 @@ public class Connection extends Activity {
 	 * @return
 	 * @throws Exception
 	 */
-	public ZEMYEFFORT getMyEffort(String user) throws Exception {
+	public Effort getMyEffort(String user) throws Exception {
 
 		// Create request
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_EFFORT);
@@ -231,7 +231,7 @@ public class Connection extends Activity {
 		request.addProperty(P_USER, user);
 		// Create envelope
 
-		ZEMYEFFORT zEffort = new ZEMYEFFORT();
+		Effort zEffort = new Effort();
 		// Involve web service
 
 		SoapSerializationEnvelope envelope = call(request);
@@ -245,16 +245,16 @@ public class Connection extends Activity {
 		SoapObject errorSoap = response2.get(0);
 		List<Message> errors = getMessageList(errorSoap);
 
-		zEffort.setErrors(errors);
+		zEffort.setMessages(errors);
 
 		if (errors.size() > 0) {
 			return zEffort;
 		}
 
-		zEffort.setCONFIRMADAS(parseResult(response3.get(1).toString()));
-		zEffort.setPCONFIRMADAS(parseResult(response3.get(2).toString()));
-		zEffort.setPENDIENTES(parseResult(response3.get(3).toString()));
-		zEffort.setTOTAL(parseResult(response3.get(4).toString()));
+		zEffort.setConfirmadas(parseResult(response3.get(1).toString()));
+		zEffort.setPConfirmadas(parseResult(response3.get(2).toString()));
+		zEffort.setPendientes(parseResult(response3.get(3).toString()));
+		zEffort.setTotal(parseResult(response3.get(4).toString()));
 
 		return zEffort;
 	}
@@ -615,7 +615,7 @@ public class Connection extends Activity {
 	/**
 	 * 
 	 * @param item
-	 * @return A single Schedule instance
+	 * @return A single {@link Schedule} instance
 	 */
 	private Schedule getSingleSchedule(SoapObject item) {
 		Schedule schedule = null;
@@ -1253,7 +1253,7 @@ public class Connection extends Activity {
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
 		envelope.setOutputSoapObject(request);
-		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL2,
+		HttpTransportBasicAuth transport = new HttpTransportBasicAuth(URL,
 				SAP_USER, SAP_PASSWORD);
 
 		transport.call(SOAP_ACTION, envelope);
@@ -1366,23 +1366,23 @@ public class Connection extends Activity {
 		Vector<SoapObject> response2 = (Vector<SoapObject>) envelope
 				.getResponse();
 
-		ZEMYEFFORT zEffort = new ZEMYEFFORT();
+		Effort zEffort = new Effort();
 
 		SoapObject errorSoap = response2.get(1);
 		List<Message> errors = getMessageList(errorSoap);
 
-		zEffort.setErrors(errors);
+		zEffort.setMessages(errors);
 
 		if (errors.size() > 0) {
 			return;
 		}
 
-		zEffort.setCONFIRMADAS(parseResult(response3.get(0).toString()));
-		zEffort.setPCONFIRMADAS(parseResult(response3.get(2).toString()));
-		zEffort.setPENDIENTES(parseResult(response3.get(3).toString()));
-		zEffort.setT_CONFIRMADOS(parseResult(response3.get(4).toString()));
-		zEffort.setT_ESTIMADOS(parseResult(response3.get(5).toString()));
-		zEffort.setTOTAL(parseResult(response3.get(6).toString()));
+		zEffort.setConfirmadas(parseResult(response3.get(0).toString()));
+		zEffort.setPConfirmadas(parseResult(response3.get(2).toString()));
+		zEffort.setPendientes(parseResult(response3.get(3).toString()));
+		zEffort.setTConfirmados(parseResult(response3.get(4).toString()));
+		zEffort.setTEstimados(parseResult(response3.get(5).toString()));
+		zEffort.setTotal(parseResult(response3.get(6).toString()));
 
 		dbManager.insertEffort(zEffort, program);
 	}

@@ -34,7 +34,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:text="Description"
-        android:textColor="@android:color/primary_text_light_nodisable" />
+        android:textColor="@android:color/primary_text_light" />
 
     <TextView
         android:id="@+id/matnr"

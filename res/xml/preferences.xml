@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/preferences" >
+
+    <PreferenceCategory android:title="@string/connection" >
+        <EditTextPreference
+            android:dialogTitle="@string/sap_user"
+            android:negativeButtonText="@android:string/cancel"
+            android:positiveButtonText="@android:string/ok"
+            android:title="@string/sap_user" />
+        <EditTextPreference
+            android:dialogMessage="@string/sap_password"
+            android:dialogTitle="@string/sap_password"
+            android:negativeButtonText="@android:string/cancel"
+            android:positiveButtonText="@android:string/ok"
+            android:title="@string/sap_password" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

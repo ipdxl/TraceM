@@ -219,7 +219,7 @@ public class VisitDetailFragment extends Fragment {
 									getActivity(),
 									getResources().getString(
 											R.string.visit_closed)
-											+ visit.getID_VISIT(),
+											+ " " + visit.getID_VISIT(),
 									Toast.LENGTH_LONG).show();
 
 							getActivity().onBackPressed();

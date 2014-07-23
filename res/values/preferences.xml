@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="connection">Connection</string>
+    <string name="ip_address">IP address</string>
+    <string name="sap_user">SAP user</string>
+    <string name="preferences">Preferences</string>
+    <string name="sap_password">SAP password</string>
+    
+</resources>

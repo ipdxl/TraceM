@@ -30,7 +30,7 @@ import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.connection.TraceMFormater;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.connection.VisitLog;
-import com.sf.tracem.connection.ZEMYEFFORT;
+import com.sf.tracem.connection.Effort;
 
 /**
  * 
@@ -55,6 +55,7 @@ public class DBManager {
 				Order.COLUMN_NAMES, null, null, null, null, Order.AUFNR);
 
 		orders = getOrdersFrom(ordersCursor);
+		traceMrdb.close();
 
 		return orders;
 	}
@@ -74,19 +75,12 @@ public class DBManager {
 				+ " ON ORDERS_SCHEDULE.ID_PROGRAM = SCHEDULE.ID_PROGRAM"
 				+ " WHERE SCHEDULE.STATUS <> '3') AND " + Order.ORDER_STATUS
 				+ " <> 1";
-		// "SELECT O.* FROM %S AS O INNER JOIN %S AS OS ON O.%S = OS.%S WHERE OS.%S = ?",
-		// OrdersTable.TABLE_NAME, OrderScheduleTable.TABLE_NAME,
-		// OrdersTable.AUFNR, OrderScheduleTable.AUFNR,
-		// OrderScheduleTable.ID_PROGRAM);
 
 		Cursor ordersCursor = traceMrdb.rawQuery(query, null);
 
-		// Cursor ordersCursor = traceMrdb.query(OrdersTable.TABLE_NAME,
-		// OrdersTable.COLUMN_NAMES, OrdersTable.ID_PROGRAM + " = ?",
-		// new String[] { id }, null, null, OrdersTable.AUFNR);
-
 		orders = getOrdersFrom(ordersCursor);
 
+		traceMrdb.close();
 		return orders;
 	}
 
@@ -183,6 +177,7 @@ public class DBManager {
 				Log.e("Insert Order", "" + result);
 			}
 		}
+		traceMwdb.close();
 	}
 
 	public void updateOrders(List<Order> orders) {
@@ -215,6 +210,7 @@ public class DBManager {
 				Log.e("Insert Order", "" + result);
 			}
 		}
+		traceMwdb.close();
 	}
 
 	public List<Schedule> getSchedules() {
@@ -242,6 +238,7 @@ public class DBManager {
 			} while (cursor.moveToNext());
 		}
 
+		traceMrdb.close();
 		return schedules;
 	}
 
@@ -256,6 +253,7 @@ public class DBManager {
 		values.put(Schedule.STATUS, schedule.getSTATUS());
 
 		traceMwdb.insert(Schedule.TABLE_NAME, null, values);
+		traceMwdb.close();
 	}
 
 	public void insertScheduleDetail(String iDProgram, List<Order> orders) {
@@ -303,7 +301,7 @@ public class DBManager {
 		// new String[] { id }, null, null, OrdersTable.AUFNR);
 
 		orders = getOrdersFrom(ordersCursor);
-
+		traceMrdb.close();
 		return orders;
 	}
 
@@ -335,6 +333,7 @@ public class DBManager {
 			values.put(OrderSchedule.ID_PROGRAM, os.getID_PROGRAM());
 			traceMwdb.insert(OrderSchedule.TABLE_NAME, null, values);
 		}
+		traceMwdb.close();
 
 	}
 
@@ -347,6 +346,7 @@ public class DBManager {
 		String id = getID_Program(year, week);
 		traceMwdb.delete(Schedule.TABLE_NAME, Schedule.ID_PROGRAM + " = ?",
 				new String[] { id });
+		traceMwdb.close();
 	}
 
 	public String getActiveSchedule() {
@@ -361,7 +361,7 @@ public class DBManager {
 		if (cursor.moveToFirst()) {
 			idProgram = cursor.getString(1);
 		}
-
+		traceMrdb.close();
 		return idProgram;
 	}
 
@@ -380,6 +380,7 @@ public class DBManager {
 
 			traceMwdb.insert(HeaderOrder.TABLE_NAME, null, values);
 		}
+		traceMwdb.close();
 
 	}
 
@@ -395,6 +396,7 @@ public class DBManager {
 
 			traceMwdb.insert(Equipment.TABLE_NAME, null, values);
 		}
+		traceMwdb.close();
 	}
 
 	public void insertOperations(List<Operation> operations) {
@@ -405,6 +407,7 @@ public class DBManager {
 
 			traceMwdb.insert(Operation.TABLE_NAME, null, values);
 		}
+		traceMwdb.close();
 	}
 
 	public void updateOperations(List<Operation> operations) {
@@ -456,6 +459,7 @@ public class DBManager {
 					comp.getREQUIREMENT_QUANTITY_UNIT());
 			traceMwdb.insert(Component.TABLE_NAME, null, values);
 		}
+		traceMwdb.close();
 	}
 
 	public OrderDetails getOrderDetails(String aufnr) {
@@ -501,7 +505,7 @@ public class DBManager {
 
 			} while (cursor.moveToNext());
 		}
-
+		traceMrdb.close();
 		return components;
 	}
 
@@ -538,6 +542,7 @@ public class DBManager {
 			}
 
 		}
+		traceMrdb.close();
 		return equipments;
 	}
 
@@ -550,6 +555,8 @@ public class DBManager {
 
 		List<Operation> operations;
 		operations = getOperationsFrom(cursor);
+
+		traceMrdb.close();
 		return operations;
 	}
 
@@ -607,7 +614,7 @@ public class DBManager {
 
 			traceMwdb.insert(MeasurementPoint.TABLE_NAME, null, values);
 		}
-
+		traceMwdb.close();
 	}
 
 	private ContentValues getMeasurementPointsValues(MeasurementPoint point) {
@@ -631,6 +638,7 @@ public class DBManager {
 		for (MeasurementPoint point : points) {
 			updateMeasurementPoint(point);
 		}
+		traceMrdb.close();
 	}
 
 	public List<MeasurementPoint> getMeasurementPoints(String aufnr,
@@ -713,6 +721,7 @@ public class DBManager {
 
 		visitList = getVisitsFromCursor(cursor);
 
+		traceMrdb.close();
 		return visitList;
 	}
 
@@ -747,6 +756,7 @@ public class DBManager {
 		ContentValues values = getVisitValues(visit);
 
 		traceMwdb.insert(Visit.TABLE_NAME, null, values);
+		traceMwdb.close();
 	}
 
 	/**
@@ -762,6 +772,8 @@ public class DBManager {
 				Visit.STATUS + " = ?", new String[] { "1" }, null, null, null);
 
 		visits = getVisitsFromCursor(cursor);
+		traceMrdb.close();
+
 		if (visits.size() == 0) {
 			return null;
 		} else {
@@ -792,6 +804,7 @@ public class DBManager {
 				.update(Visit.TABLE_NAME, values, Visit.ID_PROGRAM
 						+ " = ? AND " + Visit.ID_VISIT + " = ?", new String[] {
 						visit.getID_PROGRAM(), "" + visit.getID_VISIT() });
+		traceMwdb.close();
 	}
 
 	public UncommitedChanges getUncommitedChanges() {
@@ -928,32 +941,32 @@ public class DBManager {
 
 		traceMwdb.update(Schedule.TABLE_NAME, values, Schedule.ID_PROGRAM
 				+ "= ?", new String[] { id });
-
+		traceMwdb.close();
 	}
 
-	public void insertEffort(ZEMYEFFORT effort, String schedule) {
+	public void insertEffort(Effort effort, String schedule) {
 
 		traceMwdb = toh.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 
 		values.clear();
-		values.put(ZEMYEFFORT.ID_SCHEDULE, schedule);
-		values.put(ZEMYEFFORT.CONFIRMADAS, effort.getCONFIRMADAS());
-		values.put(ZEMYEFFORT.PENDIENTES, effort.getPENDIENTES());
-		values.put(ZEMYEFFORT.P_CONF, effort.getPCONFIRMADAS());
-		values.put(ZEMYEFFORT.TOTAL, effort.getTOTAL());
-		values.put(ZEMYEFFORT.T_CONFIRMADOS, effort.getT_CONFIRMADOS());
-		values.put(ZEMYEFFORT.T_ESTIMADOS, effort.getT_ESTIMADOS());
+		values.put(Effort.ID_PROGRAM, schedule);
+		values.put(Effort.CONFIRMADAS, effort.getConfirmadas());
+		values.put(Effort.PENDIENTES, effort.getPendientes());
+		values.put(Effort.P_CONF, effort.getPConfirmadas());
+		values.put(Effort.TOTAL, effort.getTOTAL());
+		values.put(Effort.T_CONFIRMADOS, effort.getTConfirmados());
+		values.put(Effort.T_ESTIMADOS, effort.getTEstimados());
 
-		traceMwdb.insert(ZEMYEFFORT.TABLE_NAME, null, values);
+		traceMwdb.insert(Effort.TABLE_NAME, null, values);
 		traceMwdb.close();
 	}
 
-	public List<ZEMYEFFORT> getEffort() {
+	public List<Effort> getEffort() {
 		traceMrdb = toh.getReadableDatabase();
 
-		List<ZEMYEFFORT> effort;
+		List<Effort> effort;
 
 		String query = "SELECT * FROM EFFORT";
 
@@ -964,34 +977,33 @@ public class DBManager {
 		// new String[] { id }, null, null, OrdersTable.AUFNR);
 
 		effort = getEffortFrom(effortCursor);
-
+		traceMrdb.close();
 		return effort;
 	}
 
-	private List<ZEMYEFFORT> getEffortFrom(Cursor cursor) {
-		List<ZEMYEFFORT> effortReturn = new ArrayList<ZEMYEFFORT>();
+	private List<Effort> getEffortFrom(Cursor cursor) {
+		List<Effort> effortReturn = new ArrayList<Effort>();
 
 		if (cursor.moveToFirst()) {
-			
+
 			Map<String, Integer> columnsMap = getColumnMap(cursor,
-					ZEMYEFFORT.COLUMN_NAMES);
+					Effort.COLUMN_NAMES);
 
 			do {
-				ZEMYEFFORT effort = new ZEMYEFFORT();
-				effort.setID_SCHEDULE(cursor.getString(columnsMap
-						.get(ZEMYEFFORT.ID_SCHEDULE)));
-				effort.setCONFIRMADAS(cursor.getString(columnsMap
-						.get(ZEMYEFFORT.CONFIRMADAS)));
-				effort.setPENDIENTES(cursor.getString(columnsMap
-						.get(ZEMYEFFORT.PENDIENTES)));
-				effort.setPCONFIRMADAS(cursor.getString(columnsMap
-						.get(ZEMYEFFORT.P_CONF)));
-				effort.setTOTAL(cursor.getString(columnsMap
-						.get(ZEMYEFFORT.TOTAL)));
-				effort.setT_CONFIRMADOS(cursor.getString(columnsMap
-						.get(ZEMYEFFORT.T_CONFIRMADOS)));
-				effort.setT_ESTIMADOS(cursor.getString(columnsMap
-						.get(ZEMYEFFORT.T_ESTIMADOS)));
+				Effort effort = new Effort();
+				effort.setIdProgram(cursor.getString(columnsMap
+						.get(Effort.ID_PROGRAM)));
+				effort.setConfirmadas(cursor.getString(columnsMap
+						.get(Effort.CONFIRMADAS)));
+				effort.setPendientes(cursor.getString(columnsMap
+						.get(Effort.PENDIENTES)));
+				effort.setPConfirmadas(cursor.getString(columnsMap
+						.get(Effort.P_CONF)));
+				effort.setTotal(cursor.getString(columnsMap.get(Effort.TOTAL)));
+				effort.setTConfirmados(cursor.getString(columnsMap
+						.get(Effort.T_CONFIRMADOS)));
+				effort.setTEstimados(cursor.getString(columnsMap
+						.get(Effort.T_ESTIMADOS)));
 
 				effortReturn.add(effort);
 			} while (cursor.moveToNext());

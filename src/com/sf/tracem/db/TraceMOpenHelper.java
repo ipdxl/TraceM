@@ -19,7 +19,7 @@ import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.connection.VisitLog;
-import com.sf.tracem.connection.ZEMYEFFORT;
+import com.sf.tracem.connection.Effort;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -60,7 +60,7 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 		db.execSQL(MeasurementPoint.CREATE_TABLE);
 		db.execSQL(Visit.CREATE_TABLE);
 		db.execSQL(VisitLog.CREATE_TABLE);
-		db.execSQL(ZEMYEFFORT.CREATE_TABLE);
+		db.execSQL(Effort.CREATE_TABLE);
 
 		for (String trigger : Operation.TRIGGERS) {
 			db.execSQL(trigger);
@@ -109,7 +109,7 @@ public class TraceMOpenHelper extends SQLiteOpenHelper {
 		db.delete(Order.TABLE_NAME, null, null);
 		db.delete(Schedule.TABLE_NAME, null, null);
 		db.delete(Partner.TABLE_NAME, null, null);
-		db.delete(ZEMYEFFORT.TABLE_NAME, null, null);
+		db.delete(Effort.TABLE_NAME, null, null);
 		db.close();
 	}
 }
