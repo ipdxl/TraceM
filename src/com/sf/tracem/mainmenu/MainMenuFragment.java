@@ -3,7 +3,6 @@ package com.sf.tracem.mainmenu;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -11,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -28,7 +28,7 @@ import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Menu;
 import com.sf.tracem.connection.Message;
 import com.sf.tracem.db.TraceMOpenHelper;
-import com.sf.tracem.login.LoginSharedPreferences;
+import com.sf.tracem.login.PreferenceKeys;
 import com.sf.tracem.myEffort.MyEffortMenu;
 import com.sf.tracem.plan.MyJobActivity;
 
@@ -49,6 +49,8 @@ public class MainMenuFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		setRetainInstance(true);
 		setHasOptionsMenu(true);
+		loginPreferences = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
 		super.onCreate(savedInstanceState);
 	}
 
@@ -58,9 +60,6 @@ public class MainMenuFragment extends Fragment {
 
 		View view = inflater.inflate(R.layout.mainmenu_options, container,
 				false);
-
-		getActivity().getSharedPreferences(
-				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
 
 		TraceMOpenHelper toh = new TraceMOpenHelper(getActivity());
 		tracemrdb = toh.getReadableDatabase();
@@ -141,11 +140,8 @@ public class MainMenuFragment extends Fragment {
 
 				try {
 					Connection connection = new Connection(getActivity());
-					errorsList = connection.logout(getActivity()
-							.getSharedPreferences(
-									LoginSharedPreferences.LOGIN_PREFERENCES,
-									Context.MODE_PRIVATE).getString(
-									LoginSharedPreferences.USERNAME, null));
+					errorsList = connection.logout(loginPreferences.getString(
+							PreferenceKeys.USERNAME, null));
 				} catch (Exception e) {
 					Toast.makeText(
 							getActivity(),
@@ -165,9 +161,6 @@ public class MainMenuFragment extends Fragment {
 				// clear database
 				toh = new TraceMOpenHelper(getActivity());
 				toh.clear();
-				loginPreferences = getActivity().getSharedPreferences(
-						LoginSharedPreferences.LOGIN_PREFERENCES,
-						Context.MODE_PRIVATE);
 
 				// clear LOGIN_PREFERENCES
 				loginPreferences.edit().clear().commit();

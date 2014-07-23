@@ -3,13 +3,24 @@
 
     <PreferenceCategory android:title="@string/connection" >
         <EditTextPreference
-            android:dialogTitle="@string/sap_user"
+            android:layout_width="wrap_content"
+            android:defaultValue="25.111.9.178:8004"
+            android:key="ip_address"
+            android:negativeButtonText="@android:string/cancel"
+            android:positiveButtonText="@android:string/ok"
+            android:title="@string/ip_address" />
+        <EditTextPreference
+            android:layout_width="wrap_content"
+            android:defaultValue="sapuser"
+            android:key="sap_user"
             android:negativeButtonText="@android:string/cancel"
             android:positiveButtonText="@android:string/ok"
             android:title="@string/sap_user" />
         <EditTextPreference
-            android:dialogMessage="@string/sap_password"
-            android:dialogTitle="@string/sap_password"
+            android:layout_width="wrap_content"
+            android:defaultValue="password3"
+            android:inputType="textPassword"
+            android:key="sap_password"
             android:negativeButtonText="@android:string/cancel"
             android:positiveButtonText="@android:string/ok"
             android:title="@string/sap_password" />

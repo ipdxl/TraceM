@@ -5,5 +5,6 @@
     <string name="sap_user">SAP user</string>
     <string name="preferences">Preferences</string>
     <string name="sap_password">SAP password</string>
+    <string name="settings">Settings</string>
     
 </resources>

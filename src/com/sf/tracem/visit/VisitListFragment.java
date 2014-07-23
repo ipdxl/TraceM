@@ -13,12 +13,12 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,7 +38,7 @@ import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.connection.VisitLog;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.login.LoginSharedPreferences;
+import com.sf.tracem.login.PreferenceKeys;
 import com.sf.tracem.plan.MyJobNavigation;
 
 /**
@@ -64,6 +64,8 @@ public class VisitListFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		navigation = (MyJobNavigation) activity;
+		loginPreferences = PreferenceManager
+				.getDefaultSharedPreferences(activity);
 		super.onAttach(activity);
 	}
 
@@ -72,8 +74,6 @@ public class VisitListFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
-		loginPreferences = getActivity().getSharedPreferences(
-				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
 
 	}
 
@@ -224,7 +224,7 @@ public class VisitListFragment extends Fragment {
 				visit.setHINI(vdv.getHini().getText().toString());
 				visit.setTINI((byte) (vdv.getTini().isChecked() ? 1 : 0));
 				visit.setUSER(loginPreferences.getString(
-						LoginSharedPreferences.USERNAME, null));
+						PreferenceKeys.USERNAME, null));
 
 				AsyncTask<String, Integer, Integer> createVisitTask = new AsyncTask<String, Integer, Integer>() {
 

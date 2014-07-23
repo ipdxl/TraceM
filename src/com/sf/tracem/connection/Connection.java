@@ -16,17 +16,19 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.db.TraceMOpenHelper;
 import com.sf.tracem.db.UncommitedChanges;
+import com.sf.tracem.login.PreferenceKeys;
 
 public class Connection extends Activity {
 
 	private final static String NAMESPACE = "urn:sap-com:document:sap:rfc:functions";
-	private final static String URL = "http://25.111.9.178:8004/sap/bc/srt/rfc/sap/ZPM_AP_WS?sap-client=800";
-	private final static String SAP_USER = "sapuser";
-	private final static String SAP_PASSWORD = "password3";
+	private String URL = "/sap/bc/srt/rfc/sap/ZPM_AP_WS?sap-client=800";
+	private String SAP_USER = "sapuser";
+	private String SAP_PASSWORD = "password3";
 	private final static String SOAP_ACTION = "";
 	private final static String Z_PM_AP_GET_EFFORT = "Z_PM_AP_GET_EFFORT";
 	private final static String Z_PM_AP_GET_PLAN = "Z_PM_AP_GET_PLAN";
@@ -69,6 +71,7 @@ public class Connection extends Activity {
 	private static final String Z_PM_AP_CLOSE_SCHEDULE = "Z_PM_AP_CLOSE_SCHEDULE";
 	private Context context;
 	private DBManager dbManager;
+	private String ipAddress;
 
 	/**
 	 * 
@@ -77,6 +80,20 @@ public class Connection extends Activity {
 	public Connection(Context context) {
 		this.context = context;
 		dbManager = new DBManager(context);
+
+		ipAddress = PreferenceManager.getDefaultSharedPreferences(context)
+				.getString(PreferenceKeys.IP_ADDRESS,
+						PreferenceKeys.DEFAULT_IP_ADDRESS);
+
+		SAP_USER = PreferenceManager.getDefaultSharedPreferences(context)
+				.getString(PreferenceKeys.SAP_USER,
+						PreferenceKeys.DEFAULT_SAP_USER);
+
+		SAP_PASSWORD = PreferenceManager.getDefaultSharedPreferences(context)
+				.getString(PreferenceKeys.SAP_PASSWORD,
+						PreferenceKeys.DEFAULT_SAP_PASSWORD);
+
+		URL = "http://" + ipAddress + URL;
 	}
 
 	/**

@@ -89,6 +89,9 @@
             </intent-filter>
         </activity>
         <activity android:name="org.achartengine.GraphicalActivity" />
+        <activity
+            android:name=".preferences.SettingsActivity"
+            android:label="@string/settings" />
 
         <meta-data
             android:name="com.google.android.gms.version"

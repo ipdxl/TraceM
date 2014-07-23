@@ -7,6 +7,7 @@ import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.sf.tracem.R;
-import com.sf.tracem.login.LoginSharedPreferences;
+import com.sf.tracem.login.PreferenceKeys;
 import com.sf.tracem.path.MyPathFragment;
 import com.sf.tracem.plan.detail.OrderDetailFragment;
 import com.sf.tracem.plan.menu.MyJobMenuFragment;
@@ -41,7 +42,6 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 	private ActionBar actionBar;
 	private SharedPreferences sharedPreferences;
 	private String loginName;
-	private SharedPreferences loginPreferences;
 
 	// private String currentFragment;
 	@Override
@@ -49,17 +49,12 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		loginPreferences = getSharedPreferences(
-				LoginSharedPreferences.LOGIN_PREFERENCES, MODE_PRIVATE);
-
 		fm = getSupportFragmentManager();
 		ft = fm.beginTransaction();
 
-		sharedPreferences = getSharedPreferences(
-				LoginSharedPreferences.LOGIN_PREFERENCES, MODE_PRIVATE);
-
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		loginName = sharedPreferences.getString(
-				LoginSharedPreferences.USERNAME, null);
+				PreferenceKeys.USERNAME, null);
 
 		if (loginName != null) {
 			mjmf = new MyJobMenuFragment();
@@ -211,8 +206,8 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		ft.replace(R.id.content_frame, mpf, SchedulesFragment.TAG);
 
 		Bundle args = new Bundle();
-		args.putString("USER", loginPreferences.getString(
-				LoginSharedPreferences.USERNAME, null));
+		args.putString("USER", sharedPreferences.getString(
+				PreferenceKeys.USERNAME, null));
 		mpf.setArguments(args);
 
 		ft.commit();

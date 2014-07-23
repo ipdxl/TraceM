@@ -15,12 +15,12 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -43,7 +43,7 @@ import com.sf.tracem.connection.Message;
 import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.Schedule;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.login.LoginSharedPreferences;
+import com.sf.tracem.login.PreferenceKeys;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -118,8 +118,7 @@ public class ScheduleDetailFragment extends Fragment {
 
 	@Override
 	public void onAttach(Activity activity) {
-		loginPreferences = activity.getSharedPreferences(
-				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
+		loginPreferences =  PreferenceManager.getDefaultSharedPreferences(activity);
 		super.onAttach(activity);
 	}
 
@@ -174,7 +173,7 @@ public class ScheduleDetailFragment extends Fragment {
 		Connection connection = new Connection(getActivity());
 
 		id = connection.getNetxSchedule(loginPreferences.getString(
-				LoginSharedPreferences.USERNAME, null));
+				PreferenceKeys.USERNAME, null));
 
 		if (id != null) {
 			year = Integer.parseInt(id.substring(0, 4));
@@ -360,7 +359,7 @@ public class ScheduleDetailFragment extends Fragment {
 
 				try {
 					messages = conn.closeSchedule(loginPreferences.getString(
-							LoginSharedPreferences.USERNAME, null), id);
+							PreferenceKeys.USERNAME, null), id);
 				} catch (HttpResponseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -414,7 +413,7 @@ public class ScheduleDetailFragment extends Fragment {
 				List<Message> message = null;
 				try {
 					message = connection.deleteSchedule(loginPreferences
-							.getString(LoginSharedPreferences.USERNAME, null),
+							.getString(PreferenceKeys.USERNAME, null),
 							year, week);
 				} catch (HttpResponseException e) {
 					// TODO Auto-generated catch block
@@ -508,12 +507,12 @@ public class ScheduleDetailFragment extends Fragment {
 
 						newSchedule = connection.createSchedule(
 								loginPreferences.getString(
-										LoginSharedPreferences.USERNAME, null),
+										PreferenceKeys.USERNAME, null),
 								year, week, schedule);
 						break;
 					case UPDATE:
 						messages = connection.updateSchedule(loginPreferences
-								.getString(LoginSharedPreferences.USERNAME,
+								.getString(PreferenceKeys.USERNAME,
 										null), year, week, schedule);
 						break;
 					default:

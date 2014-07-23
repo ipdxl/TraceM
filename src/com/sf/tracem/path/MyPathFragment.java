@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,11 +31,11 @@ import com.google.android.gms.maps.model.LatLngBounds.Builder;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sf.tracem.R;
-import com.sf.tracem.connection.Path;
 import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.Partner;
+import com.sf.tracem.connection.Path;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.login.LoginSharedPreferences;
+import com.sf.tracem.login.PreferenceKeys;
 
 public class MyPathFragment extends Fragment implements PathNavigation {
 
@@ -54,8 +54,8 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 
 	@Override
 	public void onAttach(Activity activity) {
-		loginPreferences = activity.getSharedPreferences(
-				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
+		loginPreferences = PreferenceManager
+				.getDefaultSharedPreferences(activity);
 		super.onAttach(activity);
 	}
 
@@ -73,9 +73,8 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 			pathList = (ArrayList<Path>) savedInstanceState
 					.getSerializable(PATH_LIST);
 		} else {
-			pathList = getPath(
-					loginPreferences.getString(LoginSharedPreferences.USERNAME, null),
-					"28.04.2014");
+			pathList = getPath(loginPreferences.getString(
+					PreferenceKeys.USERNAME, null), "28.04.2014");
 		}
 	}
 
@@ -231,8 +230,7 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 						}
 					}
 
-					path.setOrders((Order[]) ordersList
-							.toArray(new Order[] {}));
+					path.setOrders((Order[]) ordersList.toArray(new Order[] {}));
 
 					listPath.add(path);
 				}

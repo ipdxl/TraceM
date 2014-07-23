@@ -3,14 +3,20 @@
  */
 package com.sf.tracem.login;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.sf.tracem.R;
 import com.sf.tracem.mainmenu.MainMenuFragment;
+import com.sf.tracem.preferences.SettingsActivity;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -45,10 +51,10 @@ public class loginActivity extends FragmentActivity {
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 
-		sharedPreferences = getSharedPreferences(
-				LoginSharedPreferences.LOGIN_PREFERENCES, MODE_PRIVATE);
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-		loginName = sharedPreferences.getString(LoginSharedPreferences.USERNAME, null);
+		loginName = sharedPreferences.getString(
+				PreferenceKeys.USERNAME, null);
 
 		if (loginName == null) {
 			mmf = null;
@@ -69,5 +75,27 @@ public class loginActivity extends FragmentActivity {
 					MAIN_MENU_FRAGMENT);
 		}
 		fragmentTransaction.commit();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		MenuInflater inflater = new MenuInflater(this);
+		inflater.inflate(R.menu.main_menu, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.settings:
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivity(intent);
+			break;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 }

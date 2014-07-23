@@ -6,12 +6,12 @@ package com.sf.tracem.login;
 import java.util.List;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -104,11 +104,13 @@ public class LoginFragment extends Fragment {
 			return;
 		}
 
-		editor = getActivity().getSharedPreferences(
-				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE).edit();
+		editor = PreferenceManager.getDefaultSharedPreferences(getActivity())
+				.edit();
 
-		editor.putString(LoginSharedPreferences.USERNAME, user.getText().toString());
-		editor.putString(LoginSharedPreferences.PASSWORD, pass.getText().toString());
+		editor.putString(PreferenceKeys.USERNAME, user.getText()
+				.toString());
+		editor.putString(PreferenceKeys.PASSWORD, pass.getText()
+				.toString());
 
 		List<Menu> menuList = response.getMenuList();
 

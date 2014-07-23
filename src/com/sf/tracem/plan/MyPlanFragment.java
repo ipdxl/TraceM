@@ -9,11 +9,11 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,7 +33,7 @@ import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Order;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.login.LoginSharedPreferences;
+import com.sf.tracem.login.PreferenceKeys;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -67,8 +67,8 @@ public class MyPlanFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		navigation = (MyJobNavigation) activity;
-		loginPreferences = activity.getSharedPreferences(
-				LoginSharedPreferences.LOGIN_PREFERENCES, Context.MODE_PRIVATE);
+		loginPreferences = PreferenceManager
+				.getDefaultSharedPreferences(activity);
 	}
 
 	@Override
@@ -188,7 +188,7 @@ public class MyPlanFragment extends Fragment {
 
 					Connection connection = new Connection(getActivity());
 					orders = connection.getPlan(loginPreferences.getString(
-							LoginSharedPreferences.USERNAME, null));
+							PreferenceKeys.USERNAME, null));
 					if (orders != null) {
 						return orders;
 					}
