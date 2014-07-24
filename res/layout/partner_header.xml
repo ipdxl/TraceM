@@ -5,9 +5,7 @@
     android:layout_margin="10dp"
     android:background="?android:attr/activatedBackgroundIndicator"
     android:descendantFocusability="blocksDescendants"
-    android:padding="5dp"
-    tools:context=".MainActivity"
-    tools:ignore="HardcodedText,ContentDescription" >
+    android:padding="5dp" >
 
     <TextView
         android:id="@+id/partnerName"
@@ -20,7 +18,7 @@
         android:layout_toLeftOf="@+id/addLocationButton"
         android:maxLines="3"
         android:paddingLeft="?android:attr/expandableListPreferredChildIndicatorLeft"
-        android:text="User Name"
+        android:text="@string/name"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <!--
@@ -35,10 +33,10 @@
         android:layout_alignLeft="@id/addLocationButton"
         android:layout_alignTop="@+id/partnerName"
         android:layout_toRightOf="@+id/partnerName"
-        android:background="#FFFFFF"
         android:src="@android:drawable/ic_menu_mylocation"
-        android:text="Edit Data"
-        android:textColor="#0099CC" />
+        android:text="@string/location"
+        android:textColor="#0099CC"
+        android:contentDescription="@string/location" />
 
     <TextView
         android:id="@+id/partnerAddress"
@@ -49,7 +47,7 @@
         android:layout_alignRight="@+id/partnerName"
         android:layout_below="@+id/partnerName"
         android:maxLines="5"
-        android:text="Address"
+        android:text="@string/address"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="16sp" />
 
@@ -59,9 +57,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/locationButton"
-        android:background="#FFFFFF"
         android:src="@android:drawable/ic_menu_myplaces"
         android:text="@string/add_location"
-        android:textColor="#0099CC" />
+        android:textColor="#0099CC"
+        android:contentDescription="@string/add_location" />
 
 </RelativeLayout>
