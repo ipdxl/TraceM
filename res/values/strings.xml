@@ -20,6 +20,7 @@
     <string name="co_gstrp">Start Date</string>
     <string name="name">Name</string>
     <string name="address">Address</string>
+    <string name="select_picture">Select Picture</string>
 
     <color name="blue_sf">#779FF7</color>
     <color name="obscure_bg">#8D8C8B</color>
@@ -128,5 +129,6 @@
     <string name="schedule_orders">Schedule orders</string>
     <string name="estimated_time">Estimated Time</string>
     <string name="confirmed_time">Confirmed Time</string>
+    <string name="save_picture">Save picture</string>
 
 </resources>

@@ -12,5 +12,10 @@
         android:icon="@android:drawable/ic_menu_camera"
         android:title="@string/scan_qr">
     </item>
+    <item
+        android:id="@+id/save_picture"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="@string/save_picture">
+    </item>
 
 </menu>

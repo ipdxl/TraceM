@@ -15,8 +15,12 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -35,6 +39,7 @@ import android.widget.Toast;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
+import com.sf.tracem.connection.Message;
 import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.Visit;
 import com.sf.tracem.db.DBManager;
@@ -48,6 +53,8 @@ public class VisitDetailFragment extends Fragment {
 
 	public static final String TAG = "VISIT_DETAIL_FRAGMENT";
 
+	private static final int PICK_IMAGE = 0;
+
 	DBManager dbManager;
 
 	private Visit visit;
@@ -60,7 +67,8 @@ public class VisitDetailFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		loginPreferences =  PreferenceManager.getDefaultSharedPreferences(activity);
+		loginPreferences = PreferenceManager
+				.getDefaultSharedPreferences(activity);
 	}
 
 	@Override
@@ -100,7 +108,9 @@ public class VisitDetailFragment extends Fragment {
 	}
 
 	private List<Order> getUnCompleteOrders() {
-		AsyncTask<String, Integer, List<Order>> visitOrderTask = new AsyncTask<String, Integer, List<Order>>() {
+		AsyncTask<String, Integer, List<Order>> visitOrderTask;
+
+		visitOrderTask = new AsyncTask<String, Integer, List<Order>>() {
 
 			private ProgressDialog progress;
 
@@ -163,7 +173,24 @@ public class VisitDetailFragment extends Fragment {
 			closeVisit();
 			break;
 		case R.id.scan_qr:
+
+			Intent intent = new Intent();
+			intent.setComponent(new ComponentName(
+					"com.jwetherell.quick_response_code",
+					"com.jwetherell.quick_response_code.CaptureActivity"));
+			getActivity().startActivity(intent);
 			break;
+
+		case R.id.save_picture:
+			Intent pickImageintent = new Intent();
+			pickImageintent.setType("image/*");
+			pickImageintent.setAction(Intent.ACTION_GET_CONTENT);
+			// pickImageintent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+			startActivityForResult(Intent.createChooser(pickImageintent,
+					getResources().getString(R.string.select_picture)),
+					PICK_IMAGE);
+			break;
+
 		case android.R.id.home:
 			getActivity().onBackPressed();
 			break;
@@ -172,12 +199,74 @@ public class VisitDetailFragment extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+
+			Uri uri = data.getData();
+
+			Cursor cursor = getActivity()
+					.getContentResolver()
+					.query(uri,
+							new String[] { android.provider.MediaStore.Images.ImageColumns.DATA },
+							null, null, null);
+
+			if (cursor.moveToFirst()) {
+				List<String> files = new ArrayList<String>();
+				do {
+					files.add(cursor.getString(0));
+					String path = cursor.getString(0);
+					savePicture(path);
+
+				} while (cursor.moveToNext());
+			}
+		}
+
+	}
+
+	private void savePicture(String path) {
+		AsyncTask<String, Integer, List<Message>> savePictureTask;
+		savePictureTask = new AsyncTask<String, Integer, List<Message>>() {
+
+			@Override
+			protected List<Message> doInBackground(String... params) {
+				List<Message> messages = null;
+
+				try {
+					Looper.prepare();
+				} catch (Exception e) {
+				}
+
+				Connection conn = new Connection(getActivity());
+				try {
+					messages = conn.savePicture(params[0], 'X', "");
+				} catch (HttpResponseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (XmlPullParserException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return messages;
+			}
+
+		};
+		savePictureTask.execute(path);
+	}
+
 	private void closeVisit() {
 		visit.setID_PROGRAM(visit.getID_PROGRAM());
 		final VisitDialogView vdv = new VisitDialogView(getActivity());
 		View view = vdv.getView();
 
-		android.content.DialogInterface.OnClickListener closeVisitConfirmation = new android.content.DialogInterface.OnClickListener() {
+		android.content.DialogInterface.OnClickListener closeVisitConfirmation;
+
+		closeVisitConfirmation = new android.content.DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -188,7 +277,8 @@ public class VisitDetailFragment extends Fragment {
 				visit.setUSER(loginPreferences.getString(
 						PreferenceKeys.USERNAME, null));
 
-				AsyncTask<String, Integer, Boolean> createVisitTask = new AsyncTask<String, Integer, Boolean>() {
+				AsyncTask<String, Integer, Boolean> createVisitTask;
+				createVisitTask = new AsyncTask<String, Integer, Boolean>() {
 
 					@Override
 					protected Boolean doInBackground(String... params) {

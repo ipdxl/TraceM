@@ -1,11 +1,14 @@
 package com.sf.tracem.connection;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
+import org.kobjects.base64.Base64;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -17,6 +20,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.app.Activity;
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore.Files;
 
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.db.TraceMOpenHelper;
@@ -27,8 +31,8 @@ public class Connection extends Activity {
 
 	private final static String NAMESPACE = "urn:sap-com:document:sap:rfc:functions";
 	private String URL = "/sap/bc/srt/rfc/sap/ZPM_AP_WS?sap-client=800";
-	private String SAP_USER = "sapuser";
-	private String SAP_PASSWORD = "password3";
+	private String SAP_USER;
+	private String SAP_PASSWORD;
 	private final static String SOAP_ACTION = "";
 	private final static String Z_PM_AP_GET_EFFORT = "Z_PM_AP_GET_EFFORT";
 	private final static String Z_PM_AP_GET_PLAN = "Z_PM_AP_GET_PLAN";
@@ -69,6 +73,10 @@ public class Connection extends Activity {
 	private static final String Z_PM_AP_SAVE_MEASURE_DOCUEMNT = "Z_PM_AP_SAVE_MEASURE_DOCUEMNT";
 	private static final String Z_PM_AP_GET_VISIT_DETAIL = "Z_PM_AP_GET_VISIT_DETAIL";
 	private static final String Z_PM_AP_CLOSE_SCHEDULE = "Z_PM_AP_CLOSE_SCHEDULE";
+	private static final String Z_PM_AP_SAVE_PICTURE_TOFS = "Z_PM_AP_SAVE_PICTURE_TOFS";
+	private static final String PT_FILE = "PT_FILE";
+	private static final String P_EXT = "P_EXT";
+	private static final String P_TYPE = "P_TYPE";
 	private Context context;
 	private DBManager dbManager;
 	private String ipAddress;
@@ -1402,5 +1410,43 @@ public class Connection extends Activity {
 		zEffort.setTotal(parseResult(response3.get(6).toString()));
 
 		dbManager.insertEffort(zEffort, program);
+	}
+
+	public List<Message> savePicture(String path, char type, String aufnr)
+			throws HttpResponseException, IOException, XmlPullParserException {
+
+		SoapObject request = new SoapObject(NAMESPACE,
+				Z_PM_AP_SAVE_PICTURE_TOFS);
+
+		File file = new File(path);
+		FileInputStream fis = new FileInputStream(file);
+
+		int byteOffset = 0;
+		int byteCount = 255;
+		byte[][] buffer = new byte[(int) (file.length() % byteCount)][];
+
+		SoapObject ptfile = new SoapObject();
+
+		for (byte[] b : buffer) {
+			b = new byte[byteCount];
+			fis.read(b, byteOffset, byteCount);
+			byteOffset += byteCount;
+
+			ptfile.addProperty(ITEM, Base64.encode(b));
+		}
+		fis.close();
+
+		request.addProperty(PT_FILE, ptfile);
+		request.addProperty(P_EXT, path.substring(path.lastIndexOf(".")));
+		request.addProperty(P_ORDER_NUMBER, aufnr);
+		request.addProperty(P_TYPE, type);
+
+		SoapSerializationEnvelope envelope = call(request);
+
+		SoapObject response = (SoapObject) envelope.getResponse();
+
+		List<Message> messages = getMessageList(response);
+
+		return messages;
 	}
 }
