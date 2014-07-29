@@ -13,5 +13,10 @@
         android:showAsAction="always"
         android:title="@string/components">
     </item>
+    <item
+        android:id="@+id/save_picture"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="@string/save_picture">
+    </item>
 
 </menu>

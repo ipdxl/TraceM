@@ -3,13 +3,20 @@
  */
 package com.sf.tracem.plan.detail;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.ksoap2.transport.HttpResponseException;
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -26,7 +33,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sf.tracem.R;
+import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Equipment;
+import com.sf.tracem.connection.Message;
 import com.sf.tracem.connection.Operation;
 import com.sf.tracem.connection.OrderDetails;
 import com.sf.tracem.db.DBManager;
@@ -47,6 +56,7 @@ public class OrderDetailFragment extends Fragment {
 	public static final String EDIT_MODE = "EDIT_MODE";
 	public static final String VIEW_MODE = "VIEW_MODE";
 	public static final String MODE = "MODE";
+	private static final int PICK_IMAGE = 4;
 
 	private String mode;
 
@@ -170,6 +180,11 @@ public class OrderDetailFragment extends Fragment {
 		inflater.inflate(R.menu.order_details_menu, menu);
 
 		MenuItem orderDescription = menu.findItem(R.id.orderDescription);
+		MenuItem savePicture = menu.findItem(R.id.save_picture);
+		if (mode != EDIT_MODE) {
+			savePicture.setVisible(false);
+		}
+
 		View view = orderDescription.getActionView();
 
 		TextView descriptionText = (TextView) view
@@ -188,6 +203,15 @@ public class OrderDetailFragment extends Fragment {
 			break;
 		case android.R.id.home:
 			getActivity().onBackPressed();
+			break;
+		case R.id.save_picture:
+			Intent pickImageintent = new Intent();
+			pickImageintent.setType("image/*");
+			pickImageintent.setAction(Intent.ACTION_GET_CONTENT);
+			startActivityForResult(Intent.createChooser(pickImageintent,
+					getResources().getString(R.string.select_picture)),
+					PICK_IMAGE);
+			// startActivityForResult(pickImageintent, PICK_IMAGE);
 			break;
 
 		default:
@@ -218,6 +242,64 @@ public class OrderDetailFragment extends Fragment {
 				.setIcon(android.R.drawable.ic_dialog_info).setView(view)
 				.create().show();
 
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+
+			Uri uri = data.getData();
+
+			Cursor cursor = getActivity()
+					.getContentResolver()
+					.query(uri,
+							new String[] { android.provider.MediaStore.Images.ImageColumns.DATA },
+							null, null, null);
+
+			if (cursor.moveToFirst()) {
+				List<String> files = new ArrayList<String>();
+				do {
+					files.add(cursor.getString(0));
+					String path = cursor.getString(0);
+					savePicture(path);
+
+				} while (cursor.moveToNext());
+			}
+		}
+
+	}
+
+	private void savePicture(String path) {
+		AsyncTask<String, Integer, List<Message>> savePictureTask;
+		savePictureTask = new AsyncTask<String, Integer, List<Message>>() {
+
+			@Override
+			protected List<Message> doInBackground(String... params) {
+				List<Message> messages = null;
+
+				try {
+					Looper.prepare();
+				} catch (Exception e) {
+				}
+
+				Connection conn = new Connection(getActivity());
+				try {
+					messages = conn.savePicture(params[0], 'X', getArguments()
+							.getString(AUFNR));
+				} catch (HttpResponseException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (XmlPullParserException e) {
+					e.printStackTrace();
+				}
+				return messages;
+			}
+
+		};
+		savePictureTask.execute(path);
 	}
 
 	private class OrderDetailsTask extends

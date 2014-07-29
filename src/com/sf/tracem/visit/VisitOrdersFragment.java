@@ -3,11 +3,6 @@ package com.sf.tracem.visit;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sf.tracem.R;
-import com.sf.tracem.connection.Order;
-import com.sf.tracem.plan.MyJobNavigation;
-import com.sf.tracem.schedule.OrderListAdapter;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +13,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.sf.tracem.R;
+import com.sf.tracem.connection.Order;
+import com.sf.tracem.plan.MyJobNavigation;
+import com.sf.tracem.schedule.OrderListAdapter;
 
 public class VisitOrdersFragment extends Fragment {
 
@@ -78,5 +78,4 @@ public class VisitOrdersFragment extends Fragment {
 			}
 		});
 	}
-
 }

@@ -20,7 +20,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.app.Activity;
 import android.content.Context;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore.Files;
 
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.db.TraceMOpenHelper;
@@ -1421,25 +1420,23 @@ public class Connection extends Activity {
 		File file = new File(path);
 		FileInputStream fis = new FileInputStream(file);
 
-		int byteOffset = 0;
 		int byteCount = 255;
-		byte[][] buffer = new byte[(int) (file.length() % byteCount)][];
+		long length = file.length();
+		byte[][] buffer = new byte[(int) (length / byteCount)][];
 
 		SoapObject ptfile = new SoapObject();
 
 		for (byte[] b : buffer) {
 			b = new byte[byteCount];
-			fis.read(b, byteOffset, byteCount);
-			byteOffset += byteCount;
-
+			fis.read(b, 0, byteCount);
 			ptfile.addProperty(ITEM, Base64.encode(b));
 		}
 		fis.close();
 
 		request.addProperty(PT_FILE, ptfile);
-		request.addProperty(P_EXT, path.substring(path.lastIndexOf(".")));
+		request.addProperty(P_EXT, path.substring(path.lastIndexOf(".") + 1));
 		request.addProperty(P_ORDER_NUMBER, aufnr);
-		request.addProperty(P_TYPE, type);
+		request.addProperty(P_TYPE, "" + type);
 
 		SoapSerializationEnvelope envelope = call(request);
 
