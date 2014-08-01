@@ -8,13 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -174,6 +174,7 @@ public class MyPlanFragment extends Fragment {
 				progress.setMessage(getResources().getString(R.string.loading));
 				progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 				progress.setIndeterminate(true);
+				progress.setCancelable(false);
 				progress.show();
 			}
 

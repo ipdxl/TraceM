@@ -76,11 +76,14 @@ public class Connection extends Activity {
 	private static final String PT_FILE = "PT_FILE";
 	private static final String P_EXT = "P_EXT";
 	private static final String P_TYPE = "P_TYPE";
+	private static final String ZUSER = "ZUSER";
+	private static final String IT_USERS = "IT_USERS";
 	private Context context;
 	private DBManager dbManager;
 	private String ipAddress;
 
 	/**
+	 * Initializes an instance from {@link Connection} class
 	 * 
 	 * @param context
 	 */
@@ -104,20 +107,23 @@ public class Connection extends Activity {
 	}
 
 	/**
-	 * @param userName
+	 * Log in the SAP Server and retreive all requiered info for quik access.
+	 * Delete and repopulate the local data base
+	 * 
+	 * @param user
 	 * @param password
-	 * @return Z_PM_AP_LOGIN object containing user information
+	 * @return {@link Z_PM_AP_LOGIN} object containing user information
 	 * @throws HttpResponseException
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	public Z_PM_AP_LOGIN login(String userName, String password)
+	public Z_PM_AP_LOGIN login(String user, String password)
 			throws HttpResponseException, IOException, XmlPullParserException {
 
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_LOGIN);
 
 		request.addProperty(P_PASSWORD, password);
-		request.addProperty(P_USER, userName);
+		request.addProperty(P_USER, user);
 
 		SoapSerializationEnvelope envelope = call(request);
 		// Get the response
@@ -137,19 +143,20 @@ public class Connection extends Activity {
 	}
 
 	/**
+	 * Closes sesion and deletes local data
 	 * 
-	 * @param userName
+	 * @param user
 	 * @return A Message List
 	 * @throws HttpResponseException
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	public List<Message> logout(String userName) throws HttpResponseException,
+	public List<Message> logout(String user) throws HttpResponseException,
 			IOException, XmlPullParserException {
 
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_LOGOUT);
 
-		request.addProperty(P_USER, userName);
+		request.addProperty(P_USER, user);
 
 		SoapSerializationEnvelope envelope = call(request);
 
@@ -161,6 +168,7 @@ public class Connection extends Activity {
 	}
 
 	/**
+	 * Gets a {@link List}<{@link Message} from a {@link SoapObject}
 	 * 
 	 * @param object
 	 *            {@link SoapObject} containing a Message List
@@ -187,20 +195,20 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param userName
+	 * @param user
 	 *            User name
-	 * @return Next program id available
+	 * @return Next Schedule id available
 	 * @throws HttpResponseException
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
 	@SuppressWarnings("unchecked")
-	public String getNetxSchedule(String userName)
-			throws HttpResponseException, IOException, XmlPullParserException {
+	public String getNetxSchedule(String user) throws HttpResponseException,
+			IOException, XmlPullParserException {
 
 		SoapObject request = new SoapObject(NAMESPACE, GET_NEXT_SCHEDULE);
 
-		request.addProperty(P_USER, userName);
+		request.addProperty(P_USER, user);
 
 		SoapSerializationEnvelope envelope = call(request);
 
@@ -215,20 +223,20 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param object
+	 * @param menus
 	 *            {@link SoapObject} with menu list
 	 * @return {@link List}<{@link Menu}>
 	 * @throws NumberFormatException
 	 */
-	private List<Menu> getMenuList(SoapObject object)
+	private List<Menu> getMenuList(SoapObject menus)
 			throws NumberFormatException {
-		int count = object.getPropertyCount();
+		int count = menus.getPropertyCount();
 
 		ArrayList<Menu> menuList = new ArrayList<Menu>();
 
 		for (int i = 0; i < count; i++) {
 			Menu menu = new Menu();
-			SoapObject item = (SoapObject) object.getProperty(i);
+			SoapObject item = (SoapObject) menus.getProperty(i);
 
 			menu.setIdMenu((byte) parseNumericResult(item
 					.getPropertyAsString(Menu.ID_MENU)));
@@ -328,7 +336,7 @@ public class Connection extends Activity {
 	/**
 	 * 
 	 * @param bool
-	 *            {@link String} with "X" or Empty {@link String}
+	 *            {@link String} with "X" or Empty ("") {@link String}
 	 * @return 1 or 0
 	 */
 	private byte parseBitResult(String bool) {
@@ -341,19 +349,19 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param UserName
+	 * @param user
 	 *            User name
 	 * @return Single user's plan
 	 * @throws Exception
 	 */
-	public List<Order> getPlan(String UserName) throws Exception {
-		return getPlan(new String[] { UserName });
+	public List<Order> getPlan(String user) throws Exception {
+		return getPlan(new String[] { user });
 	}
 
 	/**
 	 * 
 	 * @param users
-	 *            User's names
+	 *            User names
 	 * @return User's plan list
 	 * @throws XmlPullParserException
 	 * @throws IOException
@@ -370,10 +378,10 @@ public class Connection extends Activity {
 
 		for (String user : users) {
 			SoapObject item = new SoapObject();
-			item.addProperty("ZUSER", user);
+			item.addProperty(ZUSER, user);
 			userslist.addProperty(ITEM, item);
 		}
-		request.addProperty("IT_USERS", userslist);
+		request.addProperty(IT_USERS, userslist);
 
 		SoapSerializationEnvelope envelope = call(request);
 
@@ -411,7 +419,7 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param userName
+	 * @param user
 	 *            User name
 	 * @param year
 	 *            Schedule year
@@ -426,7 +434,7 @@ public class Connection extends Activity {
 	 * 
 	 * @see #updateSchedule(String, int, int, List)
 	 */
-	public Schedule createSchedule(String userName, int year, int week,
+	public Schedule createSchedule(String user, int year, int week,
 			List<Order> orders) throws HttpResponseException, IOException,
 			XmlPullParserException {
 
@@ -435,7 +443,7 @@ public class Connection extends Activity {
 
 		@SuppressWarnings("unchecked")
 		Vector<SoapObject> response = (Vector<SoapObject>) prepareSchedule(
-				userName, year, week, orders, request);
+				user, year, week, orders, request);
 
 		Schedule schedule = getSingleSchedule(response.get(1));
 
@@ -449,7 +457,7 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param userName
+	 * @param user
 	 *            User name
 	 * @param year
 	 *            Schedule year
@@ -465,15 +473,15 @@ public class Connection extends Activity {
 	 * 
 	 * @see #createSchedule(String, int, int, List)
 	 */
-	public List<Message> updateSchedule(String userName, int year, int week,
+	public List<Message> updateSchedule(String user, int year, int week,
 			List<Order> schedule) throws HttpResponseException, IOException,
 			XmlPullParserException {
 
 		// Create request
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_UPDATE_SCHEDULE);
 
-		SoapObject response = (SoapObject) prepareSchedule(userName, year,
-				week, schedule, request);
+		SoapObject response = (SoapObject) prepareSchedule(user, year, week,
+				schedule, request);
 
 		List<Message> messagelist = null;
 		messagelist = getMessageList(response);
@@ -485,7 +493,7 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param userName
+	 * @param user
 	 *            User name
 	 * @param year
 	 *            Year
@@ -500,7 +508,7 @@ public class Connection extends Activity {
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	private Object prepareSchedule(String userName, int year, int week,
+	private Object prepareSchedule(String user, int year, int week,
 			List<Order> orders, SoapObject request)
 			throws HttpResponseException, IOException, XmlPullParserException {
 
@@ -516,7 +524,7 @@ public class Connection extends Activity {
 
 		request.addProperty("IT_ORDERS", itOrders);
 		request.addProperty(P_PROGRAM, idProgram);
-		request.addProperty(P_USER, userName);
+		request.addProperty(P_USER, user);
 
 		SoapSerializationEnvelope envelope = call(request);
 
@@ -526,7 +534,7 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param userName
+	 * @param user
 	 *            User name
 	 * @param idProgram
 	 *            Program ID
@@ -535,7 +543,7 @@ public class Connection extends Activity {
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	public List<Order> getScheduleDetail(String userName, String idProgram)
+	public List<Order> getScheduleDetail(String user, String idProgram)
 			throws HttpResponseException, IOException, XmlPullParserException {
 		// int year, int week
 		// String idProgram = "" + year + (week < 10 ? "0" : "") + week;
@@ -545,7 +553,7 @@ public class Connection extends Activity {
 				Z_PM_AP_GET_SCHEDULE_DETAIL);
 
 		request.addProperty(P_PROGRAM, idProgram);
-		request.addProperty(P_USER, userName);
+		request.addProperty(P_USER, user);
 
 		SoapSerializationEnvelope envelope = call(request);
 
@@ -590,14 +598,14 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param userName
+	 * @param user
 	 *            User name
 	 * @return A list containing schedules
 	 * @throws HttpResponseException
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	public List<Schedule> getScheduleList(String userName)
+	public List<Schedule> getScheduleList(String user)
 			throws HttpResponseException, IOException, XmlPullParserException {
 		// int year, int week
 		// String idProgram = "" + year + (week < 10 ? "0" : "") + week;
@@ -606,7 +614,7 @@ public class Connection extends Activity {
 		SoapObject request = new SoapObject(NAMESPACE,
 				Z_PM_AP_GET_SCHEDULE_LIST);
 
-		request.addProperty(P_USER, userName);
+		request.addProperty(P_USER, user);
 
 		SoapSerializationEnvelope envelope = call(request);
 
@@ -877,7 +885,7 @@ public class Connection extends Activity {
 
 	/**
 	 * 
-	 * @param userName
+	 * @param user
 	 *            User name
 	 * @param year
 	 *            Year Program
@@ -889,12 +897,12 @@ public class Connection extends Activity {
 	 * @throws HttpResponseException
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Visit> getVisitList(String userName, String id)
+	public List<Visit> getVisitList(String user, String id)
 			throws HttpResponseException, IOException, XmlPullParserException {
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_GET_VISIT_LIST);
 
 		request.addProperty(P_PROGRAM, id);
-		request.addProperty(P_USER, userName);
+		request.addProperty(P_USER, user);
 
 		SoapSerializationEnvelope envelope = call(request);
 
@@ -906,7 +914,7 @@ public class Connection extends Activity {
 		dbManager.insertVisits(visitList);
 
 		for (Visit visit : visitList) {
-			visit.setUSER(userName);
+			visit.setUSER(user);
 			getVisitDetail(visit);
 		}
 
@@ -1147,14 +1155,14 @@ public class Connection extends Activity {
 		}
 	}
 
-	public List<Message> deleteSchedule(String userName, int year, int week)
+	public List<Message> deleteSchedule(String user, int year, int week)
 			throws HttpResponseException, IOException, XmlPullParserException {
 
 		String idProgram = "" + year + (week < 10 ? "0" : "") + week;
 		SoapObject request = new SoapObject(NAMESPACE, Z_PM_AP_DELETE_SCHEDULE);
 
 		request.addProperty(P_PROGRAM, idProgram);
-		request.addProperty(P_USER, userName);
+		request.addProperty(P_USER, user);
 
 		SoapSerializationEnvelope envelope = call(request);
 
@@ -1223,7 +1231,7 @@ public class Connection extends Activity {
 		return points;
 	}
 
-	public List<Message> saveMeasureDoc(String userName,
+	public List<Message> saveMeasureDoc(String user,
 			List<MeasurementPoint> points) throws HttpResponseException,
 			IOException, XmlPullParserException {
 
@@ -1249,7 +1257,7 @@ public class Connection extends Activity {
 		}
 
 		request.addProperty(IT_READ_POINTS, soapPoints);
-		request.addProperty(P_USER, userName);
+		request.addProperty(P_USER, user);
 
 		SoapSerializationEnvelope envelope = call(request);
 
@@ -1270,6 +1278,15 @@ public class Connection extends Activity {
 		return messages;
 	}
 
+	/**
+	 * 
+	 * @param request
+	 *            {@link SoapObject} for request
+	 * @return {@link SoapSerializationEnvelope} with the response within
+	 * @throws HttpResponseException
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
 	private SoapSerializationEnvelope call(SoapObject request)
 			throws HttpResponseException, IOException, XmlPullParserException {
 
@@ -1285,6 +1302,15 @@ public class Connection extends Activity {
 		return envelope;
 	}
 
+	/**
+	 * 
+	 * @param visit
+	 *            Visit for log retreive
+	 * @return The visit's log
+	 * @throws HttpResponseException
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
 	public List<VisitLog> getVisitDetail(Visit visit)
 			throws HttpResponseException, IOException, XmlPullParserException {
 
@@ -1329,6 +1355,16 @@ public class Connection extends Activity {
 		return visitLog;
 	}
 
+	/**
+	 * Closes the current {@link Schedule}
+	 * 
+	 * @param user
+	 * @param id
+	 * @return
+	 * @throws HttpResponseException
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
 	public List<Message> closeSchedule(String user, String id)
 			throws HttpResponseException, IOException, XmlPullParserException {
 
@@ -1411,6 +1447,19 @@ public class Connection extends Activity {
 		dbManager.insertEffort(zEffort, program);
 	}
 
+	/**
+	 * 
+	 * @param path
+	 * @param type
+	 *            'X' or space ' '
+	 * @param aufnr
+	 *            Order number
+	 * @return A {@link List}<{@link Message}> with success, error and warning
+	 *         messages
+	 * @throws HttpResponseException
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
 	public List<Message> savePicture(String path, char type, String aufnr)
 			throws HttpResponseException, IOException, XmlPullParserException {
 

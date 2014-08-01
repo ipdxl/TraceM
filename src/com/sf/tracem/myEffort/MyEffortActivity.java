@@ -1,15 +1,15 @@
 package com.sf.tracem.myEffort;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.sf.tracem.R;
 
-public class MyEffort extends FragmentActivity {
+public class MyEffortActivity extends Activity {
 
 	MyEffortMenu mem = new MyEffortMenu();
 	Context context = this;

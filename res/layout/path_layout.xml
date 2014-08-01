@@ -3,24 +3,45 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <ExpandableListView
-        android:id="@+id/expandablePahtList"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:minWidth="200dp" >
-    </ExpandableListView>
-
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/expandablePahtList"
-        class="com.google.android.gms.maps.SupportMapFragment" />
+        class="com.google.android.gms.maps.MapFragment" />
+
+    <SlidingDrawer
+        android:id="@+id/slidingDrawer1"
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:content="@+id/content"
+        android:handle="@+id/handle" >
+
+        <Button
+            android:id="@+id/handle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/path" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false" >
+
+            <ExpandableListView
+                android:id="@+id/expandablePahtList"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minWidth="200dp" >
+            </ExpandableListView>
+        </LinearLayout>
+    </SlidingDrawer>
 
 </RelativeLayout>

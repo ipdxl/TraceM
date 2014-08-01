@@ -130,5 +130,6 @@
     <string name="estimated_time">Estimated Time</string>
     <string name="confirmed_time">Confirmed Time</string>
     <string name="save_picture">Save picture</string>
+    <string name="path">Path</string>
 
 </resources>

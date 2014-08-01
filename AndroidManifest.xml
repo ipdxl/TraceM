@@ -33,7 +33,9 @@
 
         <activity
             android:name="com.sf.tracem.maps.MyPathMapActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
@@ -46,7 +48,8 @@
         <activity
             android:name="com.sf.tracem.login.loginActivity"
             android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,32 +59,29 @@
         <activity
             android:name="com.sf.tracem.plan.MyJobActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
             android:uiOptions="splitActionBarWhenNarrow" >
             <meta-data
                 android:name="android.support.UI_OPTIONS"
                 android:value="splitActionBarWhenNarrow" />
         </activity>
         <activity
-            android:name="com.sf.tracem.myEffort.MyEffort"
+            android:name="com.sf.tracem.myEffort.MyEffortActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
             android:uiOptions="none" >
         </activity>
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAz3WYSudPzh5ZdKRPBBqdIj8u8KvyIoYM" />
-
         <activity
             android:name=".myEffort.MyEffortMenu"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
             android:uiOptions="none" >
         </activity>
         <activity
             android:name=".GraphAChartEngineActivity"
-            android:label="@string/app_name" >
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -6,13 +6,14 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +24,7 @@ import android.widget.ExpandableListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -47,7 +48,6 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 	private ExpandableListAdapter adapter;
 	private LatLngBounds bounds;
 	private Builder builder;
-	private View view;
 	private Marker marker;
 	private UiSettings mapSettings;
 	private SharedPreferences loginPreferences;
@@ -73,8 +73,9 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 			pathList = (ArrayList<Path>) savedInstanceState
 					.getSerializable(PATH_LIST);
 		} else {
-			pathList = getPath(loginPreferences.getString(
-					PreferenceKeys.USERNAME, null), "28.04.2014");
+			pathList = getPath(
+					loginPreferences.getString(PreferenceKeys.USERNAME, null),
+					"28.04.2014");
 		}
 	}
 
@@ -82,17 +83,11 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		view = getView();
-		if (view != null) {
-			((ViewGroup) view.getParent()).removeView(view);
-			map = ((SupportMapFragment) getFragmentManager().findFragmentById(
-					R.id.map)).getMap();
-			return view;
-		}
-		view = inflater.inflate(R.layout.path_layout, container, false);
 
-		map = ((SupportMapFragment) getFragmentManager().findFragmentById(
-				R.id.map)).getMap();
+		View view = inflater.inflate(R.layout.path_layout, container, false);
+
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+				.getMap();
 
 		map.setMyLocationEnabled(true);
 		map.setIndoorEnabled(true);
@@ -107,6 +102,16 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 		expPathList.setAdapter(adapter);
 		expPathList.setChoiceMode(ExpandableListView.CHOICE_MODE_SINGLE);
 		return view;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		Fragment fragment = (getFragmentManager().findFragmentById(R.id.map));
+		FragmentTransaction ft = getActivity().getFragmentManager()
+				.beginTransaction();
+		ft.remove(fragment);
+		ft.commit();
 	}
 
 	@Override
@@ -171,7 +176,7 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 
 			bounds = builder.build();
 
-			map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10),
+			map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75),
 					2000, null);
 		}
 	}

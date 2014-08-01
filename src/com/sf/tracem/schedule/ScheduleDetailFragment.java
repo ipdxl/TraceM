@@ -15,13 +15,13 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -118,7 +118,8 @@ public class ScheduleDetailFragment extends Fragment {
 
 	@Override
 	public void onAttach(Activity activity) {
-		loginPreferences =  PreferenceManager.getDefaultSharedPreferences(activity);
+		loginPreferences = PreferenceManager
+				.getDefaultSharedPreferences(activity);
 		super.onAttach(activity);
 	}
 
@@ -413,8 +414,8 @@ public class ScheduleDetailFragment extends Fragment {
 				List<Message> message = null;
 				try {
 					message = connection.deleteSchedule(loginPreferences
-							.getString(PreferenceKeys.USERNAME, null),
-							year, week);
+							.getString(PreferenceKeys.USERNAME, null), year,
+							week);
 				} catch (HttpResponseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -507,13 +508,13 @@ public class ScheduleDetailFragment extends Fragment {
 
 						newSchedule = connection.createSchedule(
 								loginPreferences.getString(
-										PreferenceKeys.USERNAME, null),
-								year, week, schedule);
+										PreferenceKeys.USERNAME, null), year,
+								week, schedule);
 						break;
 					case UPDATE:
 						messages = connection.updateSchedule(loginPreferences
-								.getString(PreferenceKeys.USERNAME,
-										null), year, week, schedule);
+								.getString(PreferenceKeys.USERNAME, null),
+								year, week, schedule);
 						break;
 					default:
 					}

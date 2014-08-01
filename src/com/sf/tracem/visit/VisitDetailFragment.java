@@ -14,6 +14,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
@@ -23,10 +26,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -72,7 +71,7 @@ public class VisitDetailFragment extends Fragment {
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
 
-		fm = ((FragmentActivity) getActivity()).getSupportFragmentManager();
+		fm = getActivity().getFragmentManager();
 
 		dbManager = new DBManager(getActivity());
 		visit = dbManager.getActiveVisit();
@@ -115,6 +114,7 @@ public class VisitDetailFragment extends Fragment {
 				progress.setMessage(getResources().getString(R.string.loading));
 				progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 				progress.setIndeterminate(true);
+				progress.setCancelable(false);
 				progress.show();
 			}
 
@@ -183,7 +183,6 @@ public class VisitDetailFragment extends Fragment {
 
 		return super.onOptionsItemSelected(item);
 	}
-	
 
 	private void closeVisit() {
 		visit.setID_PROGRAM(visit.getID_PROGRAM());
@@ -205,6 +204,17 @@ public class VisitDetailFragment extends Fragment {
 
 				AsyncTask<String, Integer, Boolean> createVisitTask;
 				createVisitTask = new AsyncTask<String, Integer, Boolean>() {
+
+					private ProgressDialog pd;
+
+					@Override
+					protected void onPreExecute() {
+						pd = new ProgressDialog(getActivity());
+						pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+						pd.setIndeterminate(true);
+						pd.setCancelable(false);
+						pd.show();
+					}
 
 					@Override
 					protected Boolean doInBackground(String... params) {
@@ -229,6 +239,7 @@ public class VisitDetailFragment extends Fragment {
 
 					@Override
 					protected void onPostExecute(Boolean result) {
+						pd.cancel();
 						if (result) {
 							Toast.makeText(
 									getActivity(),

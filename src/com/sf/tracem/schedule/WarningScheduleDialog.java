@@ -3,13 +3,13 @@ package com.sf.tracem.schedule;
 import java.util.concurrent.ExecutionException;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -18,10 +18,10 @@ import com.sf.tracem.R;
 
 public class WarningScheduleDialog {
 
-	private FragmentActivity activity;
+	private Activity activity;
 	private boolean result;
 
-	public WarningScheduleDialog(FragmentActivity activity) {
+	public WarningScheduleDialog(Activity activity) {
 		this.activity = activity;
 	}
 

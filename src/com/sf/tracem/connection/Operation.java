@@ -71,6 +71,7 @@ public class Operation implements Serializable {
 	public final static String[] TRIGGERS = new String[] {
 			"CREATE TRIGGER update_order_status"
 					+ " AFTER UPDATE OF COMPLETE ON OPERATION"
+					+ " WHEN NEW.COMPLETE = 1"
 					+ " BEGIN	"
 					+ " 	UPDATE ORDERS SET ORDER_STATUS = 1"
 					+ " 		WHERE AUFNR = NEW.AUFNR"

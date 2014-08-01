@@ -3,10 +3,10 @@ package com.sf.tracem.myEffort;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,7 +19,7 @@ import com.sf.tracem.R;
 import com.sf.tracem.connection.Effort;
 import com.sf.tracem.db.DBManager;
 
-public class MyEffortMenu extends FragmentActivity {
+public class MyEffortMenu extends Activity {
 
 	DBManager dbManager = new DBManager(this);
 	List<Effort> effort = new ArrayList<Effort>();
@@ -66,7 +66,8 @@ public class MyEffortMenu extends FragmentActivity {
 					Effort eff = effort.get(position);
 
 					// Pasar a la pantalla que mostrará las graficas
-					Intent intentEffort = new Intent(context, MyEffort.class);
+					Intent intentEffort = new Intent(context,
+							MyEffortActivity.class);
 
 					// Pasarle los parametros que se necesitan para generar la
 					// grafica

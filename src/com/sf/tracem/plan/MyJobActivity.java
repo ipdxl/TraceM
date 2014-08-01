@@ -4,14 +4,12 @@
 package com.sf.tracem.plan;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,15 +28,15 @@ import com.sf.tracem.visit.VisitListFragment;
  * @author José Guadalupe Mandujano Serrano
  * 
  */
-public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
+public class MyJobActivity extends Activity implements MyJobNavigation {
 
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private MyJobMenuFragment mjmf;
 	private MyPlanFragment mpf;
 	private OrderDetailFragment od;
-	private FragmentManager fm;
-	private FragmentTransaction ft;
+	private android.app.FragmentManager fm;
+	private android.app.FragmentTransaction ft;
 	private ActionBar actionBar;
 	private SharedPreferences sharedPreferences;
 	private String loginName;
@@ -49,12 +47,11 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		fm = getSupportFragmentManager();
+		fm = getFragmentManager();
 		ft = fm.beginTransaction();
 
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		loginName = sharedPreferences.getString(
-				PreferenceKeys.USERNAME, null);
+		loginName = sharedPreferences.getString(PreferenceKeys.USERNAME, null);
 
 		if (loginName != null) {
 			mjmf = new MyJobMenuFragment();
@@ -206,8 +203,8 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 		ft.replace(R.id.content_frame, mpf, SchedulesFragment.TAG);
 
 		Bundle args = new Bundle();
-		args.putString("USER", sharedPreferences.getString(
-				PreferenceKeys.USERNAME, null));
+		args.putString("USER",
+				sharedPreferences.getString(PreferenceKeys.USERNAME, null));
 		mpf.setArguments(args);
 
 		ft.commit();
@@ -239,9 +236,15 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 
 	@Override
 	public void onViewMyPath() {
-		MyPathFragment mpf = new MyPathFragment();
+		MyPathFragment mpf;
+
+		mpf = (MyPathFragment) fm.findFragmentByTag(MyPathFragment.TAG);
+		if (mpf == null) {
+			mpf = new MyPathFragment();
+		}
 
 		ft = fm.beginTransaction();
+
 		ft.replace(R.id.content_frame, mpf, MyPathFragment.TAG);
 
 		ft.commit();
@@ -277,7 +280,7 @@ public class MyJobActivity extends FragmentActivity implements MyJobNavigation {
 
 	@Override
 	public void OnVisitOrderSelected(String aufnr) {
-		FragmentTransaction ft = fm.beginTransaction();
+		ft = fm.beginTransaction();
 
 		OrderDetailFragment odf = new OrderDetailFragment();
 		Bundle args = new Bundle();

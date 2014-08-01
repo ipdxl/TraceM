@@ -3,13 +3,12 @@
  */
 package com.sf.tracem.login;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,7 +21,7 @@ import com.sf.tracem.preferences.SettingsActivity;
  * @author José Guadalupe Mandujano Serrano
  * 
  */
-public class loginActivity extends FragmentActivity {
+public class loginActivity extends Activity {
 
 	LoginFragment loginFragment;
 	MainMenuFragment mmf;
@@ -40,7 +39,7 @@ public class loginActivity extends FragmentActivity {
 
 		setContentView(R.layout.mainmenu);
 		loginFragment = new LoginFragment();
-		FragmentManager fragmentManager = getSupportFragmentManager();
+		android.app.FragmentManager fragmentManager = getFragmentManager();
 
 		loginFragment = (LoginFragment) fragmentManager
 				.findFragmentByTag(TAG_TASK_FRAGMENT);
@@ -53,8 +52,7 @@ public class loginActivity extends FragmentActivity {
 
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-		loginName = sharedPreferences.getString(
-				PreferenceKeys.USERNAME, null);
+		loginName = sharedPreferences.getString(PreferenceKeys.USERNAME, null);
 
 		if (loginName == null) {
 			mmf = null;

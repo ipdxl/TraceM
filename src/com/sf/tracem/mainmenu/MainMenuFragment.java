@@ -3,6 +3,7 @@ package com.sf.tracem.mainmenu;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -11,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
