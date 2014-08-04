@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -69,11 +70,15 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 		initDrawer();
 	}
 
-	private void initDrawer() {
-
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	private void initDrawer() {
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerToggle = new ActionBarDrawerToggle(this, /*
@@ -112,6 +117,7 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 
 		// Set the drawer toggle as the DrawerListener
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		mDrawerToggle.setDrawerIndicatorEnabled(true);
 
 	}
 
@@ -156,13 +162,6 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 
 	@Override
 	public void onShowOrderDetail(String aufnr, String name) {
-		// OrderDetail od = (OrderDetail) fm.findFragmentByTag(ORDER_DETAIL);
-		// if (od != null) {
-		// ft.remove(od);
-		// fm.popBackStack(ORDER_DETAIL,
-		// FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		// }
-		// if (od == null) {
 		od = new OrderDetailFragment();
 		Bundle args = new Bundle();
 		args.putString(OrderDetailFragment.AUFNR, aufnr);
@@ -172,10 +171,10 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 		// od.getArguments().putString("aufnr", orderNumber);
 		// }
 		ft = fm.beginTransaction();
-		ft.replace(R.id.content_frame, od, OrderDetailFragment.TAG)
-				.addToBackStack(OrderDetailFragment.TAG);
+		ft.replace(R.id.detail_frame, od, OrderDetailFragment.TAG);
+		// .addToBackStack(OrderDetailFragment.TAG);
 		ft.commit();
-		mDrawerToggle.setDrawerIndicatorEnabled(false);
+		// mDrawerToggle.setDrawerIndicatorEnabled(false);
 	}
 
 	@Override
@@ -191,9 +190,10 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 			cpf.setArguments(args);
 		}
 
-		ft.replace(R.id.content_frame, cpf, ScheduleDetailFragment.TAG)
-				.addToBackStack(ScheduleDetailFragment.TAG).commit();
-		mDrawerToggle.setDrawerIndicatorEnabled(false);
+		ft.replace(R.id.detail_frame, cpf, ScheduleDetailFragment.TAG);
+		// .addToBackStack(ScheduleDetailFragment.TAG)
+		ft.commit();
+		// mDrawerToggle.setDrawerIndicatorEnabled(false);
 	}
 
 	@Override
@@ -272,10 +272,10 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 	public void onVisitDetail() {
 		ft = fm.beginTransaction();
 		VisitDetailFragment vdf = new VisitDetailFragment();
-		ft.replace(R.id.content_frame, vdf).addToBackStack(
-				VisitDetailFragment.TAG);
+		ft.replace(R.id.detail_frame, vdf, VisitDetailFragment.TAG);
+		// .addToBackStack(VisitDetailFragment.TAG);
 		ft.commit();
-		mDrawerToggle.setDrawerIndicatorEnabled(false);
+		// mDrawerToggle.setDrawerIndicatorEnabled(false);
 	}
 
 	@Override
@@ -292,9 +292,9 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 		ft.commit();
 	}
 
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		mDrawerToggle.setDrawerIndicatorEnabled(true);
-	}
+	// @Override
+	// public void onBackPressed() {
+	// super.onBackPressed();
+	// mDrawerToggle.setDrawerIndicatorEnabled(true);
+	// }
 }

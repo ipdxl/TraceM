@@ -40,7 +40,9 @@ public class MyPlanCustomActionBar {
 		DateHighText = dateH;
 
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
-				| ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
+				| ActionBar.DISPLAY_SHOW_HOME
+		// |ActionBar.DISPLAY_HOME_AS_UP
+				);
 
 		actionBar.setCustomView(R.layout.job_action_bar);
 

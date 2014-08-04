@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/time"
+        android:layout_toRightOf="@array/filters"
         android:checkMark="?android:attr/textCheckMark" />
 
 </RelativeLayout>

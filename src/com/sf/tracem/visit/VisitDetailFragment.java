@@ -155,8 +155,8 @@ public class VisitDetailFragment extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.visit_detail_menu, menu);
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		//ActionBar actionBar = getActivity().getActionBar();
+		//actionBar.setDisplayHomeAsUpEnabled(true);
 
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -177,7 +177,7 @@ public class VisitDetailFragment extends Fragment {
 			break;
 
 		case android.R.id.home:
-			getActivity().onBackPressed();
+			//getActivity().onBackPressed();
 			break;
 		}
 
@@ -248,7 +248,7 @@ public class VisitDetailFragment extends Fragment {
 											+ " " + visit.getID_VISIT(),
 									Toast.LENGTH_LONG).show();
 
-							getActivity().onBackPressed();
+							//getActivity().onBackPressed();
 						} else {
 
 							Toast.makeText(

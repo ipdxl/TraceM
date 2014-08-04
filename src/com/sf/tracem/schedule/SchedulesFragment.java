@@ -6,7 +6,6 @@ package com.sf.tracem.schedule;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -126,20 +125,20 @@ public class SchedulesFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		getActivity().getActionBar().setDisplayOptions(
-				ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
-		getActivity().getActionBar().setDisplayShowCustomEnabled(false);
-		getActivity().getActionBar().setHomeButtonEnabled(true);
-		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		// getActivity().getActionBar().setDisplayOptions(
+		// ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
+		// getActivity().getActionBar().setDisplayShowCustomEnabled(false);
+		// getActivity().getActionBar().setHomeButtonEnabled(true);
+		// getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		inflater.inflate(R.menu.my_plan_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.createProgram) {
-			navigation.onCreateSchedule(null);
-		}
+		// if (item.getItemId() == R.id.createProgram) {
+		// navigation.onCreateSchedule(null);
+		// }
 		return super.onOptionsItemSelected(item);
 	}
 

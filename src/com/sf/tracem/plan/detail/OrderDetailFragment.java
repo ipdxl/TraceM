@@ -12,7 +12,6 @@ import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -30,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
@@ -174,23 +172,23 @@ public class OrderDetailFragment extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		// ActionBar actionBar = getActivity().getActionBar();
+		// actionBar.setDisplayHomeAsUpEnabled(false);
 
 		inflater.inflate(R.menu.order_details_menu, menu);
 
-		MenuItem orderDescription = menu.findItem(R.id.orderDescription);
+		// MenuItem orderDescription = menu.findItem(R.id.orderDescription);
 		MenuItem savePicture = menu.findItem(R.id.save_picture);
 		if (mode != EDIT_MODE) {
 			savePicture.setVisible(false);
 		}
 
-		View view = orderDescription.getActionView();
-
-		TextView descriptionText = (TextView) view
-				.findViewById(android.R.id.text1);
-		descriptionText.setText(String.format("%s : %s", getArguments()
-				.getString(AUFNR), getArguments().getString(NAME)));
+		// View view = orderDescription.getActionView();
+		//
+		// TextView descriptionText = (TextView) view
+		// .findViewById(android.R.id.text1);
+		// descriptionText.setText(String.format("%s : %s", getArguments()
+		// .getString(AUFNR), getArguments().getString(NAME)));
 
 	}
 
@@ -202,7 +200,7 @@ public class OrderDetailFragment extends Fragment {
 			showComponents();
 			break;
 		case android.R.id.home:
-			getActivity().onBackPressed();
+			// getActivity().onBackPressed();
 			break;
 		case R.id.save_picture:
 			Intent pickImageintent = new Intent();

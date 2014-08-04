@@ -8,12 +8,10 @@ import java.util.concurrent.ExecutionException;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,7 +34,6 @@ import com.sf.tracem.connection.Order;
 import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Path;
 import com.sf.tracem.db.DBManager;
-import com.sf.tracem.login.PreferenceKeys;
 
 public class MyPathFragment extends Fragment implements PathNavigation {
 
@@ -50,12 +47,13 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 	private Builder builder;
 	private Marker marker;
 	private UiSettings mapSettings;
-	private SharedPreferences loginPreferences;
+
+	// private SharedPreferences loginPreferences;
 
 	@Override
 	public void onAttach(Activity activity) {
-		loginPreferences = PreferenceManager
-				.getDefaultSharedPreferences(activity);
+		// loginPreferences = PreferenceManager
+		// .getDefaultSharedPreferences(activity);
 		super.onAttach(activity);
 	}
 
@@ -73,9 +71,7 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 			pathList = (ArrayList<Path>) savedInstanceState
 					.getSerializable(PATH_LIST);
 		} else {
-			pathList = getPath(
-					loginPreferences.getString(PreferenceKeys.USERNAME, null),
-					"28.04.2014");
+			pathList = getPath();
 		}
 	}
 
@@ -122,9 +118,9 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		getActivity().getActionBar().setDisplayShowCustomEnabled(false);
-		getActivity().getActionBar().setHomeButtonEnabled(true);
-		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		//getActivity().getActionBar().setDisplayShowCustomEnabled(false);
+		//getActivity().getActionBar().setHomeButtonEnabled(true);
+		//getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		inflater.inflate(R.menu.my_path_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -181,10 +177,10 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 		}
 	}
 
-	private ArrayList<Path> getPath(String user, String date) {
+	private ArrayList<Path> getPath() {
 
-		DummyTask task = new DummyTask();
-		task.execute(user, date);
+		PathTask task = new PathTask();
+		task.execute();
 
 		ArrayList<Path> list = new ArrayList<Path>();
 		try {
@@ -198,7 +194,7 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 		return list;
 	}
 
-	private class DummyTask extends AsyncTask<String, Void, ArrayList<Path>> {
+	private class PathTask extends AsyncTask<String, Void, ArrayList<Path>> {
 
 		@Override
 		protected ArrayList<Path> doInBackground(String... params) {
