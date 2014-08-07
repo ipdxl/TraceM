@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.sf.tracem.R;
 import com.sf.tracem.login.PreferenceKeys;
@@ -246,6 +247,14 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 		ft = fm.beginTransaction();
 
 		ft.replace(R.id.content_frame, mpf, MyPathFragment.TAG);
+		((LinearLayout) findViewById(R.id.detail_frame)).removeAllViews();
+		((LinearLayout) findViewById(R.id.detail_frame))
+				.setVisibility(View.INVISIBLE);
+
+		((LinearLayout) findViewById(R.id.content_frame))
+				.setLayoutParams(new android.widget.RelativeLayout.LayoutParams(
+						android.widget.RelativeLayout.LayoutParams.MATCH_PARENT,
+						android.widget.RelativeLayout.LayoutParams.MATCH_PARENT));
 
 		ft.commit();
 
@@ -291,10 +300,4 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 		ft.replace(R.id.order_detail_frame, odf);
 		ft.commit();
 	}
-
-	// @Override
-	// public void onBackPressed() {
-	// super.onBackPressed();
-	// mDrawerToggle.setDrawerIndicatorEnabled(true);
-	// }
 }
