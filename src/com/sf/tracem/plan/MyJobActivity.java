@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.sf.tracem.R;
 import com.sf.tracem.login.PreferenceKeys;
 import com.sf.tracem.path.MyPathFragment;
