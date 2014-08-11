@@ -3,11 +3,15 @@
  */
 package com.sf.tracem.connection;
 
+import java.io.Serializable;
+
 /**
  * @author José Guadalupe Mandujano Serrano
  * 
  */
-public class Visit {
+@SuppressWarnings("serial")
+public class Visit implements Serializable {
+
 	private long id_visit;
 	private String id_program;
 	private String user;

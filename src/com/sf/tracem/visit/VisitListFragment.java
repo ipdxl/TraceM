@@ -4,7 +4,6 @@
 package com.sf.tracem.visit;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.ksoap2.transport.HttpResponseException;
@@ -36,7 +35,6 @@ import android.widget.Toast;
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
 import com.sf.tracem.connection.Visit;
-import com.sf.tracem.connection.VisitLog;
 import com.sf.tracem.db.DBManager;
 import com.sf.tracem.login.PreferenceKeys;
 import com.sf.tracem.plan.MyJobNavigation;
@@ -57,10 +55,7 @@ public class VisitListFragment extends Fragment {
 	protected int week;
 	private MyJobNavigation navigation;
 	private Visit visit;
-	private ListView visitLogList;
-	private VisitLogAdapter logAdapter;
-	private List<VisitLog> logList = new ArrayList<VisitLog>();;
-
+	
 	@Override
 	public void onAttach(Activity activity) {
 		navigation = (MyJobNavigation) activity;
@@ -86,8 +81,6 @@ public class VisitListFragment extends Fragment {
 		list = (ListView) view.findViewById(R.id.visit_list);
 		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		list.setOnItemClickListener(new OnVisitClickListener());
-
-		visitLogList = (ListView) view.findViewById(R.id.visit_log_list);
 
 		// emptyText = (TextView) view.findViewById(android.R.id.empty);
 		return view;
@@ -157,8 +150,7 @@ public class VisitListFragment extends Fragment {
 		visistList = result;
 		visitAdapter = new VisitListAdapter(getActivity(), visistList);
 		list.setAdapter(visitAdapter);
-		logAdapter = new VisitLogAdapter(getActivity(), logList);
-		visitLogList.setAdapter(logAdapter);
+
 	}
 
 	@Override
@@ -299,10 +291,8 @@ public class VisitListFragment extends Fragment {
 			if (status.isChecked()) {
 				navigation.onVisitDetail();
 			} else {
-				DBManager dbManager = new DBManager(getActivity());
-				logList.clear();
-				logList.addAll(dbManager.getVisitLog(visistList.get(position)));
-				logAdapter.notifyDataSetChanged();
+				navigation.onViewVisitLog(visistList.get(position));
+
 			}
 		}
 	}

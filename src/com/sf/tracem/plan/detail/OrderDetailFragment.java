@@ -49,7 +49,6 @@ public class OrderDetailFragment extends Fragment {
 	private static final String OPERATIONS_FRAGMENT = "OPERATIONS_FRAGMENT";
 	public static final String TAG = "ORDER_DETAIL";
 	public static final String AUFNR = "AUFNR";
-	public static final String NAME = "NAME";
 
 	public static final String EDIT_MODE = "EDIT_MODE";
 	public static final String VIEW_MODE = "VIEW_MODE";

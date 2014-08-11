@@ -136,9 +136,9 @@ public class SchedulesFragment extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// if (item.getItemId() == R.id.createProgram) {
-		// navigation.onCreateSchedule(null);
-		// }
+		if (item.getItemId() == R.id.createProgram) {
+			navigation.onCreateSchedule(null);
+		}
 		return super.onOptionsItemSelected(item);
 	}
 

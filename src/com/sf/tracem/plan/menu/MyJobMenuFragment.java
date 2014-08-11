@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -110,6 +111,11 @@ public class MyJobMenuFragment extends Fragment {
 	}
 
 	public void gotoMenuSelected(int menuIdSelected) {
+
+		LinearLayout detailFrame = ((LinearLayout) getActivity().findViewById(
+				R.id.detail_frame));
+		detailFrame.removeAllViews();
+
 		switch (menuIdSelected) {
 		case 6:
 			navigation.onViewMyJob();

@@ -35,11 +35,5 @@
         android:showAsAction="always"
         android:title="@string/update">
     </item>
-    <item
-        android:id="@+id/createPlan"
-        android:icon="@android:drawable/ic_menu_week"
-        android:showAsAction="always"
-        android:title="@string/create_schedule">
-    </item>
 
 </menu>

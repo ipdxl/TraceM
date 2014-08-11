@@ -48,9 +48,8 @@ public class VisitOrdersFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View view = inflater.inflate(android.R.layout.list_content, container,
-				false);
-		list = (ListView) view.findViewById(android.R.id.list);
+		View view = inflater.inflate(R.layout.visit_orders, container, false);
+		list = (ListView) view.findViewById(R.id.list);
 		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 		adapter = new OrderListAdapter(getActivity(), orders);

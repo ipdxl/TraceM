@@ -12,17 +12,10 @@
 
     <ListView
         android:id="@+id/visit_list"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minWidth="250dp" >
 
-    </ListView>
-
-    <ListView
-        android:id="@+id/visit_log_list"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" >
     </ListView>
 
 </LinearLayout>

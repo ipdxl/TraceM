@@ -15,7 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import com.sf.tracem.R;
+import com.sf.tracem.connection.Visit;
 import com.sf.tracem.login.PreferenceKeys;
 import com.sf.tracem.path.MyPathFragment;
 import com.sf.tracem.plan.detail.OrderDetailFragment;
@@ -24,6 +26,9 @@ import com.sf.tracem.schedule.ScheduleDetailFragment;
 import com.sf.tracem.schedule.SchedulesFragment;
 import com.sf.tracem.visit.VisitDetailFragment;
 import com.sf.tracem.visit.VisitListFragment;
+import com.sf.tracem.visit.VisitLogFragment;
+
+import android.widget.RelativeLayout.LayoutParams;
 
 /**
  * @author José Guadalupe Mandujano Serrano
@@ -165,7 +170,6 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 		od = new OrderDetailFragment();
 		Bundle args = new Bundle();
 		args.putString(OrderDetailFragment.AUFNR, aufnr);
-		args.putString(OrderDetailFragment.NAME, name);
 		od.setArguments(args);
 		// } else {
 		// od.getArguments().putString("aufnr", orderNumber);
@@ -246,14 +250,14 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 		ft = fm.beginTransaction();
 
 		ft.replace(R.id.content_frame, mpf, MyPathFragment.TAG);
-		((LinearLayout) findViewById(R.id.detail_frame)).removeAllViews();
-		((LinearLayout) findViewById(R.id.detail_frame))
-				.setVisibility(View.INVISIBLE);
 
-		((LinearLayout) findViewById(R.id.content_frame))
-				.setLayoutParams(new android.widget.RelativeLayout.LayoutParams(
-						android.widget.RelativeLayout.LayoutParams.MATCH_PARENT,
-						android.widget.RelativeLayout.LayoutParams.MATCH_PARENT));
+		LinearLayout detailFrame = ((LinearLayout) findViewById(R.id.detail_frame));
+		detailFrame.removeAllViews();
+		detailFrame.setVisibility(View.INVISIBLE);
+
+		LinearLayout contentFrame = ((LinearLayout) findViewById(R.id.content_frame));
+		contentFrame.setLayoutParams(new LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
 		ft.commit();
 
@@ -281,9 +285,7 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 		ft = fm.beginTransaction();
 		VisitDetailFragment vdf = new VisitDetailFragment();
 		ft.replace(R.id.detail_frame, vdf, VisitDetailFragment.TAG);
-		// .addToBackStack(VisitDetailFragment.TAG);
 		ft.commit();
-		// mDrawerToggle.setDrawerIndicatorEnabled(false);
 	}
 
 	@Override
@@ -293,10 +295,22 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 		OrderDetailFragment odf = new OrderDetailFragment();
 		Bundle args = new Bundle();
 		args.putString(OrderDetailFragment.AUFNR, aufnr);
-		args.putString(OrderDetailFragment.NAME, "");
 		args.putString(OrderDetailFragment.MODE, OrderDetailFragment.EDIT_MODE);
 		odf.setArguments(args);
-		ft.replace(R.id.order_detail_frame, odf);
+		ft.replace(R.id.order_detail_layout, odf, OrderDetailFragment.TAG);
 		ft.commit();
+	}
+
+	@Override
+	public void onViewVisitLog(Visit visit) {
+
+		ft = fm.beginTransaction();
+		VisitLogFragment vdf = new VisitLogFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(VisitLogFragment.VISIT, visit);
+		vdf.setArguments(args);
+		ft.replace(R.id.detail_frame, vdf, VisitLogFragment.TAG);
+		ft.commit();
+
 	}
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/visit_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <FrameLayout
+        android:id="@+id/orders_layout"
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left" >
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content" >
+        </ListView>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO"
+        android:src="@drawable/common_signin_btn_icon_dark" />
+
+    <FrameLayout
+        android:id="@+id/order_detail_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:minWidth="250dp" >
+    </FrameLayout>
+
+</LinearLayout>

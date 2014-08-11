@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -108,6 +110,16 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 				.beginTransaction();
 		ft.remove(fragment);
 		ft.commit();
+
+		LinearLayout detailFrame = ((LinearLayout) getActivity().findViewById(
+				R.id.detail_frame));
+		detailFrame.removeAllViews();
+		detailFrame.setVisibility(View.VISIBLE);
+
+		LinearLayout contentFrame = ((LinearLayout) getActivity().findViewById(
+				R.id.content_frame));
+		contentFrame.setLayoutParams(new LayoutParams(250,
+				LayoutParams.MATCH_PARENT));
 	}
 
 	@Override
@@ -118,9 +130,9 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		//getActivity().getActionBar().setDisplayShowCustomEnabled(false);
-		//getActivity().getActionBar().setHomeButtonEnabled(true);
-		//getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		// getActivity().getActionBar().setDisplayShowCustomEnabled(false);
+		// getActivity().getActionBar().setHomeButtonEnabled(true);
+		// getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		inflater.inflate(R.menu.my_path_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}

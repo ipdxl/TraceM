@@ -3,6 +3,8 @@
  */
 package com.sf.tracem.plan;
 
+import com.sf.tracem.connection.Visit;
+
 /**
  * @author José Guadalupe Mandujano Serrano
  * 
@@ -24,5 +26,7 @@ public interface MyJobNavigation {
 	void onVisitDetail();
 
 	void OnVisitOrderSelected(String aufnr);
+
+	void onViewVisitLog(Visit visit);
 
 }

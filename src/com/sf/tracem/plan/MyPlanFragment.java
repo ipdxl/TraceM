@@ -154,9 +154,6 @@ public class MyPlanFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.createPlan:
-			navigation.onCreateSchedule(null);
-			break;
 		case R.id.refresh_schedule:
 			getOrders();
 			break;
