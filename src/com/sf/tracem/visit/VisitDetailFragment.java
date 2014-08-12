@@ -57,6 +57,8 @@ public class VisitDetailFragment extends Fragment {
 
 	protected SharedPreferences loginPreferences;
 
+	private Menu menu;
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -153,15 +155,14 @@ public class VisitDetailFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		this.menu = menu;
 		inflater.inflate(R.menu.visit_detail_menu, menu);
-		//ActionBar actionBar = getActivity().getActionBar();
-		//actionBar.setDisplayHomeAsUpEnabled(true);
-
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+
 		switch (item.getItemId()) {
 		case R.id.close_visit:
 			closeVisit();
@@ -176,11 +177,17 @@ public class VisitDetailFragment extends Fragment {
 			break;
 
 		case android.R.id.home:
-			//getActivity().onBackPressed();
+			// getActivity().onBackPressed();
 			break;
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onDestroyView() {
+		menu.clear();
+		super.onDestroyView();
 	}
 
 	private void closeVisit() {
@@ -247,7 +254,7 @@ public class VisitDetailFragment extends Fragment {
 											+ " " + visit.getID_VISIT(),
 									Toast.LENGTH_LONG).show();
 
-							//getActivity().onBackPressed();
+							// getActivity().onBackPressed();
 						} else {
 
 							Toast.makeText(
@@ -269,7 +276,6 @@ public class VisitDetailFragment extends Fragment {
 				.setPositiveButton(android.R.string.ok, closeVisitConfirmation)
 				.setNegativeButton(android.R.string.cancel, null).create();
 		cvd.show();
-
 	}
 
 }

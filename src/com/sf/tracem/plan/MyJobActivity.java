@@ -297,7 +297,7 @@ public class MyJobActivity extends Activity implements MyJobNavigation {
 		args.putString(OrderDetailFragment.AUFNR, aufnr);
 		args.putString(OrderDetailFragment.MODE, OrderDetailFragment.EDIT_MODE);
 		odf.setArguments(args);
-		ft.replace(R.id.order_detail_layout, odf, OrderDetailFragment.TAG);
+		ft.replace(R.id.order_detail_frame, odf, OrderDetailFragment.TAG);
 		ft.commit();
 	}
 

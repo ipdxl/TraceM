@@ -112,6 +112,7 @@ public class SchedulesFragment extends Fragment {
 				false);
 
 		scheduleListView = (ListView) view.findViewById(android.R.id.list);
+		scheduleListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		scheduleListView
 				.setOnItemClickListener(new ScheduleItemClickListener());
 
@@ -130,6 +131,7 @@ public class SchedulesFragment extends Fragment {
 		// getActivity().getActionBar().setDisplayShowCustomEnabled(false);
 		// getActivity().getActionBar().setHomeButtonEnabled(true);
 		// getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		menu.clear();
 		inflater.inflate(R.menu.my_plan_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -159,7 +161,7 @@ public class SchedulesFragment extends Fragment {
 		private TextView text2;
 
 		public ScheduleAdapter(Context context, List<Schedule> objects) {
-			super(context, android.R.layout.simple_list_item_2,
+			super(context, android.R.layout.simple_list_item_activated_2,
 					android.R.id.text1, objects);
 		}
 

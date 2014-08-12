@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Menu;
 import com.sf.tracem.db.TraceMOpenHelper;
+import com.sf.tracem.dummy.DummyFragment;
 import com.sf.tracem.plan.MyJobNavigation;
 
 /**
@@ -115,6 +116,13 @@ public class MyJobMenuFragment extends Fragment {
 		LinearLayout detailFrame = ((LinearLayout) getActivity().findViewById(
 				R.id.detail_frame));
 		detailFrame.removeAllViews();
+
+		getFragmentManager()
+				.beginTransaction()
+				.replace(R.id.detail_frame, new DummyFragment(),
+						DummyFragment.TAG).commit();
+
+		getActivity().invalidateOptionsMenu();
 
 		switch (menuIdSelected) {
 		case 6:

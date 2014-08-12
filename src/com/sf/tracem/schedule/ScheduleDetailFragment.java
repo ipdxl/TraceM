@@ -311,8 +311,6 @@ public class ScheduleDetailFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		//ActionBar actionBar = getActivity().getActionBar();
-		//actionBar.setDisplayHomeAsUpEnabled(true);
 		inflater.inflate(R.menu.schedule_detail_menu, menu);
 
 		deleteMenu = menu.findItem(R.id.delete_plan);
@@ -338,7 +336,7 @@ public class ScheduleDetailFragment extends Fragment {
 			closeSchedule(3);
 			break;
 		case android.R.id.home:
-			//getActivity().onBackPressed();
+			// getActivity().onBackPressed();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -382,7 +380,7 @@ public class ScheduleDetailFragment extends Fragment {
 					Toast.makeText(getActivity(), R.string.schedule_modified,
 							Toast.LENGTH_LONG).show();
 
-					//getActivity().onBackPressed();
+					// getActivity().onBackPressed();
 				} else {
 
 					Toast.makeText(getActivity(),
@@ -564,7 +562,7 @@ public class ScheduleDetailFragment extends Fragment {
 				Toast.makeText(getActivity(), messageText, Toast.LENGTH_LONG)
 						.show();
 				if (processingType == UPDATE) {
-					//getActivity().onBackPressed();
+					// getActivity().onBackPressed();
 				}
 
 			}

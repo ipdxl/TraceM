@@ -20,6 +20,11 @@
             android:orientation="horizontal" >
         </LinearLayout>
 
+        <View
+            android:id="@+id/vertical_divider"
+            style="@style/vertical_divider"
+            android:layout_toRightOf="@id/content_frame" />
+
         <LinearLayout
             android:id="@+id/detail_frame"
             android:layout_width="match_parent"
@@ -27,8 +32,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:orientation="horizontal" 
-            android:layout_toRightOf="@id/content_frame">
+            android:layout_toRightOf="@id/vertical_divider"
+            android:orientation="horizontal" >
         </LinearLayout>
     </RelativeLayout>
 

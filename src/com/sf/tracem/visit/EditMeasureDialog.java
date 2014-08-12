@@ -8,9 +8,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,8 +43,16 @@ public class EditMeasureDialog extends DialogFragment {
 	}
 
 	@Override
+	public void onCancel(DialogInterface dialog) {
+		isShown = false;
+		canceled = true;
+		super.onCancel(dialog);
+	}
+
+	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		isShown = true;
+
 		okListener = new OnClickListener() {
 
 			@Override
@@ -60,6 +66,7 @@ public class EditMeasureDialog extends DialogFragment {
 				isShown = false;
 			}
 		};
+
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 
 		View view = inflater.inflate(R.layout.edit_measure, null, false);
@@ -77,24 +84,6 @@ public class EditMeasureDialog extends DialogFragment {
 				.setNegativeButton(android.R.string.cancel, null).setView(view);
 
 		Dialog dialog = builder.create();
-
-		dialog.setOnCancelListener(new OnCancelListener() {
-
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				isShown = false;
-				canceled = true;
-			}
-		});
-
-		dialog.setOnDismissListener(new OnDismissListener() {
-
-			@Override
-			public void onDismiss(DialogInterface dialog) {
-				isShown = false;
-				canceled = true;
-			}
-		});
 
 		return dialog;
 	}

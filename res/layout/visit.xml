@@ -11,6 +11,8 @@
         android:layout_height="match_parent" >
     </FrameLayout>
 
+    <View style="@style/vertical_divider" />
+
     <FrameLayout
         android:id="@+id/order_detail_frame"
         android:layout_width="match_parent"

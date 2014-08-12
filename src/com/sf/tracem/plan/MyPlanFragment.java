@@ -94,6 +94,7 @@ public class MyPlanFragment extends Fragment {
 		view = inflater
 				.inflate(android.R.layout.list_content, container, false);
 		list = (ListView) view.findViewById(android.R.id.list);
+		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 		// headerTable = (TableLayout) view.findViewById(R.id.headerTable);
 		// contentTable = (TableLayout) view.findViewById(R.id.contentTable);
@@ -146,7 +147,7 @@ public class MyPlanFragment extends Fragment {
 		// Inflate the menu items for use in the action bar
 		// MyJobCustomActionBar mjcab = new MyJobCustomActionBar(getActivity()
 		// .getActionBar(), getActivity());
-
+		menu.clear();
 		inflater.inflate(R.menu.my_job_ab, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}

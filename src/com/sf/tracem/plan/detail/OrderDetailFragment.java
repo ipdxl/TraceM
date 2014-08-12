@@ -193,6 +193,9 @@ public class OrderDetailFragment extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if (!isVisible()) {
+			return super.onOptionsItemSelected(item);
+		}
 
 		switch (item.getItemId()) {
 		case R.id.components:
@@ -238,7 +241,6 @@ public class OrderDetailFragment extends Fragment {
 				.setTitle(R.string.components)
 				.setIcon(android.R.drawable.ic_dialog_info).setView(view)
 				.create().show();
-
 	}
 
 	@Override
