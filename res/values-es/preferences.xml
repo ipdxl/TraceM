@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="connection">Conexión</string>
+    <string name="ip_address">Dirección IP</string>
+    <string name="ip_address_description">Dirección IP, incluyendo puerto para conexión local o remote al servidor</string>
+    <string name="sap_user">Usuario SAP</string>
+    <string name="sap_user_description">Usuario para autenticación  SAP</string>
+    <string name="preferences">Preferencias</string>
+    <string name="sap_password">Contraseña SAP</string>
+    <string name="sap_password_description">Contraseña para conexión SAP</string>
+    <string name="settings">Opciones</string>
+
+</resources>

@@ -3,5 +3,5 @@
     android:id="@+id/mapview"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:apiKey="AIzaSyA-TXuL4AGLDnWzL9yZw7B11oxn6QRB8ts"
+    android:apiKey="AIzaSyAz3WYSudPzh5ZdKRPBBqdIj8u8KvyIoYM"
     android:clickable="true" />

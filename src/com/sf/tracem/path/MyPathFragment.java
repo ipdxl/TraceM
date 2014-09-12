@@ -104,7 +104,7 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 
 	@Override
 	public void onDestroyView() {
-		super.onDestroyView();
+		try{
 		Fragment fragment = (getFragmentManager().findFragmentById(R.id.map));
 		FragmentTransaction ft = getActivity().getFragmentManager()
 				.beginTransaction();
@@ -120,6 +120,9 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 				R.id.content_frame));
 		contentFrame.setLayoutParams(new LayoutParams(250,
 				LayoutParams.MATCH_PARENT));
+		}catch(Exception e){			
+		}
+		super.onDestroyView();
 	}
 
 	@Override
