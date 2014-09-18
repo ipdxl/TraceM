@@ -29,7 +29,7 @@ public class VisitListAdapter extends ArrayAdapter<Visit> {
 	 *            List of {@link Visit}
 	 */
 	public VisitListAdapter(Context context, List<Visit> objects) {
-		super(context, R.layout.visit_item, R.id.id_program, objects);
+		super(context, R.layout.visit_item, R.id.id_schedule, objects);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class VisitListAdapter extends ArrayAdapter<Visit> {
 
 		Visit item = getItem(position);
 
-		TextView idProgram = (TextView) view.findViewById(R.id.id_program);
+		TextView idProgram = (TextView) view.findViewById(R.id.id_schedule);
 		TextView idVisit = (TextView) view.findViewById(R.id.id_visit);
 		TextView comment = (TextView) view.findViewById(R.id.comment);
 		TextView fini = (TextView) view.findViewById(R.id.fini);
@@ -55,20 +55,20 @@ public class VisitListAdapter extends ArrayAdapter<Visit> {
 		comment.setText(item.getCOMENTARIO());
 		fini.setText(item.getFINI());
 		hini.setText(item.getHINI());
-		
+
 		tini.setText(item.getTINI() == 1 ? R.string.automatic : R.string.manual);
 		tini.setTextColor(item.getTINI() == 1 ? getContext().getResources()
 				.getColor(android.R.color.holo_red_dark) : getContext()
 				.getResources().getColor(android.R.color.holo_blue_dark));
-		
+
 		ffin.setText(item.getFFIN());
 		hfin.setText(item.getHFIN());
-		
-		tfin.setText(item.getTINI() == 1 ? R.string.automatic : R.string.manual);
-		tfin.setTextColor(item.getTINI() == 1 ? getContext().getResources()
+
+		tfin.setText(item.getTFIN() == 1 ? R.string.automatic : R.string.manual);
+		tfin.setTextColor(item.getTFIN() == 1 ? getContext().getResources()
 				.getColor(android.R.color.holo_red_dark) : getContext()
 				.getResources().getColor(android.R.color.holo_blue_dark));
-		
+
 		status.setChecked(item.getSTATUS() == 1 ? true : false);
 
 		return view;

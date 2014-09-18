@@ -3,6 +3,7 @@
  */
 package com.sf.tracem.path;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -136,12 +137,20 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		public void onClick(View v) {
 			if (v.getId() == R.id.locationButton) {
 				locationPressed = (Integer) v.getTag();
-				pathNavigation.locatePartner(pathList.get(locationPressed)
-						.getPartner());
+				try {
+					pathNavigation.locatePartner(pathList.get(locationPressed)
+							.getPartner());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			} else if (v.getId() == R.id.addLocationButton) {
 				addLocationPressed = (Integer) v.getTag();
-				pathNavigation.addLocation(pathList.get(addLocationPressed)
-						.getPartner());
+				try {
+					pathNavigation.addLocation(pathList.get(addLocationPressed)
+							.getPartner());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 		}

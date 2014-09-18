@@ -9,30 +9,13 @@
     tools:ignore="HardcodedText" >
 
     <TextView
-        android:id="@+id/id_program"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="8dp"
-        android:text="ID Program" />
-
-    <TextView
-        android:id="@+id/id_visit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/id_program"
-        android:text="id visit" />
-
-    <TextView
         android:id="@+id/comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/id_visit"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/status"
-        android:layout_toRightOf="@+id/id_program"
+        android:layout_toRightOf="@+id/id_schedule"
         android:lines="2"
         android:minLines="5"
         android:text="Comment"
@@ -44,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/id_visit"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:text="yyyy-MM-dd"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -55,6 +39,7 @@
         android:layout_alignBaseline="@+id/tfin"
         android:layout_alignBottom="@+id/tfin"
         android:layout_alignParentLeft="true"
+        android:layout_marginLeft="8dp"
         android:text="yyyy-MM-dd"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -109,5 +94,36 @@
         android:checkMark="?android:attr/listChoiceIndicatorSingle"
         android:checked="false"
         android:gravity="center" />
+
+    <TextView
+        android:id="@+id/visit_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/id_schedule"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/visit_id" />
+
+    <TextView
+        android:id="@+id/id_visit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/visit_no"
+        android:layout_alignBottom="@+id/visit_no"
+        android:layout_toRightOf="@+id/visit_no"
+        android:text="id visit"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/id_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Id schedule"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

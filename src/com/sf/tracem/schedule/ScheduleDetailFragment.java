@@ -228,9 +228,13 @@ public class ScheduleDetailFragment extends Fragment {
 							scheduleHoursText);
 					planHours = substractHours(order, planHours, planHoursText);
 				}
-
-				ordersAdapter.notifyDataSetChanged();
-				scheduleAdapter.notifyDataSetChanged();
+				
+				try {
+					ordersAdapter.notifyDataSetChanged();
+					scheduleAdapter.notifyDataSetChanged();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 

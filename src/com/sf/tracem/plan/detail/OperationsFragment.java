@@ -3,19 +3,15 @@ package com.sf.tracem.plan.detail;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Operation;
@@ -26,7 +22,7 @@ public class OperationsFragment extends Fragment {
 	public static final String OPERATIONS = "OPERATIONS";
 	private ListView List;
 	private List<Operation> operations;
-	private String mode;
+	String mode;
 	private DBManager dbManager;
 
 	@Override
@@ -66,7 +62,7 @@ public class OperationsFragment extends Fragment {
 		// operationList = (ListView) view.findViewById(R.id.operationsList);
 		List = (ListView) view.findViewById(android.R.id.list);
 
-		List.setAdapter(new opsArrayAdapter(getActivity(), operations));
+		List.setAdapter(new OpsArrayAdapter(this, getActivity(), operations));
 
 		return view;
 	}
@@ -98,45 +94,5 @@ public class OperationsFragment extends Fragment {
 
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-	}
-
-	private class opsArrayAdapter extends ArrayAdapter<Operation> {
-
-		private TextView activity, description, time;
-		private CheckedTextView opStatus;
-
-		public opsArrayAdapter(Context context, List<Operation> operations) {
-			super(context, R.layout.operation_item, R.id.eqktx, operations);
-		}
-
-		@SuppressLint("ViewHolder")
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-
-			LayoutInflater inflater = LayoutInflater.from(getContext());
-			View view = inflater
-					.inflate(R.layout.operation_item, parent, false);
-
-			activity = (TextView) view.findViewById(R.id.activity);
-			description = (TextView) view.findViewById(R.id.eqktx);
-			time = (TextView) view.findViewById(R.id.time);
-			opStatus = (CheckedTextView) view
-					.findViewById(R.id.operarion_status);
-
-			Operation operation = getItem(position);
-
-			activity.setText(operation.getACTIVITY());
-			description.setText(operation.getDESCRIPTION());
-			time.setText(operation.getDURATION_NORMAL() + " "
-					+ operation.getDURATION_NORMAL_UNIT());
-
-			opStatus.setChecked(operation.getCOMPLETE() == 1);
-			if (OrderDetailFragment.VIEW_MODE.equals(mode)) {
-				opStatus.setEnabled(false);
-			} else {
-				opStatus.setEnabled(operation.getCommited() == 0);
-			}
-			return view;
-		}
 	}
 }

@@ -37,6 +37,10 @@ import com.sf.tracem.connection.Partner;
 import com.sf.tracem.connection.Path;
 import com.sf.tracem.db.DBManager;
 
+/**
+ * @author JGMS
+ *
+ */
 public class MyPathFragment extends Fragment implements PathNavigation {
 
 	private static final String PATH_LIST = "PATS_LIST";
@@ -104,23 +108,24 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 
 	@Override
 	public void onDestroyView() {
-		try{
-		Fragment fragment = (getFragmentManager().findFragmentById(R.id.map));
-		FragmentTransaction ft = getActivity().getFragmentManager()
-				.beginTransaction();
-		ft.remove(fragment);
-		ft.commit();
+		try {
+			Fragment fragment = (getFragmentManager()
+					.findFragmentById(R.id.map));
+			FragmentTransaction ft = getActivity().getFragmentManager()
+					.beginTransaction();
+			ft.remove(fragment);
+			ft.commit();
 
-		LinearLayout detailFrame = ((LinearLayout) getActivity().findViewById(
-				R.id.detail_frame));
-		detailFrame.removeAllViews();
-		detailFrame.setVisibility(View.VISIBLE);
+			LinearLayout detailFrame = ((LinearLayout) getActivity()
+					.findViewById(R.id.detail_frame));
+			detailFrame.removeAllViews();
+			detailFrame.setVisibility(View.VISIBLE);
 
-		LinearLayout contentFrame = ((LinearLayout) getActivity().findViewById(
-				R.id.content_frame));
-		contentFrame.setLayoutParams(new LayoutParams(250,
-				LayoutParams.MATCH_PARENT));
-		}catch(Exception e){			
+			LinearLayout contentFrame = ((LinearLayout) getActivity()
+					.findViewById(R.id.content_frame));
+			contentFrame.setLayoutParams(new LayoutParams(250,
+					LayoutParams.MATCH_PARENT));
+		} catch (Exception e) {
 		}
 		super.onDestroyView();
 	}
@@ -163,6 +168,9 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 		return super.onOptionsItemSelected(item);
 	}
 
+	/**
+	 * Show Path locations in Google Map
+	 */
 	private void showPathLocations() {
 		map.clear();
 		Geocoder coder = new Geocoder(getActivity());
@@ -192,6 +200,11 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 		}
 	}
 
+	/**
+	 * Get a list of paths
+	 * 
+	 * @return {@link ArrayList} of {@link Path}
+	 */
 	private ArrayList<Path> getPath() {
 
 		PathTask task = new PathTask();
@@ -209,6 +222,12 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 		return list;
 	}
 
+	/**
+	 * {@link AsyncTask} subclass for bacgroun loading
+	 * 
+	 * @author JGMS
+	 *
+	 */
 	private class PathTask extends AsyncTask<String, Void, ArrayList<Path>> {
 
 		@Override
@@ -259,33 +278,33 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 	}
 
 	@Override
-	public void locatePartner(Partner partner) {
+	public void locatePartner(Partner partner) throws IOException {
 		map.clear();
 		builder = null;
 		addLocation(partner);
 	}
 
 	@Override
-	public void addLocation(Partner partner) {
-		Geocoder coder = new Geocoder(getActivity());
-		List<Address> positions = new ArrayList<Address>();
-		String address = partner.getADDRESS();
-		String name = partner.getPARTNER();
-		try {
+	public void addLocation(Partner partner) throws IOException {
+		
+			Geocoder coder = new Geocoder(getActivity());
+			List<Address> positions = new ArrayList<Address>();
+			String address = partner.getADDRESS();
+			String name = partner.getPARTNER();
+			// try {
 			positions = coder.getFromLocationName(address, 1);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		LatLng position;
-		position = new LatLng(positions.get(0).getLatitude(), positions.get(0)
-				.getLongitude());
-		MarkerOptions options = new MarkerOptions().title(name)
-				.position(position).snippet(address);
-		marker = map.addMarker(options);
+			// } catch (IOException e) {
+			// e.printStackTrace();
+			// }
+			LatLng position;
+			position = new LatLng(positions.get(0).getLatitude(), positions
+					.get(0).getLongitude());
+			MarkerOptions options = new MarkerOptions().title(name)
+					.position(position).snippet(address);
+			marker = map.addMarker(options);
 
-		marker.showInfoWindow();
+			marker.showInfoWindow();
 
-		try {
 			if (builder == null) {
 				builder = new Builder();
 				map.animateCamera(CameraUpdateFactory.newLatLngZoom(position,
@@ -298,8 +317,5 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 						CameraUpdateFactory.newLatLngBounds(bounds, 25), 2000,
 						null);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

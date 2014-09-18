@@ -55,14 +55,14 @@ public class VisitDetailFragment extends Fragment {
 
 	private FragmentManager fm;
 
-	protected SharedPreferences loginPreferences;
+	protected SharedPreferences defaultPreferences;
 
 	private Menu menu;
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		loginPreferences = PreferenceManager
+		defaultPreferences = PreferenceManager
 				.getDefaultSharedPreferences(activity);
 	}
 
@@ -205,7 +205,7 @@ public class VisitDetailFragment extends Fragment {
 				visit.setFFIN(vdv.getFini().getText().toString());
 				visit.setHFIN(vdv.getHini().getText().toString());
 				visit.setTFIN((byte) (vdv.getTini().isChecked() ? 1 : 0));
-				visit.setUSER(loginPreferences.getString(
+				visit.setUSER(defaultPreferences.getString(
 						PreferenceKeys.USERNAME, null));
 
 				AsyncTask<String, Integer, Boolean> createVisitTask;

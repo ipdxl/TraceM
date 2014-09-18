@@ -3,6 +3,8 @@
  */
 package com.sf.tracem.path;
 
+import java.io.IOException;
+
 import com.sf.tracem.connection.Partner;
 
 /**
@@ -11,8 +13,8 @@ import com.sf.tracem.connection.Partner;
  */
 public interface PathNavigation {
 
-	void locatePartner(Partner partner);
+	void locatePartner(Partner partner) throws IOException;
 
-	void addLocation(Partner partner);
+	void addLocation(Partner partner) throws IOException;
 
 }
