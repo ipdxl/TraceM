@@ -124,6 +124,7 @@
     <string name="move">Move</string>
     <string name="schedule">Schedule</string>
     <string name="plan">Plan</string>
+    <string name="manual">Manual</string>
     <string name="unatended">Unatended</string>
     <string name="confirmed">Confirmed</string>
     <string name="schedule_orders">Schedule orders</string>
