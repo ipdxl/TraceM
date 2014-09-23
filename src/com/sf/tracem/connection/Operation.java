@@ -107,68 +107,74 @@ public class Operation implements Serializable {
 		this.complete = complete;
 	}
 
-	public String getACTIVITY() {
+	public String getActivity() {
 		return activity;
 	}
 
-	public void setACTIVITY(String ACTIVITY) {
-		this.activity = ACTIVITY;
+	public void setActivity(String activity) {
+		this.activity = activity;
 	}
 
-	public String getWORK_CNTR() {
+	public String getWorkCntr() {
 		return work_cntr;
 	}
 
-	public void setWORK_CNTR(String WORK_CNTR) {
-		this.work_cntr = WORK_CNTR;
+	public void setWorkCntr(String wc) {
+		this.work_cntr = wc;
 	}
 
-	public String getDESCRIPTION() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDESCRIPTION(String DESCRIPTION) {
-		this.description = DESCRIPTION;
+	public void setDescription(String desc) {
+		this.description = desc;
 	}
 
-	public String getCONF_NO() {
+	public String getConfNo() {
 		return conf_no;
 	}
 
-	public void setCONF_NO(String CONF_NO) {
-		this.conf_no = CONF_NO;
+	public void setConfNo(String cn) {
+		this.conf_no = cn;
 	}
 
-	public String getPLANT() {
+	public String getPlant() {
 		return plant;
 	}
 
-	public void setPLANT(String PLANT) {
-		this.plant = PLANT;
+	public void setPlant(String plant) {
+		this.plant = plant;
 	}
 
-	public double getDURATION_NORMAL() {
+	public double getDurationNormal() {
 		return duration_normal;
 	}
 
-	public void setDURATION_NORMAL(double DURATION_NORMAL) {
-		this.duration_normal = DURATION_NORMAL;
+	public void setDurationNormal(double durationN) {
+		this.duration_normal = durationN;
 	}
-
-	public String getDURATION_NORMAL_UNIT() {
+	/**
+	 * 
+	 * @return Duration Normal Unit
+	 */
+	public String getDNU() {
 		return duration_normal_unit;
 	}
-
-	public void setDURATION_NORMAL_UNIT(String DURATION_NORMAL_UNIT) {
-		this.duration_normal_unit = DURATION_NORMAL_UNIT;
+	/**
+	 * Set Duration normal unit
+	 * @param dNU
+	 */
+	public void setDNU(String dNU) {
+		this.duration_normal_unit = dNU;
 	}
 
-	public int getCOMPLETE() {
+	public int getComplete() {
 		return complete;
 	}
 
-	public void setCOMPLETE(int COMPLETE) {
-		this.complete = COMPLETE;
+	public void setComplete(int complete) {
+		this.complete = complete;
 	}
 
 	/**

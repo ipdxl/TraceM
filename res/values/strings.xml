@@ -95,7 +95,7 @@
     <string name="delete_schedule_error">Schedule can not be deleted</string>
     <string name="create_visit">Create visit</string>
     <string name="complete">Complete</string>
-    <string name="hours">Hours</string>
+    <string name="hours">Hrs</string>
     <string name="components">Components</string>
     <string name="automatic">Automatic</string>
     <string name="fini">Start date</string>

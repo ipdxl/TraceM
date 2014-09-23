@@ -93,7 +93,7 @@
     <string name="delete_schedule_error">No se puede eliminar el programa</string>
     <string name="create_visit">Crear visita</string>
     <string name="complete">Completo</string>
-    <string name="hours">Horas</string>
+    <string name="hours">Hrs</string>
     <string name="components">Componentes</string>
     <string name="automatic">Automatico</string>
     <string name="fini">Fecha de cierre</string>

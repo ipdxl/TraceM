@@ -84,7 +84,7 @@ public class OperationsFragment extends Fragment {
 						opStatus.setChecked(!opStatus.isChecked());
 
 						Operation op = operations.get(position);
-						op.setCOMPLETE(op.getCOMPLETE() == 1 ? 0 : 1);
+						op.setComplete(op.getComplete() == 1 ? 0 : 1);
 						dbManager.updateOperation(op);
 					}
 				}

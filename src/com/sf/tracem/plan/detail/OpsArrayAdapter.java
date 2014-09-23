@@ -21,9 +21,6 @@ import com.sf.tracem.connection.Operation;
  */
 class OpsArrayAdapter extends ArrayAdapter<Operation> {
 
-	/**
-	 * 
-	 */
 	private OperationsFragment operationsFragment;
 	private TextView activity, description, time;
 	private CheckedTextView opStatus;
@@ -48,12 +45,11 @@ class OpsArrayAdapter extends ArrayAdapter<Operation> {
 
 		Operation operation = getItem(position);
 
-		activity.setText(operation.getACTIVITY());
-		description.setText(operation.getDESCRIPTION());
-		time.setText(operation.getDURATION_NORMAL() + " "
-				+ operation.getDURATION_NORMAL_UNIT());
+		activity.setText(operation.getActivity());
+		description.setText(operation.getDescription());
+		time.setText(operation.getDurationNormal() + " " + operation.getDNU());
 
-		opStatus.setChecked(operation.getCOMPLETE() == 1);
+		opStatus.setChecked(operation.getComplete() == 1);
 		if (OrderDetailFragment.VIEW_MODE.equals(operationsFragment.mode)) {
 			opStatus.setEnabled(false);
 		} else if (operation.getCommited() == 1) {

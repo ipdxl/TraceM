@@ -424,7 +424,7 @@ public class DBManager {
 				Operation.ACTIVITY);
 
 		traceMwdb.update(Operation.TABLE_NAME, values, query,
-				new String[] { op.getAufnr(), op.getACTIVITY() });
+				new String[] { op.getAufnr(), op.getActivity() });
 		traceMwdb.close();
 
 	}
@@ -433,13 +433,13 @@ public class DBManager {
 		ContentValues values = new ContentValues();
 
 		values.put(Operation.AUFNR, op.getAufnr());
-		values.put(Operation.ACTIVITY, op.getACTIVITY());
-		values.put(Operation.COMPLETE, op.getCOMPLETE());
-		values.put(Operation.DESCRIPTION, op.getDESCRIPTION());
-		values.put(Operation.DURATION_NORMAL, op.getDURATION_NORMAL());
-		values.put(Operation.DURATION_NORMAL_UNIT, op.getDURATION_NORMAL_UNIT());
-		values.put(Operation.PLANT, op.getPLANT());
-		values.put(Operation.WORK_CNTR, op.getWORK_CNTR());
+		values.put(Operation.ACTIVITY, op.getActivity());
+		values.put(Operation.COMPLETE, op.getComplete());
+		values.put(Operation.DESCRIPTION, op.getDescription());
+		values.put(Operation.DURATION_NORMAL, op.getDurationNormal());
+		values.put(Operation.DURATION_NORMAL_UNIT, op.getDNU());
+		values.put(Operation.PLANT, op.getPlant());
+		values.put(Operation.WORK_CNTR, op.getWorkCntr());
 		values.put(Operation.COMMITED, op.getCommited());
 		return values;
 	}
@@ -572,19 +572,19 @@ public class DBManager {
 
 				operation.setAufnr(cursor.getString(columnMap
 						.get(Operation.AUFNR)));
-				operation.setACTIVITY(cursor.getString(columnMap
+				operation.setActivity(cursor.getString(columnMap
 						.get(Operation.ACTIVITY)));
-				operation.setCOMPLETE(cursor.getInt(columnMap
+				operation.setComplete(cursor.getInt(columnMap
 						.get(Operation.COMPLETE)));
-				operation.setDESCRIPTION(cursor.getString(columnMap
+				operation.setDescription(cursor.getString(columnMap
 						.get(Operation.DESCRIPTION)));
-				operation.setDURATION_NORMAL(cursor.getDouble(columnMap
+				operation.setDurationNormal(cursor.getDouble(columnMap
 						.get(Operation.DURATION_NORMAL)));
-				operation.setDURATION_NORMAL_UNIT(cursor.getString(columnMap
+				operation.setDNU(cursor.getString(columnMap
 						.get(Operation.DURATION_NORMAL_UNIT)));
-				operation.setPLANT(cursor.getString(columnMap
+				operation.setPlant(cursor.getString(columnMap
 						.get(Operation.PLANT)));
-				operation.setWORK_CNTR(cursor.getString(columnMap
+				operation.setWorkCntr(cursor.getString(columnMap
 						.get(Operation.WORK_CNTR)));
 				operation.setCommited(cursor.getInt(columnMap
 						.get(Operation.COMMITED)));

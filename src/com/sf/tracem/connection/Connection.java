@@ -780,17 +780,17 @@ public class Connection extends Activity {
 			SoapObject item = (SoapObject) soapOperations.getProperty(i);
 
 			Operation operation = new Operation();
-			operation.setACTIVITY(parseResult(item.getProperty(
+			operation.setActivity(parseResult(item.getProperty(
 					Operation.ACTIVITY).toString()));
-			operation.setDESCRIPTION(parseResult(item.getProperty(
+			operation.setDescription(parseResult(item.getProperty(
 					Operation.DESCRIPTION).toString()));
-			operation.setDURATION_NORMAL(parseNumericResult(item.getProperty(
+			operation.setDurationNormal(parseNumericResult(item.getProperty(
 					Operation.DURATION_NORMAL).toString()));
-			operation.setDURATION_NORMAL_UNIT(parseResult(item.getProperty(
+			operation.setDNU(parseResult(item.getProperty(
 					Operation.DURATION_NORMAL_UNIT).toString()));
-			operation.setWORK_CNTR(parseResult(item.getProperty(
+			operation.setWorkCntr(parseResult(item.getProperty(
 					Operation.WORK_CNTR).toString()));
-			operation.setCOMPLETE(parseBitResult(item.getProperty(
+			operation.setComplete(parseBitResult(item.getProperty(
 					Operation.COMPLETE).toString()));
 
 			operation.setAufnr(aufnr);
@@ -1060,15 +1060,15 @@ public class Connection extends Activity {
 				if (order.equals(op.getAufnr())) {
 					Confirmation conf = new Confirmation();
 
-					conf.setACTIVITY(op.getACTIVITY());
-					conf.setCOMPLETE(op.getCOMPLETE());
-					conf.setACTUAL_DUR(op.getDURATION_NORMAL());
+					conf.setACTIVITY(op.getActivity());
+					conf.setCOMPLETE(op.getComplete());
+					conf.setACTUAL_DUR(op.getDurationNormal());
 					conf.setCONF_TEXT("");
 					conf.setEXEC_FIN_DATE(visit.getFFIN());
 					conf.setEXEC_FIN_TIME(visit.getHFIN());
 					conf.setEXEC_START_DATE(visit.getFINI());
 					conf.setEXEC_START_TIME(visit.getHINI());
-					conf.setUN_ACT_DUR(op.getDURATION_NORMAL_UNIT());
+					conf.setUN_ACT_DUR(op.getDNU());
 					confirmations.add(conf);
 				}
 			}
