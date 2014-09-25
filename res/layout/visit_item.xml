@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
+    android:background="?android:attr/activatedBackgroundIndicator"
     android:descendantFocusability="blocksDescendants"
-    tools:ignore="HardcodedText" 
-    style="@style/listview_selected_item">
+    tools:ignore="HardcodedText" >
 
     <TextView
         android:id="@+id/comment"
