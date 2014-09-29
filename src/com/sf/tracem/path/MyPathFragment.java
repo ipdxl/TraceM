@@ -141,7 +141,7 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 		// getActivity().getActionBar().setDisplayShowCustomEnabled(false);
 		// getActivity().getActionBar().setHomeButtonEnabled(true);
 		// getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-		inflater.inflate(R.menu.my_path_menu, menu);
+		inflater.inflate(R.menu.path_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 

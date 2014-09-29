@@ -27,7 +27,6 @@ import android.widget.ListView;
 //import android.widget.TableLayout;
 //import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sf.tracem.R;
 import com.sf.tracem.connection.Connection;
@@ -148,7 +147,7 @@ public class MyPlanFragment extends Fragment {
 		// MyJobCustomActionBar mjcab = new MyJobCustomActionBar(getActivity()
 		// .getActionBar(), getActivity());
 		menu.clear();
-		inflater.inflate(R.menu.my_job_ab, menu);
+		inflater.inflate(R.menu.job_ab, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -226,8 +225,7 @@ public class MyPlanFragment extends Fragment {
 			TextView aufnr = (TextView) view.findViewById(R.id.aufnr);
 
 			TextView name = (TextView) view.findViewById(R.id.name);
-			Toast.makeText(view.getContext(), aufnr.getText().toString(),
-					Toast.LENGTH_SHORT).show();
+
 			navigation.onShowOrderDetail(aufnr.getText().toString(), name
 					.getText().toString());
 

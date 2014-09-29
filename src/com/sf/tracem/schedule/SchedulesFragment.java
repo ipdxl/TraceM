@@ -132,7 +132,7 @@ public class SchedulesFragment extends Fragment {
 		// getActivity().getActionBar().setHomeButtonEnabled(true);
 		// getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		menu.clear();
-		inflater.inflate(R.menu.my_plan_menu, menu);
+		inflater.inflate(R.menu.schedule_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 

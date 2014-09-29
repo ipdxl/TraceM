@@ -81,7 +81,7 @@ public class VisitListFragment extends Fragment {
 		list = (ListView) view.findViewById(R.id.visit_list);
 		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		list.setOnItemClickListener(new OnVisitClickListener());
-		list.setSelector(R.drawable.like_card_selector);
+		// list.setSelector(R.drawable.like_card_selector);
 
 		// emptyText = (TextView) view.findViewById(android.R.id.empty);
 		return view;
