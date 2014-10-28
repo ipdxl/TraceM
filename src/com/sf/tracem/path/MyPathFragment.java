@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -175,29 +176,46 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 		map.clear();
 		Geocoder coder = new Geocoder(getActivity());
 		builder = new Builder();
+		List<Address> positions = new ArrayList<Address>();
+		LatLng position = null;
+
+		DBManager dbm = new DBManager(getActivity());
+
 		for (int i = 0; i < pathList.size(); i++) {
-			List<Address> positions = new ArrayList<Address>();
-			try {
-				positions = coder.getFromLocationName(pathList.get(i)
-						.getPartner().getADDRESS(), 1);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (pathList.get(i).getPartner().getLongitude() == 0) {
+
+				try {
+					positions = coder.getFromLocationName(pathList.get(i)
+							.getPartner().getADDRESS(), 1);
+				} catch (IOException e) {
+					e.printStackTrace();
+					continue;
+				}
+
+				position = new LatLng(positions.get(0).getLatitude(), positions
+						.get(0).getLongitude());
+
+				Partner partner = new Partner();
+				partner.setLatitude(position.latitude);
+				partner.setLongitude(position.longitude);
+
+				dbm.updatePartner(partner);
+			} else {
+				position = new LatLng(pathList.get(i).getPartner()
+						.getLatitude(), pathList.get(i).getPartner()
+						.getLongitude());
 			}
-			LatLng position;
-			position = new LatLng(positions.get(0).getLatitude(), positions
-					.get(0).getLongitude());
 			builder.include(position);
 			MarkerOptions options = new MarkerOptions()
 					.title(pathList.get(i).getPartner().getPARTNER())
 					.position(position)
 					.snippet(pathList.get(i).getPartner().getADDRESS());
 			map.addMarker(options);
-
-			bounds = builder.build();
-
-			map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75),
-					2000, null);
 		}
+
+		bounds = builder.build();
+		map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 75),
+				2000, null);
 	}
 
 	/**
@@ -243,14 +261,13 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 				ArrayList<String> names = new ArrayList<String>();
 
 				for (Order item : orders) {
-					if (names.contains(item.getPARTNER())) {
+					if (names.contains(item.getPartner())) {
 						continue;
 					}
-					names.add(item.getPARTNER());
+					names.add(item.getPartner());
 
-					Partner partner = new Partner();
-					partner.setPARTNER(item.getPARTNER());
-					partner.setADDRESS(item.getADDRESS());
+					Partner partner = dbManager.getPartner(item.getPartner());
+
 					partnerList.add(partner);
 				}
 
@@ -260,12 +277,14 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 
 					List<Order> ordersList = new ArrayList<Order>();
 					for (Order item : orders) {
-						if (item.getPARTNER() == path.getPartner().getPARTNER()) {
+						if (item.getPartner().equals(
+								path.getPartner().getPARTNER())) {
 							ordersList.add(item);
 						}
 					}
 
-					path.setOrders((Order[]) ordersList.toArray(new Order[] {}));
+					path.setOrders((Order[]) ordersList
+							.toArray(new Order[ordersList.size()]));
 
 					listPath.add(path);
 				}
@@ -286,36 +305,52 @@ public class MyPathFragment extends Fragment implements PathNavigation {
 
 	@Override
 	public void addLocation(Partner partner) throws IOException {
-		
-			Geocoder coder = new Geocoder(getActivity());
-			List<Address> positions = new ArrayList<Address>();
-			String address = partner.getADDRESS();
-			String name = partner.getPARTNER();
-			// try {
-			positions = coder.getFromLocationName(address, 1);
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
-			LatLng position;
-			position = new LatLng(positions.get(0).getLatitude(), positions
-					.get(0).getLongitude());
-			MarkerOptions options = new MarkerOptions().title(name)
-					.position(position).snippet(address);
-			marker = map.addMarker(options);
+		LatLng position;
+		String address = partner.getADDRESS();
+		String name = partner.getPARTNER();
 
-			marker.showInfoWindow();
+		if (partner.getLatitude() == 0 || partner.getLongitude() == 0) {
+			try {
+				Geocoder coder = new Geocoder(getActivity());
+				List<Address> positions = new ArrayList<Address>();
+				positions = coder.getFromLocationName(address, 1);
 
-			if (builder == null) {
-				builder = new Builder();
-				map.animateCamera(CameraUpdateFactory.newLatLngZoom(position,
-						13));
-				builder.include(position);
-			} else {
-				builder.include(position);
-				bounds = builder.build();
-				map.animateCamera(
-						CameraUpdateFactory.newLatLngBounds(bounds, 25), 2000,
-						null);
+				position = new LatLng(positions.get(0).getLatitude(), positions
+						.get(0).getLongitude());
+
+				partner.setLatitude(position.latitude);
+				partner.setLongitude(position.longitude);
+
+				DBManager dbm = new DBManager(getActivity());
+
+				dbm.updatePartner(partner);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+				Toast.makeText(getActivity(),
+						getResources().getString(R.string.add_location_error),
+						Toast.LENGTH_SHORT).show();
+				return;
 			}
+		} else {
+			position = new LatLng(partner.getLatitude(), partner.getLongitude());
+		}
+
+		MarkerOptions options = new MarkerOptions().title(name)
+				.position(position).snippet(address);
+		marker = map.addMarker(options);
+
+		marker.showInfoWindow();
+
+		if (builder == null) {
+			builder = new Builder();
+			map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 13));
+			builder.include(position);
+		} else {
+			builder.include(position);
+			bounds = builder.build();
+			map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 25),
+					2000, null);
+		}
 	}
 }

@@ -44,13 +44,13 @@ public class OrderListAdapter extends ArrayAdapter<Order> {
 		hour = (TextView) view.findViewById(R.id.zhour);
 		status = (TextView) view.findViewById(R.id.order_status);
 
-		aufnr.setText(order.getAUFNR());
-		auftx.setText(order.getAUFTEXT());
-		co_gstrpPlan.setText(order.getCO_GSTRP());
-		name.setText(order.getPARTNER());
-		hour.setText(String.format(Locale.US, "%.1f", order.getZHOURS()));
+		aufnr.setText(order.getAufnr());
+		auftx.setText(order.getAuftext());
+		co_gstrpPlan.setText(order.getCoGstrp());
+		name.setText(order.getPartner());
+		hour.setText(String.format(Locale.US, "%.1f", order.getZHhours()));
 
-		switch (order.getORDER_STATUS()) {
+		switch (order.getOrderStatus()) {
 		case 0:
 			status.setText("");
 			break;

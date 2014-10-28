@@ -133,5 +133,6 @@
     <string name="save_picture">Save picture</string>
     <string name="path">Path</string>
     <string name="visit_id">Visit No.</string>
+    <string name="add_location_error">Unable to add current location</string>
 
 </resources>

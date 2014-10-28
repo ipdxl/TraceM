@@ -123,7 +123,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 	public long getChildId(int groupPosition, int childPosition) {
 		return Long
 				.parseLong(pathList.get(groupPosition).getOrders()[childPosition]
-						.getAUFNR());
+						.getAufnr());
 	}
 
 	@Override

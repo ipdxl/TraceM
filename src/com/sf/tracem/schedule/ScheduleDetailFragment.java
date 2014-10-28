@@ -657,7 +657,7 @@ public class ScheduleDetailFragment extends Fragment {
 	}
 
 	private float addHours(Order order, float initialHours, TextView textView) {
-		float hour = order.getZHOURS();
+		float hour = order.getZHhours();
 		initialHours += hour;
 		textView.setText(String.format(Locale.US, "%.1f", initialHours));
 		return initialHours;
@@ -665,7 +665,7 @@ public class ScheduleDetailFragment extends Fragment {
 
 	private float substractHours(Order order, float initialHours,
 			TextView textView) {
-		float hour = order.getZHOURS();
+		float hour = order.getZHhours();
 		initialHours -= hour;
 		textView.setText(String.format(Locale.US, "%.1f", initialHours));
 		return initialHours;

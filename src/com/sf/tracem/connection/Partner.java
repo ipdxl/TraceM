@@ -10,6 +10,7 @@ public class Partner implements Serializable {
 	private String partner;
 	private String name;
 	private String address;
+	private double latitude, longitude;
 
 	public final static String TABLE_NAME = "PARTNER";
 
@@ -38,19 +39,33 @@ public class Partner implements Serializable {
 	 * 
 	 * @see #LONGITUDE
 	 */
-	public final static String LATITUDE = "ADDRESS";
+	public final static String LATITUDE = "LATITUDE";
 	/**
 	 * Longitude
 	 * 
 	 * @see #LATITUDE
 	 */
-	public final static String LONGITUDE = "ADDRESS";
+	public final static String LONGITUDE = "LONGITUDE";
+	
+	public final static String[] COLUMN_NAMES = new String[]{
+		PARTNER
+		,PARTN_ROLE
+		,ROL_TEXT
+		,NAME
+		,ADDRESS
+		,LATITUDE
+		,LONGITUDE
+	};
 
 	public final static String CREATE_TABLE = "CREATE TABLE PARTNER (\n"
-			+ "	  PARTNER 		TEXT PRIMARY KEY\n" + "	, PARTNER_ROLE	TEXT\n"
-			+ "	, ROL_TEXT 		TEXT\n" + "	, NAME			TEXT\n"
-			+ "	, ADDRESS		TEXT\n" + "	, LATITUDE		TEXT\n"
-			+ "	, LONGITUDE		TEXT\n" + ");";
+			+ "	  PARTNER 		TEXT PRIMARY KEY\n" 
+			+ "	, PARTN_ROLE	TEXT\n"
+			+ "	, ROL_TEXT 		TEXT\n" 
+			+ "	, NAME			TEXT\n"
+			+ "	, ADDRESS		TEXT\n" 
+			+ "	, LATITUDE		TEXT NOT NULL DEFAULT '0'\n"
+			+ "	, LONGITUDE		TEXT NOT NULL DEFAULT '0'\n" 
+			+ ");";
 
 	public String getPARTN_ROLE() {
 		return partn_role;
@@ -90,5 +105,33 @@ public class Partner implements Serializable {
 
 	public void setROL_TEXT(String rOL_TEXT) {
 		rol_text = rOL_TEXT;
+	}
+
+	/**
+	 * @return the latitude
+	 */
+	public double getLatitude() {
+		return latitude;
+	}
+
+	/**
+	 * @param latitude the latitude to set
+	 */
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	/**
+	 * @return the longitude
+	 */
+	public double getLongitude() {
+		return longitude;
+	}
+
+	/**
+	 * @param longitude the longitude to set
+	 */
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 }

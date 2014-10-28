@@ -8,13 +8,13 @@ public class Order implements Serializable {
 	private String address;
 	private String aufnr;
 	private String aufart;
-	private String co_gstrp;
+	private String coGstrp;
 	private String auftext;
 	private String partner;
-	private int order_status;
-	private String exp_days;
-	private String exp_status;
-	private float zhours;
+	private int orderStatus;
+	private String expDays;
+	private String expStatus;
+	private float zHours;
 
 	/**
 	 * Orders table name
@@ -92,11 +92,17 @@ public class Order implements Serializable {
 			+ "AUFNR 		TEXT PRIMARY KEY"
 			// + ", ID_PROGRAM	TEXT REFERENCES SCHEDULE(ID_PROGRAM) "
 			// + " ON UPDATE CASCADE ON DELETE NO ACTION"
-			+ ", AUFART		TEXT" + ", CO_GSTRP	TEXT" + ", AUFTEXT 	TEXT"
+			+ ", AUFART		TEXT" 
+			+ ", CO_GSTRP	TEXT" 
+			+ ", AUFTEXT 	TEXT"
 			+ ", PARTNER 	TEXT NOT NULL REFERENCES PARTNER (PARTNER)"
-			+ ", ADDRESS	TEXT" + ", ORDERS_STATUS 	TEXT"
-			+ ", EXP_DAYS 		INTEGER" + ", EXP_STATUS 	TEXT" + ", ZHOURS 		TEXT"
-			+ ", ORDER_STATUS INTEGER" + ")";
+			+ ", ADDRESS	TEXT" 
+			+ ", ORDERS_STATUS 	TEXT"
+			+ ", EXP_DAYS 		INTEGER" 
+			+ ", EXP_STATUS 	TEXT" 
+			+ ", ZHOURS 		TEXT"
+			+ ", ORDER_STATUS INTEGER" 
+			+ ")";
 
 	/**
 	 * Column names array ordered alphabetically
@@ -110,130 +116,116 @@ public class Order implements Serializable {
 	/**
 	 * @return the pARTNER
 	 */
-	public String getPARTNER() {
+	public String getPartner() {
 		return partner;
 	}
 
 	/**
-	 * @param pARTNER
+	 * @param partner
 	 *            the pARTNER to set
 	 */
-	public void setPARTNER(String pARTNER) {
-		partner = pARTNER;
+	public void setPARTNER(String partner) {
+		this.partner = partner;
 	}
 
 	/**
 	 * @return the oRDER_STATUS
 	 */
-	public int getORDER_STATUS() {
-		return order_status;
+	public int getOrderStatus() {
+		return orderStatus;
 	}
 
 	/**
-	 * @param oRDER_STATUS
+	 * @param os
 	 *            the oRDER_STATUS to set
 	 */
-	public void setORDER_STATUS(int oRDER_STATUS) {
-		order_status = oRDER_STATUS;
+	public void setOrderStatus(int os) {
+		orderStatus = os;
 	}
 
 	/**
 	 * @return the eXP_DAYS
 	 */
-	public String getEXP_DAYS() {
-		return exp_days;
+	public String getExpDays() {
+		return expDays;
 	}
 
 	/**
-	 * @param eXP_DAYS
+	 * @param ed
 	 *            the eXP_DAYS to set
 	 */
-	public void setEXP_DAYS(String eXP_DAYS) {
-		exp_days = eXP_DAYS;
+	public void setExpDays(String ed) {
+		expDays = ed;
 	}
 
 	/**
 	 * @return the eXP_STATUS
 	 */
-	public String getEXP_STATUS() {
-		return exp_status;
+	public String getExpStatus() {
+		return expStatus;
 	}
 
 	/**
-	 * @param eXP_STATUS
+	 * @param es
 	 *            the eXP_STATUS to set
 	 */
-	public void setEXP_STATUS(String eXP_STATUS) {
-		exp_status = eXP_STATUS;
+	public void setExpStatus(String es) {
+		expStatus = es;
 	}
 
 	/**
-	 * @return the zHOURS
+	 * @return the ZHours
 	 */
-	public float getZHOURS() {
-		return zhours;
+	public float getZHhours() {
+		return zHours;
 	}
 
 	/**
-	 * @param zHOURS
+	 * @param zH
 	 *            the zHOURS to set
 	 */
-	public void setZHOURS(float zHOURS) {
-		zhours = zHOURS;
+	public void setZHhours(float zH) {
+		zHours = zH;
 	}
 
-	public String getADDRESS() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setADDRESS(String aDDRESS) {
+	public void setAddress(String aDDRESS) {
 		address = aDDRESS;
 	}
 
-	public String getAUFNR() {
+	public String getAufnr() {
 		return aufnr;
 	}
 
-	public void setAUFNR(String aUFNR) {
-		aufnr = "" + Integer.parseInt(aUFNR);
+	public void setAufnr(String aufnr) {
+		this.aufnr = "" + Integer.parseInt(aufnr);
 	}
 
-	public String getAUFART() {
+	public String getAufart() {
 		return aufart;
 	}
 
-	public void setAUFART(String aUFART) {
-		aufart = aUFART;
+	public void setAufart(String aufart) {
+		this.aufart = aufart;
 	}
 
-	public String getCO_GSTRP() {
-		return co_gstrp;
+	public String getCoGstrp() {
+		return coGstrp;
 	}
 
-	public void setCO_GSTRP(String cO_GSTRP) {
-		co_gstrp = cO_GSTRP;
+	public void setCoGstrp(String coGstrp) {
+		this.coGstrp = coGstrp;
 	}
 
-	public String getAUFTEXT() {
+	public String getAuftext() {
 		return auftext;
 	}
 
-	public void setAUFTEXT(String aUFTEXT) {
-		auftext = aUFTEXT;
+	public void setAuftext(String auftext) {
+		this.auftext = auftext;
 	}
-
-	// /**
-	// * @return the iD_PROGRAM
-	// */
-	// public String getID_PROGRAM() {
-	// return ID_PROGRAM;
-	// }
-	//
-	// /**
-	// * @param iD_PROGRAM the iD_PROGRAM to set
-	// */
-	// public void setID_PROGRAM(String iD_PROGRAM) {
-	// ID_PROGRAM = iD_PROGRAM;
-	// }
 
 }

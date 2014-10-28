@@ -60,6 +60,52 @@ public class DBManager {
 		return orders;
 	}
 
+	/**
+	 * Select a partner
+	 * 
+	 * @param parnerId
+	 *            Partner name
+	 * @return
+	 */
+	public Partner getPartner(String parnerId) {
+		Partner partner = null;
+
+		traceMrdb = toh.getReadableDatabase();
+
+		Cursor cursor = traceMrdb.query(Partner.TABLE_NAME,
+				Partner.COLUMN_NAMES, Partner.PARTNER + " = ?",
+				new String[] { parnerId }, null, null, null);
+
+		partner = getPartnerFrom(cursor);
+
+		return partner;
+	}
+
+	private Partner getPartnerFrom(Cursor cursor) {
+		Map<String, Integer> columnsMap = new ArrayMap<String, Integer>();
+
+		for (String column : Partner.COLUMN_NAMES) {
+			columnsMap.put(column, cursor.getColumnIndex(column));
+		}
+		Partner partner = new Partner();
+		if (cursor.moveToFirst()) {
+
+			partner.setADDRESS(cursor.getString(columnsMap.get(Partner.ADDRESS)));
+			partner.setLatitude(Double.parseDouble(cursor.getString((columnsMap
+					.get(Partner.LATITUDE)))));
+			partner.setLongitude(Double.parseDouble(cursor.getString(columnsMap
+					.get(Partner.LONGITUDE))));
+			partner.setNAME(cursor.getString(columnsMap.get(Partner.NAME)));
+			partner.setPARTN_ROLE(cursor.getString(columnsMap
+					.get(Partner.PARTN_ROLE)));
+			partner.setPARTNER(cursor.getString(columnsMap.get(Partner.PARTNER)));
+			partner.setROL_TEXT(cursor.getString(columnsMap
+					.get(Partner.ROL_TEXT)));
+		}
+
+		return partner;
+	}
+
 	public List<Order> getUnassignedOrders() {
 		traceMrdb = toh.getReadableDatabase();
 
@@ -102,23 +148,23 @@ public class DBManager {
 		if (cursor.moveToFirst()) {
 			do {
 				Order order = new Order();
-				order.setADDRESS(cursor.getString(columnsMap.get(Order.ADDRESS)));
+				order.setAddress(cursor.getString(columnsMap.get(Order.ADDRESS)));
 				// order.setASSIGNED_STATUS(cursor.getShort(columnsMap
 				// .get(OrdersTable.ASSIGNED_STATUS)));
-				order.setAUFART(cursor.getString(columnsMap.get(Order.AUFART)));
-				order.setAUFNR(cursor.getString(columnsMap.get(Order.AUFNR)));
-				order.setAUFTEXT(cursor.getString(columnsMap.get(Order.AUFTEXT)));
-				order.setCO_GSTRP(cursor.getString(columnsMap
+				order.setAufart(cursor.getString(columnsMap.get(Order.AUFART)));
+				order.setAufnr(cursor.getString(columnsMap.get(Order.AUFNR)));
+				order.setAuftext(cursor.getString(columnsMap.get(Order.AUFTEXT)));
+				order.setCoGstrp(cursor.getString(columnsMap
 						.get(Order.CO_GSTRP)));
-				order.setEXP_DAYS(cursor.getString(columnsMap
+				order.setExpDays(cursor.getString(columnsMap
 						.get(Order.EXP_DAYS)));
-				order.setEXP_STATUS(cursor.getString(columnsMap
+				order.setExpStatus(cursor.getString(columnsMap
 						.get(Order.EXP_STATUS)));
 				// order.setID_PROGRAM(cursor.getString(8));
-				order.setORDER_STATUS(cursor.getInt(columnsMap
+				order.setOrderStatus(cursor.getInt(columnsMap
 						.get(Order.ORDER_STATUS)));
 				order.setPARTNER(cursor.getString(columnsMap.get(Order.PARTNER)));
-				order.setZHOURS(cursor.getFloat(columnsMap.get(Order.ZHOURS)));
+				order.setZHhours(cursor.getFloat(columnsMap.get(Order.ZHOURS)));
 				orders.add(order);
 			} while (cursor.moveToNext());
 		}
@@ -133,39 +179,35 @@ public class DBManager {
 	 */
 	public void insertOrders(List<Order> orders) {
 
-		traceMwdb = toh.getWritableDatabase();
-
 		ContentValues values = new ContentValues();
 		for (Order order : orders) {
-			values.clear();
-			if (order.getPARTNER() != null) {
-				values.put(Partner.PARTNER, order.getPARTNER());
-				values.put(Partner.ADDRESS, order.getADDRESS());
-				long result = traceMwdb
-						.insert(Partner.TABLE_NAME, null, values);
-				if (result != -1) {
-					Log.i("Insert Partner", "" + result);
-				} else {
-					Log.e("Insert Partner", "" + result);
-				}
+			if (order.getPartner() != null) {
+
+				Partner partner = new Partner();
+				partner.setPARTNER(order.getPartner());
+				partner.setADDRESS(order.getAddress());
+
+				insertPartner(partner);
+
 			}
 		}
 
+		traceMwdb = toh.getWritableDatabase();
 		for (Order order : orders) {
 			values.clear();
-			values.put(Order.AUFNR, order.getAUFNR());
-			values.put(Order.AUFART, order.getAUFART());
-			values.put(Order.CO_GSTRP, order.getCO_GSTRP());
-			values.put(Order.AUFTEXT, order.getAUFTEXT());
-			if (order.getPARTNER() == null) {
+			values.put(Order.AUFNR, order.getAufnr());
+			values.put(Order.AUFART, order.getAufart());
+			values.put(Order.CO_GSTRP, order.getCoGstrp());
+			values.put(Order.AUFTEXT, order.getAuftext());
+			if (order.getPartner() == null) {
 				continue;
 			}
-			values.put(Order.PARTNER, order.getPARTNER());
-			values.put(Partner.ADDRESS, order.getADDRESS());
-			values.put(Order.ORDER_STATUS, order.getORDER_STATUS());
-			values.put(Order.EXP_DAYS, order.getEXP_DAYS());
-			values.put(Order.EXP_STATUS, order.getEXP_STATUS());
-			values.put(Order.ZHOURS, order.getZHOURS());
+			values.put(Order.PARTNER, order.getPartner());
+			values.put(Partner.ADDRESS, order.getAddress());
+			values.put(Order.ORDER_STATUS, order.getOrderStatus());
+			values.put(Order.EXP_DAYS, order.getExpDays());
+			values.put(Order.EXP_STATUS, order.getExpStatus());
+			values.put(Order.ZHOURS, order.getZHhours());
 			// values.put(OrdersTable.ASSIGNED_STATUS,
 			// order.getASSIGNED_STATUS());
 			// values.put(OrdersTable.ID_PROGRAM, order.getID_PROGRAM());
@@ -180,6 +222,30 @@ public class DBManager {
 		traceMwdb.close();
 	}
 
+	private void insertPartner(Partner partner) {
+		traceMwdb = toh.getWritableDatabase();
+		ContentValues values = new ContentValues();
+
+		values.put(Partner.PARTNER, partner.getPARTNER());
+		values.put(Partner.ADDRESS, partner.getADDRESS());
+		values.put(Partner.LATITUDE, partner.getLatitude());
+		values.put(Partner.LONGITUDE, partner.getLongitude());
+		values.put(Partner.NAME, partner.getNAME());
+		values.put(Partner.PARTN_ROLE, partner.getPARTN_ROLE());
+		values.put(Partner.ROL_TEXT, partner.getROL_TEXT());
+
+		long result = traceMwdb.insert(Partner.TABLE_NAME, null, values);
+
+		if (result != -1) {
+			Log.i("Insert Partner", "" + result);
+		} else {
+			Log.e("Insert Partner", "" + result);
+		}
+
+		traceMwdb.close();
+
+	}
+
 	public void updateOrders(List<Order> orders) {
 
 		traceMwdb = toh.getWritableDatabase();
@@ -188,22 +254,22 @@ public class DBManager {
 
 		for (Order order : orders) {
 			values.clear();
-			values.put(Order.AUFNR, order.getAUFNR());
-			values.put(Order.AUFART, order.getAUFART());
-			values.put(Order.CO_GSTRP, order.getCO_GSTRP());
-			values.put(Order.AUFTEXT, order.getAUFTEXT());
-			values.put(Order.PARTNER, order.getPARTNER());
-			values.put(Partner.ADDRESS, order.getADDRESS());
-			values.put(Order.ORDER_STATUS, order.getORDER_STATUS());
-			values.put(Order.EXP_DAYS, order.getEXP_DAYS());
-			values.put(Order.EXP_STATUS, order.getEXP_STATUS());
-			values.put(Order.ZHOURS, order.getZHOURS());
+			values.put(Order.AUFNR, order.getAufnr());
+			values.put(Order.AUFART, order.getAufart());
+			values.put(Order.CO_GSTRP, order.getCoGstrp());
+			values.put(Order.AUFTEXT, order.getAuftext());
+			values.put(Order.PARTNER, order.getPartner());
+			values.put(Partner.ADDRESS, order.getAddress());
+			values.put(Order.ORDER_STATUS, order.getOrderStatus());
+			values.put(Order.EXP_DAYS, order.getExpDays());
+			values.put(Order.EXP_STATUS, order.getExpStatus());
+			values.put(Order.ZHOURS, order.getZHhours());
 			// values.put(OrdersTable.ASSIGNED_STATUS,
 			// order.getASSIGNED_STATUS());
 			// values.put(OrdersTable.ID_PROGRAM, order.getID_PROGRAM());
 
 			long result = traceMwdb.update(Order.TABLE_NAME, values,
-					Order.AUFNR + " = ?", new String[] { order.getAUFNR() });
+					Order.AUFNR + " = ?", new String[] { order.getAufnr() });
 			if (result != -1) {
 				Log.i("Insert Order", "" + result);
 			} else {
@@ -317,7 +383,7 @@ public class DBManager {
 
 		for (Order order : newSchedule) {
 			OrderSchedule os = new OrderSchedule();
-			os.setAUFNR(order.getAUFNR());
+			os.setAUFNR(order.getAufnr());
 			os.setID_PROGRAM(id);
 			oss.add(os);
 		}
@@ -790,7 +856,7 @@ public class DBManager {
 		orders = getScheduleDetail(activeID);
 
 		for (Order order : orders) {
-			if (order.getORDER_STATUS() != 1)
+			if (order.getOrderStatus() != 1)
 				uncompleteorders.add(order);
 		}
 
@@ -1010,5 +1076,22 @@ public class DBManager {
 		}
 
 		return effortReturn;
+	}
+
+	public void updatePartner(Partner partner) {
+		traceMwdb = toh.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(Partner.ADDRESS, partner.getADDRESS());
+		values.put(Partner.LATITUDE, partner.getLatitude());
+		values.put(Partner.LONGITUDE, partner.getLongitude());
+		values.put(Partner.NAME, partner.getNAME());
+		values.put(Partner.PARTN_ROLE, partner.getPARTN_ROLE());
+		values.put(Partner.ROL_TEXT, partner.getROL_TEXT());
+
+		traceMwdb.update(Partner.TABLE_NAME, values, Partner.PARTNER + " = ?",
+				new String[] { partner.getPARTNER() });
+		traceMwdb.close();
 	}
 }

@@ -305,25 +305,25 @@ public class Connection extends Activity {
 		for (int i = 0; i < count; i++) {
 			SoapObject item = (SoapObject) listSoap.getProperty(i);
 			order = new Order();
-			order.setAUFART(parseResult(item.getProperty(Order.AUFART)
+			order.setAufart(parseResult(item.getProperty(Order.AUFART)
 					.toString()));
-			order.setAUFNR(parseResult(item.getProperty(Order.AUFNR).toString()));
-			order.setAUFTEXT(parseResult(item.getProperty(Order.AUFTEXT)
+			order.setAufnr(parseResult(item.getProperty(Order.AUFNR).toString()));
+			order.setAuftext(parseResult(item.getProperty(Order.AUFTEXT)
 					.toString()));
-			order.setCO_GSTRP(parseResult(item.getProperty(Order.CO_GSTRP)
+			order.setCoGstrp(parseResult(item.getProperty(Order.CO_GSTRP)
 					.toString()));
 			order.setPARTNER(parseResult(item.getProperty(Order.PARTNER)
 					.toString()));
-			order.setADDRESS(parseResult(item.getProperty(Partner.ADDRESS)
+			order.setAddress(parseResult(item.getProperty(Partner.ADDRESS)
 					.toString()));
 
-			order.setORDER_STATUS((int) parseNumericResult(item.getProperty(
+			order.setOrderStatus((int) parseNumericResult(item.getProperty(
 					Order.ORDER_STATUS).toString()));
-			order.setEXP_DAYS(parseResult(item.getProperty(Order.EXP_DAYS)
+			order.setExpDays(parseResult(item.getProperty(Order.EXP_DAYS)
 					.toString()));
-			order.setEXP_STATUS(parseResult(item.getProperty(Order.EXP_STATUS)
+			order.setExpStatus(parseResult(item.getProperty(Order.EXP_STATUS)
 					.toString()));
-			order.setZHOURS((float) parseNumericResult(item.getProperty(
+			order.setZHhours((float) parseNumericResult(item.getProperty(
 					Order.ZHOURS).toString()));
 			// order.setASSIGNED_STATUS(parseBitResult(item.getProperty(
 			// "ASSIGNED_STATUS").toString()));
@@ -400,7 +400,7 @@ public class Connection extends Activity {
 		dbManager.insertOrders(zOrders);
 
 		for (Order order : zOrders) {
-			getOrderDetails(order.getAUFNR());
+			getOrderDetails(order.getAufnr());
 		}
 
 		zOrders = dbManager.getOrders();
@@ -518,7 +518,7 @@ public class Connection extends Activity {
 
 		for (Order order : orders) {
 			SoapObject item = new SoapObject();
-			item.addProperty(Order.AUFNR, order.getAUFNR());
+			item.addProperty(Order.AUFNR, order.getAufnr());
 			itOrders.addProperty(ITEM, item);
 		}
 
@@ -588,7 +588,7 @@ public class Connection extends Activity {
 			SoapObject item = (SoapObject) ordersSoap.getProperty(i);
 			Order order = new Order();
 
-			order.setAUFNR(parseResult(item.getPropertyAsString(Order.AUFNR)));
+			order.setAufnr(parseResult(item.getPropertyAsString(Order.AUFNR)));
 
 			orders.add(order);
 		}
